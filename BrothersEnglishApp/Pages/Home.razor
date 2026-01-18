@@ -1,0 +1,48 @@
+﻿@page "/"
+@using BrothersEnglishApp.Services
+@inject UserContext Context
+@inject NavigationManager Nav
+
+<PageTitle>ホーム - 英単語</PageTitle>
+
+<div class="container text-center mt-5">
+    <h1 class="display-4 mb-5">どっちが勉強する？</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-6 col-md-4">
+            <button class="btn btn-outline-primary btn-lg w-100 p-4 shadow" @onclick='() => SelectUser("つかさ")'>
+                <div class="display-1">📘</div>
+                <div>つかさ</div>
+            </button>
+        </div>
+        <div class="col-6 col-md-4">
+            <button class="btn btn-outline-success btn-lg w-100 p-4 shadow" @onclick='() => SelectUser("まもる")'>
+                <div class="display-1">📗</div>
+                <div>まもる</div>
+            </button>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-12 col-md-4">
+            <button class="btn btn-outline-secondary w-100 p-3 shadow-sm" @onclick='() => SelectUser("管理人")'>
+                <span>管理人</span>
+            </button>
+        </div>
+    </div>
+
+    @if (Context.IsSelected)
+    {
+        <div class="mt-5 alert alert-secondary">
+            今は <strong>@Context.CurrentUser</strong> がログイン中だよ
+        </div>
+    }
+</div>
+
+@code {
+    private void SelectUser(string name)
+    {
+        Context.CurrentUser = name;
+        // 名前を選んだら、そのままトレーニング画面へGO！
+        Nav.NavigateTo("training");
+    }
+}

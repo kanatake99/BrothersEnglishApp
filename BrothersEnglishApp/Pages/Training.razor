@@ -1,0 +1,230 @@
+﻿@page "/training"
+@using BrothersEnglishApp.Models
+@using BrothersEnglishApp.Services
+@inject LocalStorageService Storage
+@inject NavigationManager Nav
+@inject UserContext Context
+@inject IJSRuntime JS
+@inject HttpClient Http
+
+<PageTitle>トレーニング</PageTitle>
+
+@if (currentWord == null)
+{
+    <div class="text-center mt-5">
+        <span class="display-1">🎉</span>
+        <h4 class="mt-3">今日の目標達成！</h4>
+        @* 修正1：現在のユーザー名のみを表示 *@
+        <p class="fs-5">@(Context.CurrentUser)くん、よく頑張ったね！</p>
+        <button class="btn btn-primary btn-lg mt-3 shadow" @onclick='() => Nav.NavigateTo("/")'>TOPへ戻る</button>
+    </div>
+}
+else
+{
+    <div class="container-fluid mt-2 text-center">
+        @* containerをfluidにして横幅を有効活用 *@
+        @* ステップ表示を少しコンパクトに *@
+        <div class="badge rounded-pill @(isReviewing ? "bg-danger" : "bg-warning text-dark") mb-2 px-3 py-2">
+            @if (isReviewing)
+            {
+                <span>👀 よく見て覚えよう！</span>
+            }
+            else
+            {
+
+                <span>@(isStep2 ? "🔥 見ないで！" : "📝 お手本通り！")</span>
+            }
+        </div>
+
+        <div class="card shadow-sm p-3 mb-2">
+            @* 単語情報エリア *@
+            <div class="mb-3">
+                <div class="text-center mb-4">
+                    <h2 class="display-2 fw-bold">@currentWord.Word</h2>
+                    <span class="badge bg-success mb-1" style="font-size: 0.7rem;">@currentWord.PartOfSpeech</span>
+                    <div class="text-muted fs-4">@currentWord.IPA</div> @* ここで発音記号を表示 *@
+                </div>
+                <h2 class="fw-bold mb-0" style="font-size: calc(1.5rem + 1.5vw);">@currentWord.Meaning</h2>
+            </div>
+
+            @* お手本エリア：スマホで見やすい高さに *@
+            <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
+                @if (isReviewing || !isStep2)
+                {
+                    <h2 class="display-4 fw-bold text-primary mb-0">@currentWord.Word</h2>
+                }
+                else
+                {
+                    <h2 class="display-4 fw-bold text-muted mb-0" style="opacity: 0.1;">????</h2>
+                }
+            </div>
+
+            @if (isReviewing)
+            {
+                @* 修正：スマホで押しやすい、画面中央の巨大なボタン *@
+                <button class="btn btn-danger btn-lg w-100 shadow py-4 fs-3" @onclick="EndReview">
+                    覚えた！次へ 🚀
+                </button>
+            }
+            else
+            {
+                <div class="form-group mb-2">
+                    @* 修正後：スマホ最適化＋間違えた時の震え演出を追加！ *@
+                    <input @ref="wordInput"
+                           @bind="userInput"
+                           @bind:event="oninput"
+                           @onkeyup="HandleKeyUp"
+                           class="form-control form-control-lg text-center fs-1 py-3 @(isWrong ? "shake border-danger text-danger" : "")"
+                           type="text"
+                           autocomplete="off"
+                           autocorrect="off"
+                           spellcheck="false"
+                           placeholder="入力してね" />
+                </div>
+            }
+
+            @if (isCorrect)
+            {
+                <div class="alert alert-success py-2 mt-2 shadow-sm">✨ 正解！ ✨</div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<EnglishWord>? allWords;
+    private UserProgress? userProgress;
+    private EnglishWord? currentWord;
+    private ElementReference wordInput;
+    private string userInput = "";
+    private bool isStep2 = false;
+    private bool isCorrect = false;
+    private bool isReviewing = false; // 復習モードかどうか
+    private bool isWrong = false; // 震えさせるためのフラグ
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Context.IsSelected)
+        {
+            Nav.NavigateTo("/");
+            return;
+        }
+
+        // サーバーから最新の単語リストをダウンロードする
+        allWords = await Http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json");
+        userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUser}")
+                       ?? new UserProgress { UserName = Context.CurrentUser };
+
+        await SelectNextWord();
+    }
+
+    private async Task SelectNextWord()
+    {
+        if (allWords == null || userProgress == null) return;
+
+        var settings = await Storage.LoadAsync<AppSettings>("AppSettings") ?? new AppSettings();
+        var todayCount = userProgress.WordStatuses.Count(s => s.LastReviewed.Date == DateTime.Today && s.Status >= 1);
+
+        if (todayCount >= settings.DailyGoal)
+        {
+            currentWord = null;
+            return;
+        }
+
+        currentWord = allWords
+            .Where(w => !userProgress.WordStatuses.Any(s => s.WordId == w.Id && s.LastReviewed.Date == DateTime.Today))
+            .OrderByDescending(w => w.Level)
+            .ThenBy(w => Guid.NewGuid())
+            .FirstOrDefault();
+
+        userInput = "";
+        isStep2 = false;
+        isCorrect = false;
+        isReviewing = false;
+        StateHasChanged();
+        await Task.Delay(10);
+        await JS.InvokeVoidAsync("focusElement", wordInput);
+    }
+
+    private async Task CheckAnswer()
+    {
+        if (currentWord == null || userProgress == null || isReviewing) return;
+
+        if (userInput.Trim().ToLower() == currentWord.Word.ToLower())
+        {
+            isCorrect = true;
+            StateHasChanged();
+            await Task.Delay(600);
+
+            if (!isStep2)
+            {
+                isStep2 = true;
+                isCorrect = false;
+                userInput = "";
+                StateHasChanged();
+            }
+            else
+            {
+                var status = userProgress.WordStatuses.FirstOrDefault(s => s.WordId == currentWord.Id);
+                if (status == null)
+                {
+                    status = new WordStatus { WordId = currentWord.Id };
+                    userProgress.WordStatuses.Add(status);
+                }
+                status.Status = 1;
+                status.CorrectCount++;
+                status.LastReviewed = DateTime.Now;
+
+                await Storage.SaveAsync($"User_{Context.CurrentUser}", userProgress);
+                await SelectNextWord();
+            }
+        }
+        else
+        {
+            // 間違えた場合
+            if (!isStep2)
+            {
+                // Step 1 の時は、震えさせるだけ
+                isWrong = true;
+                StateHasChanged();
+                await Task.Delay(500); // 震えてる間待つ
+                isWrong = false;
+                StateHasChanged();
+            }
+            else if (isStep2 && !string.IsNullOrEmpty(userInput))
+            {
+                var status = userProgress.WordStatuses.FirstOrDefault(s => s.WordId == currentWord.Id);
+                if (status == null)
+                {
+                    status = new WordStatus { WordId = currentWord.Id };
+                    userProgress.WordStatuses.Add(status);
+                }
+                status.IncorrectCount++;
+                await Storage.SaveAsync($"User_{Context.CurrentUser}", userProgress);
+
+                // 復習モードへ切り替え
+                isReviewing = true;
+                userInput = "";
+                StateHasChanged();
+            }
+        }
+    }
+
+    // 「覚えた！」ボタンを押した時
+    private async Task EndReview()
+    {
+        isReviewing = false;
+        userInput = "";
+        StateHasChanged();
+
+        // 画面が切り替わるのを一瞬待ってから、入力欄にフォーカスを当てる
+        await Task.Delay(10);
+        await JS.InvokeVoidAsync("focusElement", wordInput);
+    }
+
+    // Enterキーでの送信対応
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await CheckAnswer();
+    }
+}

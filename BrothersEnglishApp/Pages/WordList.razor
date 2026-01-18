@@ -1,0 +1,131 @@
+﻿@page "/wordlist"
+@using BrothersEnglishApp.Models
+@using BrothersEnglishApp.Services
+@inject LocalStorageService Storage
+@inject HttpClient Http
+
+<PageTitle>単語一覧</PageTitle>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>📖 登録単語リスト</h3>
+        <span class="badge bg-secondary">全 @(words?.Count ?? 0) 単語</span>
+    </div>
+
+    @if (words == null)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>読み込み中...</p>
+        </div>
+    }
+    else if (!words.Any())
+    {
+        <div class="alert alert-info">
+            まだ単語が登録されていないよ。「一括登録」から追加してね！
+        </div>
+    }
+    else
+    {
+        <div class="list-group shadow-sm mt-3">
+            @foreach (var w in words)
+            {
+                <div class="list-group-item p-3">
+                    @* 上段：単語、品詞、頻出度 *@
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <strong class="h5 text-primary mb-0">@w.Word</strong>
+                            <span class="text-body-tertiary">@w.IPA</span>
+                            <span class="badge @GetBadgeClass(w.PartOfSpeech) ms-2">
+                                @w.PartOfSpeech
+                            </span>
+                        </div>
+                        <div class="text-nowrap">
+                            @for (int i = 0; i < w.Level; i++)
+                            {
+                                <span class="text-warning" style="font-size: 0.8rem;">★</span>
+                            }
+                        </div>
+                    </div>
+
+                    @* 下段：意味 *@
+                    <div class="bg-light p-2 rounded mb-2">
+                        <span class="text-dark">@w.Meaning</span>
+                    </div>
+
+                    @* 操作ボタン（右下に配置） *@
+                    <div class="text-end">
+                        <button class="btn btn-outline-danger btn-sm border-0" @onclick="() => DeleteWord(w.Id)">
+                            <i class="bi bi-trash"></i> 削除
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<EnglishWord>? words;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWords();
+    }
+
+    private async Task LoadWords()
+    {
+        try
+        {
+            // 1. サーバーのJSONファイルを読み込む（wwwroot/data/master_words.json）
+            var savedWords = await Http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json")
+                             ?? new List<EnglishWord>();
+
+            // 2. A-Z順に並び替えて表示用リストに入れる
+            words = savedWords.OrderBy(w => w.Word).ToList();
+        }
+        catch (Exception ex)
+        {
+            // 通信エラーなどで読み込めなかった時のための安全策
+            Console.WriteLine($"エラーが起きたよ: {ex.Message}");
+            words = new List<EnglishWord>();
+        }
+    }
+
+    private async Task DeleteWord(string id)
+    {
+        if (words == null) return;
+
+        // 指定されたID以外の単語を残す（＝削除）
+        // リストから消して、かつ A-Z 順をキープ！
+        words = words.Where(w => w.Id != id)
+                     .OrderBy(w => w.Word) // ここでも並び替えを入れると安心
+                     .ToList();
+        // 更新されたリストを保存
+        await Storage.SaveAsync("MasterWords", words);
+
+        // 画面を再描画
+        StateHasChanged();
+    }
+
+    // 品詞に応じてバッジの色を変えるルール
+    private string GetBadgeClass(string? pos)
+    {
+        if (string.IsNullOrEmpty(pos)) return "bg-secondary";
+
+        // 「動詞」という文字が含まれていたら青（最優先）
+        if (pos.Contains("動詞")) return "bg-primary";
+
+        // 「名詞」という文字が含まれていたら緑
+        if (pos.Contains("名詞")) return "bg-success";
+
+        // 「形容詞」という文字が含まれていたら黄色
+        if (pos.Contains("形容詞")) return "bg-warning text-dark";
+
+        // 「副詞」という文字が含まれていたら水色
+        if (pos.Contains("副詞")) return "bg-info text-dark";
+
+        // どれにも当てはまらない場合はグレー
+        return "bg-secondary";
+    }
+}
