@@ -4,8 +4,8 @@
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
 @inject UserContext Context
-@inject IJSRuntime JS
-@inject HttpClient Http
+@inject IJSRuntime JS   // JavaScript呼び出し用
+@inject HttpClient Http // HTTPクライアント
 
 <PageTitle>トレーニング</PageTitle>
 
@@ -32,38 +32,48 @@ else
             else
             {
 
-                <span>@(isStep2 ? "🔥 見ないで！" : "📝 お手本通り！")</span>
+                <span>@(isStep2 ? "🔥 見ないで入力！" : "📝 お手本通り入力！")</span>
             }
         </div>
 
         <div class="card shadow-sm p-3 mb-2">
-            @* 単語情報エリア *@
-            <div class="mb-3">
-                <div class="text-center mb-4">
-                    <h2 class="display-2 fw-bold">@currentWord.Word</h2>
-                    <span class="badge bg-success mb-1" style="font-size: 0.7rem;">@currentWord.PartOfSpeech</span>
-                    <div class="text-muted fs-4">@currentWord.IPA</div> @* ここで発音記号を表示 *@
-                </div>
-                <h2 class="fw-bold mb-0" style="font-size: calc(1.5rem + 1.5vw);">@currentWord.Meaning</h2>
-            </div>
-
             @* お手本エリア：スマホで見やすい高さに *@
             <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
                 @if (isReviewing || !isStep2)
                 {
                     <h2 class="display-4 fw-bold text-primary mb-0">@currentWord.Word</h2>
+                    <div class="text-muted fs-4 ps-1">
+                        @currentWord.IPA@* ここで発音記号を表示 *@
+                    </div>
+
                 }
                 else
                 {
                     <h2 class="display-4 fw-bold text-muted mb-0" style="opacity: 0.1;">????</h2>
+
                 }
             </div>
+            
+            @* 単語情報エリア *@
+            <div class="mb-3">
+                <div class="text-center my-4">
+                    <span class="badge bg-success ">@currentWord.PartOfSpeech</span>
+                    @* スピーカーボタン。クリックで Speak メソッドを実行！ *@
+                    <button class="btn btn-outline-primary rounded-circle"
+                            @onclick="() => Speak(currentWord.Word)"
+                            title="音声を再生">
+                        <i class="bi bi-volume-up-fill"></i>
+                    </button>
+                </div>
+                <h2 class="fw-bold mt-1 mb-0" style="font-size: calc(1.5rem + 1.5vw);">@currentWord.Meaning</h2>
+             </div>
+
 
             @if (isReviewing)
             {
                 @* 修正：スマホで押しやすい、画面中央の巨大なボタン *@
                 <button class="btn btn-danger btn-lg w-100 shadow py-4 fs-3" @onclick="EndReview">
-                    覚えた！次へ 🚀
+                    覚えた！もう一度入力🚀
                 </button>
             }
             else
@@ -101,6 +111,7 @@ else
     private bool isCorrect = false;
     private bool isReviewing = false; // 復習モードかどうか
     private bool isWrong = false; // 震えさせるためのフラグ
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -226,5 +237,17 @@ else
     private async Task HandleKeyUp(KeyboardEventArgs e)
     {
         if (e.Key == "Enter") await CheckAnswer();
+    }
+
+    // 単語を読み上げるメソッド
+    private async Task Speak(string text)
+    {
+        // ブラウザの読み上げ機能（Web Speech API）を呼び出すよ
+        // 言語を 'en-US' に指定して、英語らしく発音してもらう
+        await JS.InvokeVoidAsync("eval", $@"
+            var msg = new SpeechSynthesisUtterance('{text.Replace("'", "\\'")}');
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        ");
     }
 }

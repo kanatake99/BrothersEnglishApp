@@ -52,14 +52,7 @@
                     <div class="bg-light p-2 rounded mb-2">
                         <span class="text-dark">@w.Meaning</span>
                     </div>
-
-                    @* 操作ボタン（右下に配置） *@
-                    <div class="text-end">
-                        <button class="btn btn-outline-danger btn-sm border-0" @onclick="() => DeleteWord(w.Id)">
-                            <i class="bi bi-trash"></i> 削除
-                        </button>
-                    </div>
-                </div>
+               </div>
             }
         </div>
     }
@@ -68,11 +61,13 @@
 @code {
     private List<EnglishWord>? words;
 
+    // コンポーネント初期化時に単語リストを読み込む
     protected override async Task OnInitializedAsync()
     {
         await LoadWords();
     }
 
+    // 単語リストをサーバーから読み込むメソッド
     private async Task LoadWords()
     {
         try
@@ -90,22 +85,6 @@
             Console.WriteLine($"エラーが起きたよ: {ex.Message}");
             words = new List<EnglishWord>();
         }
-    }
-
-    private async Task DeleteWord(string id)
-    {
-        if (words == null) return;
-
-        // 指定されたID以外の単語を残す（＝削除）
-        // リストから消して、かつ A-Z 順をキープ！
-        words = words.Where(w => w.Id != id)
-                     .OrderBy(w => w.Word) // ここでも並び替えを入れると安心
-                     .ToList();
-        // 更新されたリストを保存
-        await Storage.SaveAsync("MasterWords", words);
-
-        // 画面を再描画
-        StateHasChanged();
     }
 
     // 品詞に応じてバッジの色を変えるルール
