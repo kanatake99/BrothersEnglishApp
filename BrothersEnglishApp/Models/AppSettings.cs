@@ -2,6 +2,7 @@
 
 public class AppSettings
 {
-    // 一日に勉強する単語数
     public int DailyGoal { get; set; } = 10;
+    // 追加：自動再生の設定（デフォルトはオン）
+    public bool IsAutoSpeechEnabled { get; set; } = true;
 }

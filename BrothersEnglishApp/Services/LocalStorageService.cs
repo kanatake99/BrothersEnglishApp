@@ -44,4 +44,35 @@ public class LocalStorageService(IJSRuntime js)
             return default;
         }
     }
+
+    // セッション情報を保存・取得するメソッド
+    public async Task SaveSessionAsync(UserSession session)
+    {
+        // セッション情報を保存
+        await js.InvokeVoidAsync("localStorage.setItem", "user_session", JsonSerializer.Serialize(session));
+    }
+
+    public async Task<UserSession?> GetSessionAsync()
+    {
+        var json = await js.InvokeAsync<string>("localStorage.getItem", "user_session");
+        if (string.IsNullOrEmpty(json)) return null;
+
+        var session = JsonSerializer.Deserialize<UserSession>(json);
+
+        // 1ヶ月（30日）経過しているかチェック
+        if (session != null && session.LoginDate.AddDays(30) < DateTime.Now)
+        {
+            await js.InvokeVoidAsync("localStorage.removeItem", "user_session");
+            return null;
+        }
+        return session;
+    }
+
+    // データを削除する
+    public async Task DeleteAsync(string key)
+    {
+        // JavaScript の localStorage.removeItem を呼び出す
+        await js.InvokeVoidAsync("localStorage.removeItem", key);
+    }
 }
+

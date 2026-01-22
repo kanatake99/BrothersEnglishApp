@@ -24,7 +24,18 @@ else
     <div class="container-fluid mt-2 text-center">
         @* containerをfluidにして横幅を有効活用 *@
         @* ステップ表示を少しコンパクトに *@
-        <div class="badge rounded-pill @(isReviewing ? "bg-danger" : "bg-warning text-dark") mb-2 px-3 py-2">
+        <div class="text-center mb-4">
+            <div class="d-flex justify-content-center align-items-end flex-column">
+                <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="autoSpeech"
+                           @bind="appSettings.IsAutoSpeechEnabled" @oninput="ToggleAutoSpeech" />
+                    <label class="form-check-label small text-muted" for="autoSpeech">
+                        単語読み上げ
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="badge rounded-pill @(isReviewing ? "bg-danger" : "bg-warning text-dark") mb-2 px-4 py-3">
             @if (isReviewing)
             {
                 <span>👀 よく見て覚えよう！</span>
@@ -111,8 +122,9 @@ else
     private bool isCorrect = false;
     private bool isReviewing = false; // 復習モードかどうか
     private bool isWrong = false; // 震えさせるためのフラグ
+    private AppSettings appSettings = new();
 
-
+    // コンポーネント初期化時の処理
     protected override async Task OnInitializedAsync()
     {
         if (!Context.IsSelected)
@@ -123,12 +135,24 @@ else
 
         // サーバーから最新の単語リストをダウンロードする
         allWords = await Http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json");
-        userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUser}")
-                       ?? new UserProgress { UserName = Context.CurrentUser };
+        userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}")
+                ?? new UserProgress { UserName = Context.CurrentUser };
+
+        // 他の読み込み処理と一緒に AppSettings もロードする
+        var savedSettings = await Storage.LoadAsync<AppSettings>("AppSettings");
+        if (savedSettings != null) appSettings = savedSettings;
 
         await SelectNextWord();
     }
 
+    // トグルが切り替わった時に保存する
+    private async Task ToggleAutoSpeech(ChangeEventArgs e)
+    {
+        appSettings.IsAutoSpeechEnabled = (bool)e.Value!;
+        await Storage.SaveAsync("AppSettings", appSettings);
+    }
+    
+    // 次の単語を選ぶメソッド
     private async Task SelectNextWord()
     {
         if (allWords == null || userProgress == null) return;
@@ -155,8 +179,15 @@ else
         StateHasChanged();
         await Task.Delay(10);
         await JS.InvokeVoidAsync("focusElement", wordInput);
+
+        if (currentWord != null && appSettings.IsAutoSpeechEnabled)
+        {
+            await Task.Delay(300);
+            await Speak(currentWord.Word);
+        }
     }
 
+    // ユーザーの回答をチェックするメソッド
     private async Task CheckAnswer()
     {
         if (currentWord == null || userProgress == null || isReviewing) return;
@@ -186,7 +217,7 @@ else
                 status.CorrectCount++;
                 status.LastReviewed = DateTime.Now;
 
-                await Storage.SaveAsync($"User_{Context.CurrentUser}", userProgress);
+                await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
                 await SelectNextWord();
             }
         }
@@ -211,7 +242,7 @@ else
                     userProgress.WordStatuses.Add(status);
                 }
                 status.IncorrectCount++;
-                await Storage.SaveAsync($"User_{Context.CurrentUser}", userProgress);
+                await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
 
                 // 復習モードへ切り替え
                 isReviewing = true;

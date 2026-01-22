@@ -1,42 +1,42 @@
 ﻿@using BrothersEnglishApp.Services 
 @inject UserContext Context
 
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="top-row ps-3 navbar bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BrothersEnglishApp</a>
+        <a class="navbar-brand text-light" href="">BrothersEnglishApp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass nav-scrollable bg-light" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+        <div class="nav-item px-3 fs-4">
+            <NavLink class="nav-link text-primary-emphasis" href="" Match="NavLinkMatch.All">
                 <span class="me-2 fs-3">🏠</span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="training">
-                <span class="me-2 fs-3">📝</span> 覚える(Training)
+        <div class="nav-item px-3 fs-4">
+            <NavLink class="nav-link text-primary-emphasis" href="training">
+                <span class="me-2 fs-3">📝</span> 覚える
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="report">
+        <div class="nav-item px-3 fs-4">
+            <NavLink class="nav-link text-primary-emphasis" href="report">
                 <span class="me-2 fs-3">📋</span> 成績表
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-             <NavLink class="nav-link" href="wordlist">
+        <div class="nav-item px-3 fs-4">
+            <NavLink class="nav-link text-primary-emphasis" href="wordlist">
                 <span class="me-2 fs-3">📍</span> 単語一覧
             </NavLink>
         </div>
         @if (Context.IsAdmin)
         {
             @* 管理人にしか見えないメニュー *@
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="settings">
+            <div class="nav-item px-3 fs-4">
+                <NavLink class="nav-link text-primary-emphasis" href="settings">
                     <span class="me-2 fs-3">🛠️</span> アプリ設定
                     </NavLink>
             </div>

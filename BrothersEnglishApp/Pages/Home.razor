@@ -1,48 +1,64 @@
 ﻿@page "/"
-@using BrothersEnglishApp.Services
-@inject UserContext Context
+@inject UserContext UserContext
 @inject NavigationManager Nav
 
-<PageTitle>ホーム - 英単語</PageTitle>
-
 <div class="container text-center mt-5">
-    <h1 class="display-4 mb-5">どっちが勉強する？</h1>
-
-    <div class="row justify-content-center">
-        <div class="col-6 col-md-4">
-            <button class="btn btn-outline-primary btn-lg w-100 p-4 shadow" @onclick='() => SelectUser("つかさ")'>
-                <div class="display-1">📘</div>
-                <div>つかさ</div>
-            </button>
-        </div>
-        <div class="col-6 col-md-4">
-            <button class="btn btn-outline-success btn-lg w-100 p-4 shadow" @onclick='() => SelectUser("まもる")'>
-                <div class="display-1">📗</div>
-                <div>まもる</div>
-            </button>
-        </div>
-    </div>
-    <div class="row justify-content-center mt-4">
-        <div class="col-12 col-md-4">
-            <button class="btn btn-outline-secondary w-100 p-3 shadow-sm" @onclick='() => SelectUser("管理人")'>
-                <span>管理人</span>
-            </button>
-        </div>
-    </div>
-
-    @if (Context.IsSelected)
+    @if (string.IsNullOrEmpty(_selectedId))
     {
-        <div class="mt-5 alert alert-secondary">
-            今は <strong>@Context.CurrentUser</strong> がログイン中だよ
+        <h2>だれが つかうかな？</h2>
+        <div class="row mt-4">
+            @foreach (var user in _availableUsers)
+            {
+                <div class="col-md-4 mb-3">
+                    <button class="btn btn-outline-primary btn-lg w-100 p-4" @onclick="() => SelectUser(user.Id)">
+                        <i class="bi bi-person-circle"></i><br /> @user.Name
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h2>@(_availableUsers.First(u => u.Id == _selectedId).Name) くん</h2>
+        <p>PIN（4けた）をいれてね</p>
+        <input type="password" class="form-control form-control-lg text-center mx-auto"
+               style="max-width: 200px; font-size: 2rem;"
+               @bind="_inputPin" @bind:event="oninput" maxlength="4" />
+
+        <div class="mt-4">
+            <button class="btn btn-primary btn-lg" @onclick="HandleLogin">ログイン</button>
+            <button class="btn btn-link" @onclick="() => _selectedId = null">もどる</button>
         </div>
     }
 </div>
 
 @code {
-    private void SelectUser(string name)
+    private string? _selectedId;
+    private string _inputPin = "";
+
+    private readonly (string Id, string Name, string Pin)[] _availableUsers = [
+        ("tsukasa", "つかさ", "4126"), // PINはとりあえず固定
+        ("mamoru", "まもる", "4126"),
+        ("admin", "管理人", "4126")
+    ];
+
+    private void SelectUser(string id) => _selectedId = id;
+
+    private async Task HandleLogin()
     {
-        Context.CurrentUser = name;
-        // 名前を選んだら、そのままトレーニング画面へGO！
-        Nav.NavigateTo("training");
+        var user = _availableUsers.FirstOrDefault(u => u.Id == _selectedId);
+        if (user.Pin == _inputPin)
+        {
+            var session = new UserSession(user.Id, user.Name, user.Pin, DateTime.Now);
+            await UserContext.LoginAsync(session);
+
+            // 重要：ここで Training 画面へ直接飛ばす
+            Nav.NavigateTo("/training");
+        }
+        else
+        {
+            // PINが違うときの処理（アラートなど）
+            _inputPin = "";
+        }
     }
 }

@@ -3,6 +3,7 @@
 @using BrothersEnglishApp.Services
 @inject LocalStorageService Storage
 @inject HttpClient Http
+@inject IJSRuntime JS
 
 <PageTitle>単語一覧</PageTitle>
 
@@ -34,8 +35,12 @@
                     @* 上段：単語、品詞、頻出度 *@
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div>
+                            @* 一覧用の小さなスピーカーボタン *@
                             <strong class="h5 text-primary mb-0">@w.Word</strong>
                             <span class="text-body-tertiary">@w.IPA</span>
+                            <button class="btn btn-sm btn-link p-0" @onclick="() => Speak(w.Word)" title="音声を再生">
+                                <i class="bi bi-volume-up-fill text-primary"></i>
+                            </button>
                             <span class="badge @GetBadgeClass(w.PartOfSpeech) ms-2">
                                 @w.PartOfSpeech
                             </span>
@@ -106,5 +111,14 @@
 
         // どれにも当てはまらない場合はグレー
         return "bg-secondary";
+    }
+
+    private async Task Speak(string text)
+    {
+        await JS.InvokeVoidAsync("eval", $@"
+            var msg = new SpeechSynthesisUtterance('{text.Replace("'", "\\'")}');
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        ");
     }
 }

@@ -1,16 +1,42 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@inject UserContext UserContext
+@inject NavigationManager Nav
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+@if (_isInitialized)
+{
+    @if (UserContext.IsLoggedIn)
+    {
+        @* ② ログイン済み：ナビを表示して中身（Trainingなど）を出す *@
+        <div class="page">
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+            <main>
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
         </div>
+    }
+    else
+    {
+        @* ① 未ログイン：Homeコンポーネントのみを表示 *@
+        <Home />
+    }
+}
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+@code {
+    private bool _isInitialized;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UserContext.InitializeAsync();
+        _isInitialized = true;
+        
+        // もしログイン済みで、今 "/" にいるなら Training へ自動転送
+        if (UserContext.IsLoggedIn && Nav.Uri.EndsWith("/"))
+        {
+            Nav.NavigateTo("/training");
+        }
+    }
+}
