@@ -17,7 +17,7 @@ public class UserContext(LocalStorageService localStorage)
     public async Task InitializeAsync()
     {
         CurrentSession = await localStorage.LoadAsync<UserSession>("user_session");
-        if (CurrentSession != null && CurrentSession.LoginDate.AddDays(30) < DateTime.Now)
+        if (CurrentSession != null && CurrentSession.LoginDate.AddDays(30) < DateTime.UtcNow)
         {
             await LogoutAsync();
         }

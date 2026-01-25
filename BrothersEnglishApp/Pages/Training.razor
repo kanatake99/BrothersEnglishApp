@@ -5,7 +5,8 @@
 @inject NavigationManager Nav
 @inject UserContext Context
 @inject IJSRuntime JS   // JavaScript呼び出し用
-@inject HttpClient Http // HTTPクライアント
+@inject WordRepository WordRepo // 単語リポジトリの注入
+@inject TrainingEngine Engine // トレーニングエンジンの注入
 
 <PageTitle>トレーニング</PageTitle>
 
@@ -14,7 +15,7 @@
     <div class="text-center mt-5">
         <span class="display-1">🎉</span>
         <h4 class="mt-3">今日の目標達成！</h4>
-        @* 修正1：現在のユーザー名のみを表示 *@
+        @* 現在のユーザー名のみを表示 *@
         <p class="fs-5">@(Context.CurrentUser)くん、よく頑張ったね！</p>
         <button class="btn btn-primary btn-lg mt-3 shadow" @onclick='() => Nav.NavigateTo("/")'>TOPへ戻る</button>
     </div>
@@ -134,7 +135,7 @@ else
         }
 
         // サーバーから最新の単語リストをダウンロードする
-        allWords = await Http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json");
+        allWords = await WordRepo.GetWordsAsync();
         userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}")
                 ?? new UserProgress { UserName = Context.CurrentUser };
 
@@ -157,33 +158,26 @@ else
     {
         if (allWords == null || userProgress == null) return;
 
-        var settings = await Storage.LoadAsync<AppSettings>("AppSettings") ?? new AppSettings();
-        var todayCount = userProgress.WordStatuses.Count(s => s.LastReviewed.Date == DateTime.Today && s.Status >= 1);
-
-        if (todayCount >= settings.DailyGoal)
-        {
-            currentWord = null;
-            return;
-        }
-
-        currentWord = allWords
-            .Where(w => !userProgress.WordStatuses.Any(s => s.WordId == w.Id && s.LastReviewed.Date == DateTime.Today))
-            .OrderByDescending(w => w.Level)
-            .ThenBy(w => Guid.NewGuid())
-            .FirstOrDefault();
+        // 複雑な判定は Engine に任せる！
+        currentWord = Engine.GetNextWord(allWords, userProgress, appSettings.DailyGoal);
 
         userInput = "";
         isStep2 = false;
         isCorrect = false;
         isReviewing = false;
-        StateHasChanged();
-        await Task.Delay(10);
-        await JS.InvokeVoidAsync("focusElement", wordInput);
 
-        if (currentWord != null && appSettings.IsAutoSpeechEnabled)
+        StateHasChanged();
+        // 画面が切り替わるのを一瞬待ってから、入力欄にフォーカスを当てる
+        if (currentWord != null)
         {
-            await Task.Delay(300);
-            await Speak(currentWord.Word);
+            await Task.Delay(10);
+            await JS.InvokeVoidAsync("speechHandlers.focusElement", wordInput);
+
+            if (appSettings.IsAutoSpeechEnabled)
+            {
+                await Task.Delay(300);
+                await Speak(currentWord.Word);
+            }
         }
     }
 
@@ -192,64 +186,46 @@ else
     {
         if (currentWord == null || userProgress == null || isReviewing) return;
 
-        if (userInput.Trim().ToLower() == currentWord.Word.ToLower())
+        // 審判に判定を任せる
+        var result = Engine.ProcessAnswer(userInput, currentWord, userProgress, isStep2);
+
+        if (result.IsCorrect)
         {
             isCorrect = true;
             StateHasChanged();
             await Task.Delay(600);
 
-            if (!isStep2)
+            if (result.ShouldGoToStep2)
             {
                 isStep2 = true;
                 isCorrect = false;
                 userInput = "";
-                StateHasChanged();
             }
-            else
+            else if (result.IsFinished)
             {
-                var status = userProgress.WordStatuses.FirstOrDefault(s => s.WordId == currentWord.Id);
-                if (status == null)
-                {
-                    status = new WordStatus { WordId = currentWord.Id };
-                    userProgress.WordStatuses.Add(status);
-                }
-                status.Status = 1;
-                status.CorrectCount++;
-                status.LastReviewed = DateTime.Now;
-
+                // 保存して次へ
                 await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
                 await SelectNextWord();
             }
         }
         else
         {
-            // 間違えた場合
-            if (!isStep2)
+            if (result.ShouldStartReview)
             {
-                // Step 1 の時は、震えさせるだけ
-                isWrong = true;
-                StateHasChanged();
-                await Task.Delay(500); // 震えてる間待つ
-                isWrong = false;
-                StateHasChanged();
-            }
-            else if (isStep2 && !string.IsNullOrEmpty(userInput))
-            {
-                var status = userProgress.WordStatuses.FirstOrDefault(s => s.WordId == currentWord.Id);
-                if (status == null)
-                {
-                    status = new WordStatus { WordId = currentWord.Id };
-                    userProgress.WordStatuses.Add(status);
-                }
-                status.IncorrectCount++;
                 await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
-
-                // 復習モードへ切り替え
                 isReviewing = true;
                 userInput = "";
+            }
+            else
+            {
+                // Step1でのミス、または空文字など
+                isWrong = true;
                 StateHasChanged();
+                await Task.Delay(500);
+                isWrong = false;
             }
         }
+        StateHasChanged();
     }
 
     // 「覚えた！」ボタンを押した時
@@ -273,12 +249,8 @@ else
     // 単語を読み上げるメソッド
     private async Task Speak(string text)
     {
-        // ブラウザの読み上げ機能（Web Speech API）を呼び出すよ
-        // 言語を 'en-US' に指定して、英語らしく発音してもらう
-        await JS.InvokeVoidAsync("eval", $@"
-            var msg = new SpeechSynthesisUtterance('{text.Replace("'", "\\'")}');
-            msg.lang = 'en-US';
-            window.speechSynthesis.speak(msg);
-        ");
+        // eval ではなく、定義した関数名を直接呼ぶ！
+        // 引数（text）を渡すだけなので、シングルクォートの考慮も不要で安全
+        await JS.InvokeVoidAsync("speechHandlers.speak", text);
     }
 }

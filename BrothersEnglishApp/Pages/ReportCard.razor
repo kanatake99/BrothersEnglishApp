@@ -2,6 +2,7 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @inject LocalStorageService Storage
+@inject WordRepository WordRepo // 単語リポジトリサービス
 
 <PageTitle>成績表</PageTitle>
 
@@ -101,7 +102,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        allWords = await Storage.LoadAsync<List<EnglishWord>>("MasterWords");
+        allWords = await WordRepo.GetWordsAsync();
 
         // 二人分のデータをロード
         var names = new[] { "つかさ", "まもる" };

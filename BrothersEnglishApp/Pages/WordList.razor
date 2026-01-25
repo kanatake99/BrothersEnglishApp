@@ -2,7 +2,7 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @inject LocalStorageService Storage
-@inject HttpClient Http
+@inject WordRepository WordRepo // 単語リポジトリサービス
 @inject IJSRuntime JS
 
 <PageTitle>単語一覧</PageTitle>
@@ -78,8 +78,7 @@
         try
         {
             // 1. サーバーのJSONファイルを読み込む（wwwroot/data/master_words.json）
-            var savedWords = await Http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json")
-                             ?? new List<EnglishWord>();
+            var savedWords = await WordRepo.GetWordsAsync();
 
             // 2. A-Z順に並び替えて表示用リストに入れる
             words = savedWords.OrderBy(w => w.Word).ToList();
@@ -115,10 +114,6 @@
 
     private async Task Speak(string text)
     {
-        await JS.InvokeVoidAsync("eval", $@"
-            var msg = new SpeechSynthesisUtterance('{text.Replace("'", "\\'")}');
-            msg.lang = 'en-US';
-            window.speechSynthesis.speak(msg);
-        ");
+        await JS.InvokeVoidAsync("speechHandlers.speak", text);
     }
 }

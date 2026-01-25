@@ -7,4 +7,4 @@
 /// <param name="UserName">表示用の名前</param>
 /// <param name="LoginDate">ログインした日時</param>
 // Models/UserSession.cs
-public record UserSession(string UserId, string UserName, string Pin, DateTime LoginDate);
+public record UserSession(string UserId, string UserName, DateTime LoginDate);

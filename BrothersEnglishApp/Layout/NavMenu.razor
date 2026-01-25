@@ -1,5 +1,6 @@
 ﻿@using BrothersEnglishApp.Services 
 @inject UserContext Context
+@inject NavigationManager Nav
 
 <div class="top-row ps-3 navbar bg-primary">
     <div class="container-fluid">
@@ -9,6 +10,7 @@
         </button>
     </div>
 </div>
+
 
 <div class="@NavMenuCssClass nav-scrollable bg-light" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
@@ -32,6 +34,12 @@
                 <span class="me-2 fs-3">📍</span> 単語一覧
             </NavLink>
         </div>
+        <div class="nav-item px-3 fs-4">
+            @* mt-autoで一番下に配置 *@
+            <button class="nav-link btn btn-link text-danger" @onclick="HandleLogout">
+                <span class="me-2 fs-3">🔓</span>ログアウト
+            </button>
+        </div>
         @if (Context.IsAdmin)
         {
             @* 管理人にしか見えないメニュー *@
@@ -52,5 +60,11 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task HandleLogout()
+    {
+        await Context.LogoutAsync();
+        Nav.NavigateTo("/", forceLoad: true); // 状態をクリアして戻る
     }
 }

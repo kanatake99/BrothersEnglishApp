@@ -49,15 +49,15 @@
         var user = _availableUsers.FirstOrDefault(u => u.Id == _selectedId);
         if (user.Pin == _inputPin)
         {
-            var session = new UserSession(user.Id, user.Name, user.Pin, DateTime.Now);
-            await UserContext.LoginAsync(session);
+            // ここで作成する session には PIN を含めない
+            var session = new UserSession(user.Id, user.Name, DateTime.UtcNow);
 
-            // 重要：ここで Training 画面へ直接飛ばす
+            await UserContext.LoginAsync(session);
             Nav.NavigateTo("/training");
         }
         else
         {
-            // PINが違うときの処理（アラートなど）
+            // 間違えた時の処理（入力クリアなど）
             _inputPin = "";
         }
     }

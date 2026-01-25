@@ -11,5 +11,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 // LocalStorageService‚ðŽg‚¦‚é‚æ‚¤‚É“o˜^‚·‚é
 builder.Services.AddScoped<BrothersEnglishApp.Services.LocalStorageService>();
 builder.Services.AddScoped<UserContext>();
+builder.Services.AddScoped<WordRepository>();
+builder.Services.AddScoped<TrainingEngine>();
 
 await builder.Build().RunAsync();
