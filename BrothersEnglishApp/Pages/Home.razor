@@ -1,64 +1,81 @@
 ﻿@page "/"
-@inject UserContext UserContext
+@inject UserContext Context
 @inject NavigationManager Nav
+@inject LocalStorageService Storage
 
-<div class="container text-center mt-5">
-    @if (string.IsNullOrEmpty(_selectedId))
+<PageTitle>ホーム - 英単語アプリ</PageTitle>
+
+<div class="container mt-4">
+    @if (!Context.IsLoggedIn)
     {
-        <h2>だれが つかうかな？</h2>
-        <div class="row mt-4">
-            @foreach (var user in _availableUsers)
-            {
-                <div class="col-md-4 mb-3">
-                    <button class="btn btn-outline-primary btn-lg w-100 p-4" @onclick="() => SelectUser(user.Id)">
-                        <i class="bi bi-person-circle"></i><br /> @user.Name
-                    </button>
-                </div>
-            }
+        @* 念のためのガード。OnInitializedで飛ばすが、一瞬見えるのを防ぐ *@
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">ログイン画面へ いどう中...</p>
         </div>
     }
     else
     {
-        <h2>@(_availableUsers.First(u => u.Id == _selectedId).Name) くん</h2>
-        <p>PIN（4けた）をいれてね</p>
-        <input type="password" class="form-control form-control-lg text-center mx-auto"
-               style="max-width: 200px; font-size: 2rem;"
-               @bind="_inputPin" @bind:event="oninput" maxlength="4" />
+        @* --- ログイン済みの表示：ここがメインのHome --- *@
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold">こんにちは、@(Context.CurrentUser)くん！</h1>
+            <p class="text-muted">今日も一緒にお勉強をしよう！</p>
+        </div>
 
-        <div class="mt-4">
-            <button class="btn btn-primary btn-lg" @onclick="HandleLogin">ログイン</button>
-            <button class="btn btn-link" @onclick="() => _selectedId = null">もどる</button>
+        @* メインメニュー（カード形式で押しやすく） *@
+        <div class="row g-4 justify-content-center">
+            <div class="col-6 col-md-4">
+                <div class="card h-100 shadow-sm border-warning text-center p-3 btn btn-light" @onclick='() => Nav.NavigateTo("training")'>
+                    <div class="display-3">📝</div>
+                    <div class="card-body p-1">
+                        <h5 class="card-title fw-bold">覚える</h5>
+                        <p class="small text-muted mb-0">Training</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+                <div class="card h-100 shadow-sm border-success text-center p-3 btn btn-light" @onclick='() => Nav.NavigateTo("study")'>
+                    <div class="display-3">🏁</div>
+                    <div class="card-body p-1">
+                        <h5 class="card-title fw-bold">復習</h5>
+                        <p class="small text-muted mb-0">Study</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* --- カレンダーエリア（後で実装する場所） --- *@
+        <div class="mt-5 p-4 bg-white rounded shadow-sm">
+            <h4 class="border-bottom pb-2 mb-3">📅 カレンダー</h4>
+            <div class="text-center py-5 text-muted border border-dashed rounded">
+                ここにカレンダーが出るよ！<br />
+                丸（○）や花丸（💮）を並べる準備中...
+            </div>
+        </div>
+
+        @* ログアウトボタン（親切設計） *@
+        <div class="text-center mt-5">
+            <button class="btn btn-link text-secondary" @onclick="HandleLogout">
+                べつの 人で ログインする
+            </button>
         </div>
     }
 </div>
 
 @code {
-    private string? _selectedId;
-    private string _inputPin = "";
-
-    private readonly (string Id, string Name, string Pin)[] _availableUsers = [
-        ("tsukasa", "つかさ", "4126"), // PINはとりあえず固定
-        ("mamoru", "まもる", "4126"),
-        ("admin", "管理人", "4126")
-    ];
-
-    private void SelectUser(string id) => _selectedId = id;
-
-    private async Task HandleLogin()
+    protected override void OnInitialized()
     {
-        var user = _availableUsers.FirstOrDefault(u => u.Id == _selectedId);
-        if (user.Pin == _inputPin)
+        // ログインしていなければログイン画面へリダイレクト
+        if (!Context.IsLoggedIn)
         {
-            // ここで作成する session には PIN を含めない
-            var session = new UserSession(user.Id, user.Name, DateTime.UtcNow);
+            Nav.NavigateTo("login");
+        }
+    }
 
-            await UserContext.LoginAsync(session);
-            Nav.NavigateTo("/training");
-        }
-        else
-        {
-            // 間違えた時の処理（入力クリアなど）
-            _inputPin = "";
-        }
+    private async Task HandleLogout()
+    {
+        await Context.LogoutAsync();
+        Nav.NavigateTo("login");
     }
 }

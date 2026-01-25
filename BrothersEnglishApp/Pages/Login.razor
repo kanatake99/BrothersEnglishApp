@@ -1,0 +1,73 @@
+﻿@page "/login"
+@inject UserContext UserContext
+@inject NavigationManager Nav
+
+<div class="container text-center mt-5">
+    @if (string.IsNullOrEmpty(_selectedId))
+    {
+        <h2>だれが つかうかな？</h2>
+        <div class="row mt-4">
+            @foreach (var user in _availableUsers)
+            {
+                <div class="col-md-4 mb-3">
+                    <button class="btn btn-outline-primary btn-lg w-100 p-4" @onclick="() => SelectUser(user.Id)">
+                        <i class="bi bi-person-circle"></i><br /> @user.Name
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h2>@(_availableUsers.First(u => u.Id == _selectedId).Name) くん</h2>
+        <p>PIN（4けた）をいれてね</p>
+        <input type="password" class="form-control form-control-lg text-center mx-auto"
+               style="max-width: 200px; font-size: 2rem;"
+               @oninput="HandleInput" maxlength="4" />
+
+        <div class="mt-4">
+            <button class="btn btn-primary btn-lg" @onclick="HandleLogin">ログイン</button>
+            <button class="btn btn-link" @onclick="() => _selectedId = null">もどる</button>
+        </div>
+    }
+</div>
+
+@code {
+    private string? _selectedId;
+    private string _inputPin = "";
+
+    private readonly (string Id, string Name, string Pin)[] _availableUsers = [
+        ("tsukasa", "つかさ", "4126"), // PINはとりあえず固定
+        ("mamoru", "まもる", "4126"),
+        ("admin", "管理人", "4126")
+    ];
+
+    private void SelectUser(string id) => _selectedId = id;
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        _inputPin = e.Value?.ToString() ?? "";
+        if (_inputPin.Length == 4)
+        {
+            await HandleLogin();
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        var user = _availableUsers.FirstOrDefault(u => u.Id == _selectedId);
+        if (user.Pin == _inputPin)
+        {
+            // ここで作成する session には PIN を含めない
+            var session = new UserSession(user.Id, user.Name, DateTime.UtcNow);
+
+            await UserContext.LoginAsync(session);
+            Nav.NavigateTo("/training");
+        }
+        else
+        {
+            // 間違えた時の処理（入力クリアなど）
+            _inputPin = "";
+        }
+    }
+}

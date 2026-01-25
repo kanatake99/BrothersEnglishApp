@@ -46,7 +46,10 @@ public class TrainingResult
     public TrainingResult ProcessAnswer(string userInput, EnglishWord currentWord, UserProgress userProgress, bool isStep2)
     {
         var result = new TrainingResult();
-        bool isCorrect = userInput.Trim().ToLower() == currentWord.Word.ToLower();
+        bool isCorrect = string.Equals(
+            userInput.Trim(),
+            currentWord.Word,
+            StringComparison.OrdinalIgnoreCase);
         result.IsCorrect = isCorrect;
 
         if (isCorrect)

@@ -6,9 +6,22 @@
 @inject IJSRuntime JS
 
 <PageTitle>単語一覧</PageTitle>
+@* --- 1. 索引ボタン（スマホで押しやすいよう横スクロール or 折り返し） --- *@
+<div class="d-flex flex-wrap gap-1 my-3">
+    @foreach (var letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        {
+            <button class="btn btn-info btn-sm"
+                    @onclick="@(() => ScrollToLetter(letter.ToString()))"
+                    style="min-width: 35px; height: 35px;">
+                @letter
+            </button>
+        }
+</div>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+
+@* --- 2. 単語リスト表示エリア --- *@
+<div class="container mb-3">
+    <div class="d-flex justify-content-between align-items-center mt-5">
         <h3>📖 登録単語リスト</h3>
         <span class="badge bg-secondary">全 @(words?.Count ?? 0) 単語</span>
     </div>
@@ -28,40 +41,51 @@
     }
     else
     {
-        <div class="list-group shadow-sm mt-3">
-            @foreach (var w in words)
+        <div class="list-group shadow-sm mt-1">
+            @foreach (var group in words.GroupBy(w => w.Word[0].ToString().ToUpper()).OrderBy(g => g.Key))
             {
-                <div class="list-group-item p-3">
-                    @* 上段：単語、品詞、頻出度 *@
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                            @* 一覧用の小さなスピーカーボタン *@
-                            <strong class="h5 text-primary mb-0">@w.Word</strong>
-                            <span class="text-body-tertiary">@w.IPA</span>
-                            <button class="btn btn-sm btn-link p-0" @onclick="() => Speak(w.Word)" title="音声を再生">
-                                <i class="bi bi-volume-up-fill text-primary"></i>
-                            </button>
-                            <span class="badge @GetBadgeClass(w.PartOfSpeech) ms-2">
-                                @w.PartOfSpeech
-                            </span>
-                        </div>
-                        <div class="text-nowrap">
-                            @for (int i = 0; i < w.Level; i++)
-                            {
-                                <span class="text-warning" style="font-size: 0.8rem;">★</span>
-                            }
-                        </div>
-                    </div>
+                <h3 id="letter-@group.Key" class="bg-light p-2 mt-4 border-start border-4 border-primary">@group.Key</h3>
 
-                    @* 下段：意味 *@
-                    <div class="bg-light p-2 rounded mb-2">
-                        <span class="text-dark">@w.Meaning</span>
+                @foreach (var w in group)
+                {
+                    @* 単語ごとに個別のカード *@
+                    <div class="list-group-item p-3">
+                        @* 上段:単語、品詞、頻出度 *@
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <strong class="h5 text-primary mb-0 fs-3">@w.Word</strong>
+                                <span class="text-body-tertiary">@w.IPA</span>
+                                <button class="btn btn-sm btn-link p-0" @onclick="() => Speak(w.Word)" title="音声を再生">
+                                    <i class="bi bi-volume-up-fill text-primary"></i>
+                                </button>
+                                <span class="badge @GetBadgeClass(w.PartOfSpeech) ms-2">
+                                    @w.PartOfSpeech
+                                </span>
+                            </div>
+                            <div class="text-nowrap">
+                                @for (int i = 0; i < w.Level; i++)
+                                {
+                                    <span class="text-warning" style="font-size: 0.8rem;">★</span>
+                                }
+                            </div>
+                        </div>
+                        @* 下段:意味 *@
+                        <div class="bg-light p-2 rounded">
+                            <span class="text-dark">@w.Meaning</span>
+                        </div>
                     </div>
-               </div>
+                }
             }
         </div>
     }
 </div>
+
+@* --- 3. トップへ戻るボタン（右下に固定） --- *@
+<button class="btn btn-primary rounded-circle shadow"
+        style="position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; z-index: 1000;"
+        @onclick="ScrollToTop">
+    <i class="bi bi-arrow-up"></i>
+</button>
 
 @code {
     private List<EnglishWord>? words;
@@ -70,6 +94,19 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadWords();
+    }
+ 
+
+    // 特定のアルファベットまでジャンプ
+    private async Task ScrollToLetter(string letter)
+    {
+        await JS.InvokeVoidAsync("appFunctions.scrollToElement", $"letter-{letter}");
+    }
+
+    // 一番上まで戻る
+    private async Task ScrollToTop()
+    {
+        await JS.InvokeVoidAsync("appFunctions.scrollToTop");
     }
 
     // 単語リストをサーバーから読み込むメソッド
@@ -116,4 +153,5 @@
     {
         await JS.InvokeVoidAsync("speechHandlers.speak", text);
     }
+
 }

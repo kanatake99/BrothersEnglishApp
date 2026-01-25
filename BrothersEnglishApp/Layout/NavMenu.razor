@@ -25,6 +25,11 @@
             </NavLink>
         </div>
         <div class="nav-item px-3 fs-4">
+            <NavLink class="nav-link text-primary-emphasis" href="study">
+                <span class="me-2 fs-3">🏁</span> 復習
+            </NavLink>
+        </div>
+        <div class="nav-item px-3 fs-4">
             <NavLink class="nav-link text-primary-emphasis" href="report">
                 <span class="me-2 fs-3">📋</span> 成績表
             </NavLink>
@@ -33,12 +38,6 @@
             <NavLink class="nav-link text-primary-emphasis" href="wordlist">
                 <span class="me-2 fs-3">📍</span> 単語一覧
             </NavLink>
-        </div>
-        <div class="nav-item px-3 fs-4">
-            @* mt-autoで一番下に配置 *@
-            <button class="nav-link btn btn-link text-danger" @onclick="HandleLogout">
-                <span class="me-2 fs-3">🔓</span>ログアウト
-            </button>
         </div>
         @if (Context.IsAdmin)
         {

@@ -1,0 +1,152 @@
+﻿@page "/study"
+@inject WordRepository WordRepo
+@inject TrainingEngine Engine
+@inject UserContext Context
+@inject LocalStorageService Storage
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageTitle>今日の復習</PageTitle>
+
+<div class="container mt-4">
+    @if (_isFinished)
+    {
+        <div class="text-center">
+            <h2>おつかれさま！</h2>
+            <p>今日の 学習は 終わりだよ。</p>
+            <div class="display-1 text-success mb-4"><i class="bi bi-trophy-fill"></i></div>
+            <button class="btn btn-primary btn-lg" @onclick="GoReport">成績表を 見る</button>
+        </div>
+    }
+    else if (_currentQuestion != null)
+    {
+        <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+            <div class="card-header bg-info text-white text-center">
+                がくしゅう中 (@(_doneCount + 1) / @_studyGoal)
+            </div>
+            <div class="card-body text-center p-5">
+                <p class="text-muted">@(_currentQuestion.IsEnglishToJapanese ? "これの意味は？" : "これは英語で？")</p>
+                <h1 class="display-4 mb-4">@_currentQuestion.QuestionText</h1>
+                
+                <div class="d-grid gap-3">
+                    @foreach (var option in _currentQuestion.Options)
+                    {
+                        <button class="btn btn-outline-primary btn-lg py-3" @onclick="() => HandleAnswer(option)">
+                            @option
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <p>きょう おぼえた単語を よみこみ中...</p>
+        </div>
+    }
+</div>
+
+@code {
+
+    private List<EnglishWord> _allWords = [];
+    private UserProgress? _userProgress;
+    private Question? _currentQuestion;
+    private int _studyGoal = 10; // 1日の学習回数
+    private int _doneCount = 0;
+    private bool _isFinished = false;
+
+    // クイズ用モデル
+    private class Question {
+        public string QuestionText { get; set; } = "";
+        public string CorrectAnswer { get; set; } = "";
+        public List<string> Options { get; set; } = [];
+        public bool IsEnglishToJapanese { get; set; }
+    }
+
+    // 成績表にいく
+    private void GoReport()
+    {
+        Navigation.NavigateTo("report");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _allWords = await WordRepo.GetWordsAsync();
+        _userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}");
+        
+        // 設定から学習回数を取得（なければデフォルト10）
+        var settings = await Storage.LoadAsync<AppSettings>("AppSettings");
+        _studyGoal = settings?.DailyGoal ?? 10; // ここは「学習回数」用の別設定にしてもいいね
+
+        GenerateNextQuestion();
+    }
+
+    private void GenerateNextQuestion()
+    {
+        if (_doneCount >= _studyGoal) {
+            _isFinished = true;
+            return;
+        }
+
+        // 1. 今日「正解(Status >= 1)」した単語を抽出
+        var todayWords = _allWords.Where(w => 
+            _userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.LastReviewed.Date == DateTime.UtcNow.Date && s.Status >= 1) ?? false
+        ).ToList();
+
+        // 今日覚えた単語が少ない（例えば3語未満）なら、
+        // 復習のために過去に覚えた単語も混ぜて出題するようにする
+        List<EnglishWord> pool = todayWords;
+        if (todayWords.Count < 3)
+        {
+            // 過去に一度でも正解したことがある単語を混ぜる
+            var learnedWords = _allWords.Where(w =>
+                _userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false
+            ).ToList();
+
+            pool = learnedWords.Count > 0 ? learnedWords : _allWords;
+        }
+        
+        // 2. 問題の単語を決定
+        var target = pool[Random.Shared.Next(pool.Count)];
+        bool isEngToJap = Random.Shared.Next(2) == 0;
+        
+        // 3. 選択肢の作成（正解 + 未習得含むランダムな3つ）
+        var options = new List<string> { isEngToJap ? target.Meaning : target.Word };
+        var wrongCandidates = _allWords.Where(w => w.Id != target.Id).OrderBy(_ => Guid.NewGuid()).Take(3);
+        foreach (var w in wrongCandidates)
+        {
+            options.Add(isEngToJap ? w.Meaning : w.Word);
+        }
+
+        _currentQuestion = new Question {
+            QuestionText = isEngToJap ? target.Word : target.Meaning,
+            CorrectAnswer = isEngToJap ? target.Meaning : target.Word,
+            Options = options.OrderBy(_ => Guid.NewGuid()).ToList(),
+            IsEnglishToJapanese = isEngToJap
+        };
+    }
+
+    private async Task HandleAnswer(string selected)
+    {
+        if (selected == _currentQuestion?.CorrectAnswer) {
+            _doneCount++;
+            GenerateNextQuestion();
+        } else {
+            // 不正解時の演出（とりあえずアラート）
+            await JS.InvokeVoidAsync("alert", "ざんねん！もういっかい！");
+        }
+    }
+}
+
+<style>
+    /* ボタンの中の文字を、データの通りのケース（大文字小文字）で表示する */
+    .btn {
+        text-transform: none !important;
+    }
+
+    /* ついでに問題文のデカい文字も勝手に変わらないようにガードしておく */
+    .display-4 {
+        text-transform: none !important;
+    }
+</style>
