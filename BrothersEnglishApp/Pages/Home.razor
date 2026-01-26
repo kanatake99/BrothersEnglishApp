@@ -45,14 +45,61 @@
             </div>
         </div>
 
-        @* --- カレンダーエリア（後で実装する場所） --- *@
+        @* --- カレンダーエリア --- *@
         <div class="mt-5 p-4 bg-white rounded shadow-sm">
-            <h4 class="border-bottom pb-2 mb-3">📅 カレンダー</h4>
-            <div class="text-center py-5 text-muted border border-dashed rounded">
-                ここにカレンダーが出るよ！<br />
-                丸（○）や花丸（💮）を並べる準備中...
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                @* 前の月へ *@
+                <button class="btn btn-outline-secondary btn-sm" @onclick="() => ChangeMonth(-1)">
+                    <i class="bi bi-chevron-left"></i> 前の月
+                </button>
+
+                <h4 class="mb-0 fw-bold">
+                    📅 @(_displayDate.ToString("yyyy年 MM月"))
+                </h4>
+
+                @* 次の月へ *@
+                <button class="btn btn-outline-secondary btn-sm" @onclick="() => ChangeMonth(1)">
+                    次の月 <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+
+            <table class="table table-bordered text-center calendar-table">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-danger">日</th>
+                        <th>月</th>
+                        <th>火</th>
+                        <th>水</th>
+                        <th>木</th>
+                        <th>金</th>
+                        <th class="text-primary">土</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var week in _calendarWeeks)
+                    {
+                        <tr>
+                            @foreach (var day in week)
+                            {
+                                <td class="@(day.Month != _displayDate.Month ? "text-muted opacity-25" : "")">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="small mb-1">@day.Day</span>
+                                        <div class="mark-area" style="height: 30px;">
+                                            @GetMark(day)
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @* 今の月に戻るボタン（おまけ） *@
+            <div class="text-end mt-2">
+                <button class="btn btn-link btn-sm text-decoration-none" @onclick="GoToday">きょうに 戻る</button>
             </div>
         </div>
+
 
         @* ログアウトボタン（親切設計） *@
         <div class="text-center mt-5">
@@ -78,4 +125,75 @@
         await Context.LogoutAsync();
         Nav.NavigateTo("login");
     }
+
+    private DateTime _displayDate = DateTime.UtcNow;
+    private List<List<DateTime>> _calendarWeeks = new();
+    private UserProgress? _userProgress;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // ... 前回のログインチェック ...
+        _userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}");
+        GenerateCalendar();
+    }
+
+    private void GenerateCalendar()
+    {
+        _calendarWeeks.Clear();
+        var firstDayOfMonth = new DateTime(_displayDate.Year, _displayDate.Month, 1);
+        // 月の最初の週の日曜日まで戻る
+        var startDate = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
+        
+        var currentDay = startDate;
+        for (int i = 0; i < 6; i++) // 最大6週間
+        {
+            var week = new List<DateTime>();
+            for (int j = 0; j < 7; j++)
+            {
+                week.Add(currentDay);
+                currentDay = currentDay.AddDays(1);
+            }
+            _calendarWeeks.Add(week);
+            if (currentDay.Month != _displayDate.Month && i >= 4) break;
+        }
+    }
+
+    private void ChangeMonth(int monthsToAdd)
+    {
+        // 月を加算（マイナスなら減算）
+        _displayDate = _displayDate.AddMonths(monthsToAdd);
+
+        // 日付が変わったので、カレンダーのマス目を再計算！
+        GenerateCalendar();
+    }
+
+    // 今日の月に一発で戻る処理
+    private void GoToday()
+    {
+        _displayDate = DateTime.UtcNow;
+        GenerateCalendar();
+    }
+
+    // 日付に対応する「印」を返す
+    private RenderFragment GetMark(DateTime date) => builder =>
+    {
+        if (_userProgress == null) return;
+        var key = date.ToString("yyyyMMdd");
+        
+        if (_userProgress.ActivityLog.TryGetValue(key, out var activity))
+        {
+            if (activity.TrainingDone && activity.StudyDone)
+            {
+                builder.AddMarkupContent(0, "<span class='flower-mark'>💮</span>");
+            }
+            else if (activity.TrainingDone)
+            {
+                builder.AddMarkupContent(1, "<span class='training-mark'>○</span>");
+            }
+            else if (activity.StudyDone)
+            {
+                builder.AddMarkupContent(2, "<span class='study-mark'>○</span>");
+            }
+        }
+    };
 }

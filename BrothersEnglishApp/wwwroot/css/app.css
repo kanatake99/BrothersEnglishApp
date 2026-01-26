@@ -131,4 +131,24 @@ code {
         transform: translateX(5px);
     }
 }
+/* home カレンダーエリア */
+.calendar-table th, .calendar-table td {
+    padding: 8px 2px !important;
+    width: 14.28%; /* 7等分 */
+    vertical-align: middle;
+}
 
+.flower-mark {
+    font-size: 1.5rem;
+    color: #ff4757;
+}
+
+.training-mark {
+    color: #1e90ff;
+    font-size: 1.2rem;
+}
+
+.study-mark {
+    color: #2ed573;
+    font-size: 1.2rem;
+}

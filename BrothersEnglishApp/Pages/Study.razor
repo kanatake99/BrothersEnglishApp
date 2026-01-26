@@ -86,6 +86,20 @@
     {
         if (_doneCount >= _studyGoal) {
             _isFinished = true;
+            // ★復習完了のフラグ処理
+            var todayKey = DateTime.UtcNow.ToString("yyyyMMdd");
+            if (_userProgress != null)
+            {
+                if (!_userProgress.ActivityLog.ContainsKey(todayKey))
+                {
+                    _userProgress.ActivityLog[todayKey] = new DayActivity();
+                }
+                _userProgress.ActivityLog[todayKey].StudyDone = true;
+
+                // 非同期メソッドではないので、本当は Task にするか
+                // 別の保存用メソッドを呼ぶのがベストだけど、一旦ここで保存
+                _ = Storage.SaveAsync($"User_{Context.CurrentUserId}", _userProgress);
+            }
             return;
         }
 

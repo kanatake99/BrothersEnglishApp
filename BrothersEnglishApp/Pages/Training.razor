@@ -181,7 +181,7 @@ else
         appSettings.IsAutoSpeechEnabled = (bool)e.Value!;
         await Storage.SaveAsync("AppSettings", appSettings);
     }
-    
+
     // 今何問目かを計算する
     private int GetCurrentProgress()
     {
@@ -215,6 +215,7 @@ else
         isReviewing = false;
 
         StateHasChanged();
+
         // 画面が切り替わるのを一瞬待ってから、入力欄にフォーカスを当てる
         if (currentWord != null)
         {
@@ -226,6 +227,18 @@ else
                 await Task.Delay(300);
                 await Speak(currentWord.Word);
             }
+        } else
+        {
+             // ★目標達成した時のフラグ処理を追加
+            var todayKey = DateTime.UtcNow.ToString("yyyyMMdd");
+            if (!userProgress.ActivityLog.ContainsKey(todayKey))
+            {
+                userProgress.ActivityLog[todayKey] = new DayActivity();
+            }
+            userProgress.ActivityLog[todayKey].TrainingDone = true;
+
+            // 保存を忘れずに！
+            await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
         }
     }
 

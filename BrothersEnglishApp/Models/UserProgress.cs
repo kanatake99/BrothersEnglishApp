@@ -5,7 +5,7 @@
         public string UserName { get; set; } = "";
         public List<WordStatus> WordStatuses { get; set; } = new();
 
-        // ↓ これを追加！日付をキーにして、何をやったか記録する
+        // 日付（"yyyyMMdd"形式）をキーにして、その日の活動を保存する
         public Dictionary<string, DayActivity> ActivityLog { get; set; } = new();
     }
     public class DayActivity

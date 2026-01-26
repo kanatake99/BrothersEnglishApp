@@ -6,7 +6,7 @@
 {
     @if (UserContext.IsLoggedIn)
     {
-        @* ② ログイン済み：ナビを表示して中身（Trainingなど）を出す *@
+        @* ログイン済み：通常のサイドバー付きレイアウト *@
         <div class="page">
             <div class="sidebar">
                 <NavMenu />
@@ -20,8 +20,9 @@
     }
     else
     {
-        @* ① 未ログイン：Homeコンポーネントのみを表示 *@
-        <Home />
+        @* 未ログイン：ログイン画面を表示 *@
+        @* ここで「login」というページを表示するようにするよ *@
+        <BrothersEnglishApp.Pages.Login />
     }
 }
 
@@ -32,11 +33,8 @@
     {
         await UserContext.InitializeAsync();
         _isInitialized = true;
-        
-        // もしログイン済みで、今 "/" にいるなら Training へ自動転送
-        if (UserContext.IsLoggedIn && Nav.Uri.EndsWith("/"))
-        {
-            Nav.NavigateTo("/training");
-        }
+
+        // 自動転送はここでは「あえてしない」のがコツ！
+        // ログインしていれば @Body が Home を表示してくれるからね。
     }
 }
