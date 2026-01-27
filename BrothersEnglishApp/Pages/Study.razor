@@ -5,6 +5,7 @@
 @inject LocalStorageService Storage
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject TrainingEngine Engine // トレーニングエンジンの注入
 
 <PageTitle>今日の復習</PageTitle>
 
@@ -31,7 +32,7 @@
                 <div class="d-grid gap-3">
                     @foreach (var option in _currentQuestion.Options)
                     {
-                        <button class="btn btn-outline-primary btn-lg py-3" @onclick="() => HandleAnswer(option)">
+                        <button class="btn btn-outline-primary btn-lg py-3 fs-4" @onclick="() => HandleAnswer(option)">
                             @option
                         </button>
                     }
@@ -48,109 +49,66 @@
 </div>
 
 @code {
-
     private List<EnglishWord> _allWords = [];
     private UserProgress? _userProgress;
     private Question? _currentQuestion;
-    private int _studyGoal = 10; // 1日の学習回数
+    private int _studyGoal = 10;
     private int _doneCount = 0;
     private bool _isFinished = false;
 
-    // クイズ用モデル
-    private class Question {
-        public string QuestionText { get; set; } = "";
-        public string CorrectAnswer { get; set; } = "";
-        public List<string> Options { get; set; } = [];
-        public bool IsEnglishToJapanese { get; set; }
-    }
-
-    // 成績表にいく
-    private void GoReport()
-    {
-        Navigation.NavigateTo("report");
-    }
-
+    
     protected override async Task OnInitializedAsync()
     {
         _allWords = await WordRepo.GetWordsAsync();
         _userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}");
-        
-        // 設定から学習回数を取得（なければデフォルト10）
         var settings = await Storage.LoadAsync<AppSettings>("AppSettings");
-        _studyGoal = settings?.DailyGoal ?? 10; // ここは「学習回数」用の別設定にしてもいいね
+        _studyGoal = settings?.DailyGoal ?? 10;
 
         GenerateNextQuestion();
     }
 
+
     private void GenerateNextQuestion()
     {
-        if (_doneCount >= _studyGoal) {
-            _isFinished = true;
-            // ★復習完了のフラグ処理
-            var todayKey = DateTime.UtcNow.ToString("yyyyMMdd");
-            if (_userProgress != null)
-            {
-                if (!_userProgress.ActivityLog.ContainsKey(todayKey))
-                {
-                    _userProgress.ActivityLog[todayKey] = new DayActivity();
-                }
-                _userProgress.ActivityLog[todayKey].StudyDone = true;
-
-                // 非同期メソッドではないので、本当は Task にするか
-                // 別の保存用メソッドを呼ぶのがベストだけど、一旦ここで保存
-                _ = Storage.SaveAsync($"User_{Context.CurrentUserId}", _userProgress);
-            }
+        if (_doneCount >= _studyGoal)
+        {
+            FinishStudy();
             return;
         }
 
-        // 1. 今日「正解(Status >= 1)」した単語を抽出
-        var todayWords = _allWords.Where(w => 
-            _userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.LastReviewed.Date == DateTime.UtcNow.Date && s.Status >= 1) ?? false
-        ).ToList();
+        // ★ロジックをEngineに丸投げ！
+        _currentQuestion = Engine.GenerateStudyQuestion(_allWords, _userProgress);
+    }
 
-        // 今日覚えた単語が少ない（例えば3語未満）なら、
-        // 復習のために過去に覚えた単語も混ぜて出題するようにする
-        List<EnglishWord> pool = todayWords;
-        if (todayWords.Count < 3)
+    private async void FinishStudy()
+    {
+        _isFinished = true;
+        var todayKey = DateTime.UtcNow.ToString("yyyyMMdd");
+        if (_userProgress != null)
         {
-            // 過去に一度でも正解したことがある単語を混ぜる
-            var learnedWords = _allWords.Where(w =>
-                _userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false
-            ).ToList();
+            if (!_userProgress.ActivityLog.ContainsKey(todayKey))
+                _userProgress.ActivityLog[todayKey] = new DayActivity();
 
-            pool = learnedWords.Count > 0 ? learnedWords : _allWords;
+            _userProgress.ActivityLog[todayKey].StudyDone = true;
+            await Storage.SaveAsync($"User_{Context.CurrentUserId}", _userProgress);
         }
-        
-        // 2. 問題の単語を決定
-        var target = pool[Random.Shared.Next(pool.Count)];
-        bool isEngToJap = Random.Shared.Next(2) == 0;
-        
-        // 3. 選択肢の作成（正解 + 未習得含むランダムな3つ）
-        var options = new List<string> { isEngToJap ? target.Meaning : target.Word };
-        var wrongCandidates = _allWords.Where(w => w.Id != target.Id).OrderBy(_ => Guid.NewGuid()).Take(3);
-        foreach (var w in wrongCandidates)
-        {
-            options.Add(isEngToJap ? w.Meaning : w.Word);
-        }
-
-        _currentQuestion = new Question {
-            QuestionText = isEngToJap ? target.Word : target.Meaning,
-            CorrectAnswer = isEngToJap ? target.Meaning : target.Word,
-            Options = options.OrderBy(_ => Guid.NewGuid()).ToList(),
-            IsEnglishToJapanese = isEngToJap
-        };
+        StateHasChanged();
     }
 
     private async Task HandleAnswer(string selected)
     {
-        if (selected == _currentQuestion?.CorrectAnswer) {
+        if (selected == _currentQuestion?.CorrectAnswer)
+        {
             _doneCount++;
             GenerateNextQuestion();
-        } else {
-            // 不正解時の演出（とりあえずアラート）
+        }
+        else
+        {
             await JS.InvokeVoidAsync("alert", "ざんねん！もういっかい！");
         }
     }
+
+    private void GoReport() => Navigation.NavigateTo("report");
 }
 
 <style>

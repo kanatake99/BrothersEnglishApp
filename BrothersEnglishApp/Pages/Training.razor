@@ -22,11 +22,6 @@
             <button class="btn btn-success btn-lg shadow-sm py-3" @onclick='() => Nav.NavigateTo("study")'>
                 <i class="bi bi-play-circle-fill me-2"></i>今日の復習をする
             </button>
-
-            @* サブの動線：ホームへ *@
-            <button class="btn btn-outline-secondary" @onclick='() => Nav.NavigateTo("/")'>
-                TOPへ戻る
-            </button>
         </div>
     </div>
 }
@@ -48,7 +43,7 @@ else
         <div class="progress mb-3" style="height: 10px;">
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
                  role="progressbar" 
-                 style="width: @(GetProgressPercentage())%"></div>
+                 style="@_progressStyle"></div>
         </div>
 
         @* containerをfluidにして横幅を有効活用 *@
@@ -114,7 +109,7 @@ else
             {
                 @* 修正：スマホで押しやすい、画面中央の巨大なボタン *@
                 <button class="btn btn-danger btn-lg w-100 shadow py-4 fs-3" @onclick="EndReview">
-                    覚えた！もう一度入力🚀
+                    もう一度入力する🚀
                 </button>
             }
             else
@@ -153,6 +148,10 @@ else
     private bool isReviewing = false; // 復習モードかどうか
     private bool isWrong = false; // 震えさせるためのフラグ
     private AppSettings appSettings = new();
+
+    // 矢印（=>）を使って、常に最新の進捗率を反映した「命令文」を作る
+    //インラインでの式展開（Expression Evaluation）を回避し、プロパティバインディングに寄せる
+    private string _progressStyle => $"width: {GetProgressPercentage()}%;";
 
     // コンポーネント初期化時の処理
     protected override async Task OnInitializedAsync()

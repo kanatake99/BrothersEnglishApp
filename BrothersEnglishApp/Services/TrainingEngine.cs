@@ -1,6 +1,4 @@
-﻿// Services/TrainingEngine.cs
-// 英単語学習アプリのトレーニングエンジン
-using BrothersEnglishApp.Models;
+﻿using BrothersEnglishApp.Models;
 
 namespace BrothersEnglishApp.Services;
 
@@ -12,37 +10,38 @@ public class TrainingResult
     public bool IsFinished { get; set; }
 }
 
-
-    public class TrainingEngine
+public class Question
 {
+    public string QuestionText { get; set; } = "";
+    public string CorrectAnswer { get; set; } = "";
+    public List<string> Options { get; set; } = [];
+    public bool IsEnglishToJapanese { get; set; }
+}
 
-    public EnglishWord? GetNextWord(
-        List<EnglishWord> allWords,
-        UserProgress userProgress,
-        int dailyGoal)
+public class TrainingEngine
+{
+    // 前回の単語IDを一時的に保持する変数
+    private string? _lastWordId;
+
+    // --- Training用ロジック ---
+    public EnglishWord? GetNextWord(List<EnglishWord> allWords, UserProgress userProgress, int dailyGoal)
     {
-        // 1. 今日の達成目標をチェック
-        var todayUtc = DateTime.UtcNow.Date; // UTCでの今日
-
+        var todayUtc = DateTime.UtcNow.Date;
         var todayCount = userProgress.WordStatuses.Count(s =>
             s.LastReviewed.Date == todayUtc && s.Status >= 1);
 
         if (todayCount >= dailyGoal) return null;
 
-        // 2. 出題候補を絞り込む
-        // まだ今日学習していない単語だけを対象にする
         var candidates = allWords.Where(w =>
             !userProgress.WordStatuses.Any(s =>
                 s.WordId == w.Id && s.LastReviewed.Date == todayUtc));
 
-        // 3. レベル順（5→1）で並べ、同じレベル内ではランダムにする
         return candidates
-            .OrderByDescending(w => w.Level) // レベルが高い順
-            .ThenBy(_ => Guid.NewGuid())     // 同じレベル内はランダム
+            .OrderByDescending(w => w.Level)
+            .ThenBy(_ => Guid.NewGuid())
             .FirstOrDefault();
     }
 
-    // 回答をチェックして進捗を更新するロジック
     public TrainingResult ProcessAnswer(string userInput, EnglishWord currentWord, UserProgress userProgress, bool isStep2)
     {
         var result = new TrainingResult();
@@ -60,7 +59,6 @@ public class TrainingResult
             }
             else
             {
-                // Step2正解なら進捗を更新
                 UpdateWordStatus(userProgress, currentWord.Id, true);
                 result.IsFinished = true;
             }
@@ -69,7 +67,6 @@ public class TrainingResult
         {
             if (isStep2 && !string.IsNullOrEmpty(userInput))
             {
-                // Step2で間違えたら不正解カウントを増やして復習モードへ
                 UpdateWordStatus(userProgress, currentWord.Id, false);
                 result.ShouldStartReview = true;
             }
@@ -77,12 +74,9 @@ public class TrainingResult
         return result;
     }
 
-    // 単語の進捗状況を更新するヘルパーメソッド
     private void UpdateWordStatus(UserProgress progress, string wordId, bool isCorrect)
     {
-        // 2. ここで探す時も string 同士の比較になるよ
         var status = progress.WordStatuses.FirstOrDefault(s => s.WordId == wordId);
-
         if (status == null)
         {
             status = new WordStatus { WordId = wordId };
@@ -99,5 +93,51 @@ public class TrainingResult
         {
             status.IncorrectCount++;
         }
+    }
+
+    // --- Study用ロジック ---
+    public Question GenerateStudyQuestion(List<EnglishWord> allWords, UserProgress? userProgress)
+    {
+        var todayUtc = DateTime.UtcNow.Date;
+
+        // 1. 出題候補（pool）の作成
+        var todayWords = allWords.Where(w =>
+            userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.LastReviewed.Date == todayUtc && s.Status >= 1) ?? false
+        ).ToList();
+
+        List<EnglishWord> pool = todayWords.Count < 3
+                    ? (allWords.Where(w => userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false).ToList())
+                    : todayWords;
+
+        if (pool.Count == 0) pool = allWords.Take(20).ToList();
+
+        // ★ ここがポイント：前回と違う単語を選ぶロジック
+        // poolが2件以上あれば、前回出したID以外のものに絞り込む
+        var finalPool = (pool.Count > 1 && _lastWordId != null)
+            ? pool.Where(w => w.Id != _lastWordId).ToList()
+            : pool;
+
+        // 2. ターゲットの決定
+        var target = finalPool[Random.Shared.Next(finalPool.Count)];
+
+        // ★ 今回のIDを「前回のID」として保存しておく
+        _lastWordId = target.Id;
+
+        bool isEngToJap = Random.Shared.Next(2) == 0;
+
+        var options = new List<string> { isEngToJap ? target.Meaning : target.Word };
+        var wrongCandidates = allWords.Where(w => w.Id != target.Id).OrderBy(_ => Guid.NewGuid()).Take(3);
+        foreach (var w in wrongCandidates)
+        {
+            options.Add(isEngToJap ? w.Meaning : w.Word);
+        }
+
+        return new Question
+        {
+            QuestionText = isEngToJap ? target.Word : target.Meaning,
+            CorrectAnswer = isEngToJap ? target.Meaning : target.Word,
+            Options = options.OrderBy(_ => Guid.NewGuid()).ToList(),
+            IsEnglishToJapanese = isEngToJap
+        };
     }
 }
