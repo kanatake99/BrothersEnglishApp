@@ -134,10 +134,12 @@ else
                            @bind:event="oninput"
                            @onkeyup="HandleKeyUp"
                            class="form-control form-control-lg text-center fs-1 py-3 @(_isWrong ? "shake border-danger text-danger" : "")"
-                           type="text"
+                           type="password" @* ← 【超重要】これだけで予測入力がほぼ消える *@
                            autocomplete="off"
                            autocorrect="off"
+                           autocapitalize="none" @* 文頭を勝手に大文字にさせない *@
                            spellcheck="false"
+                           inputmode="email" @* ← スマホで最初から英字キーボードを出す魔法 *@
                            placeholder="入力してね" />
                 </div>
             }
