@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # mainブランチに保存されたら実行
+    branches: [master] # mainブランチに保存されたら実行
 
 jobs:
   deploy-to-github-pages:
