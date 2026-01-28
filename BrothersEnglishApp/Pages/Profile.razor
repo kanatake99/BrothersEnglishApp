@@ -1,0 +1,59 @@
+﻿@page "/profile"
+@using BrothersEnglishApp.Models
+@using BrothersEnglishApp.Services
+@inject UserContext Context
+@inject LocalStorageService Storage
+
+<div class="container mt-4">
+    <h3>⚙️ @(Context.CurrentUser)くんの設定</h3>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            @* --- Training 用 --- *@
+            <div class="mb-4">
+                <label class="form-label fw-bold">📖 「覚える」の目標（新しくやる数）</label>
+                <div class="d-flex align-items-center gap-3">
+                    <input type="range" class="form-range" min="5" max="50" step="5" @bind="_userProgress.DailyGoal" />
+                    <span class="badge bg-primary fs-5">@_userProgress.DailyGoal 個</span>
+                </div>
+            </div>
+
+            @* --- Study 用 --- *@
+            <div class="mb-4">
+                <label class="form-label fw-bold">🏁 「復習」の目標（クイズを解く数）</label>
+                <div class="d-flex align-items-center gap-3">
+                    <input type="range" class="form-range" min="5" max="100" step="5" @bind="_userProgress.StudyGoal" />
+                    <span class="badge bg-info fs-5">@_userProgress.StudyGoal 個</span>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-bold">🔊 英単語読み上げ設定</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="autoSpeechProfile"
+                           @bind="_userProgress.IsAutoSpeechEnabled" />
+                    <label class="form-check-label" for="autoSpeechProfile">
+                        単語を 自動で読み上げる
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn btn-success w-100 py-2" @onclick="SaveSettings">設定を保存する</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private UserProgress _userProgress = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var p = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}");
+        if (p != null) _userProgress = p;
+    }
+
+    private async Task SaveSettings()
+    {
+        await Storage.SaveAsync($"User_{Context.CurrentUserId}", _userProgress);
+        // 保存したよ！という通知や遷移をここに入れてもOK
+    }
+}

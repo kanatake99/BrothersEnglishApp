@@ -4,75 +4,100 @@ using BrothersEnglishApp.Models;
 
 namespace BrothersEnglishApp.Services;
 
-// クラス名のすぐ横で (IJSRuntime js) を受け取る！これが「プライマリコンストラクター」だよ。
-// これで、クラス内のどこでも「js」という名前でJavaScriptが呼べるようになるんだ。
+/// <summary>
+/// ブラウザのLocalStorageへのアクセスと、ユーザーデータの永続化を担うサービス
+/// </summary>
 public class LocalStorageService(IJSRuntime js)
 {
-    // データを保存する
+    // JSON変換のルールを一箇所に集約（Copilot指摘5の対応）
+    private static readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true, // 大文字小文字を気にしない
+        WriteIndented = false               // 保存容量節約のため改行はなし
+    };
+
+    #region 基本的な読み書きメソッド
+
+    /// <summary>汎用的なデータの保存</summary>
     public async Task SaveAsync<T>(string key, T value)
     {
         try
         {
-            // value を JSON という文字列形式に変換して、ブラウザの引き出しにしまうよ
-            var json = JsonSerializer.Serialize(value);
+            var json = JsonSerializer.Serialize(value, _jsonOptions);
             await js.InvokeVoidAsync("localStorage.setItem", key, json);
         }
         catch (Exception ex)
         {
-            // 万が一保存できなかった時のための保険だね
-            Console.WriteLine($"保存エラー: {ex.Message}");
+            // 本番では ILogger を使うのが理想だけど、まずは開発用に
+            Console.WriteLine($"[LocalStorage Save Error]: {key} - {ex.Message}");
         }
     }
 
-    // データを取り出す
+    /// <summary>汎用的なデータの取得</summary>
     public async Task<T?> LoadAsync<T>(string key)
     {
         try
         {
-            // 引き出しから JSON 文字列を取り出す
             var json = await js.InvokeAsync<string?>("localStorage.getItem", key);
-
-            // 何も入っていなければ、空っぽ（デフォルト値）を返すよ
             if (string.IsNullOrEmpty(json)) return default;
 
-            // 文字列を元のデータ形式（T）に戻してあげる
-            return JsonSerializer.Deserialize<T>(json);
+            return JsonSerializer.Deserialize<T>(json, _jsonOptions);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"読み込みエラー: {ex.Message}");
+            Console.WriteLine($"[LocalStorage Load Error]: {key} - {ex.Message}");
             return default;
         }
     }
 
-    // セッション情報を保存・取得するメソッド
-    public async Task SaveSessionAsync(UserSession session)
+    /// <summary>指定したキーのデータを削除</summary>
+    public async Task DeleteAsync(string key) =>
+        await js.InvokeVoidAsync("localStorage.removeItem", key);
+
+    #endregion
+
+    #region ユーザー進捗（UserProgress）専用メソッド
+
+    // キー名の命名規則を一箇所で管理（Copilot指摘4の対応）
+    private string GetUserKey(string userId) => $"User_{userId}";
+
+    /// <summary>特定のユーザーの学習進捗を保存</summary>
+    public async Task SaveUserProgressAsync(string userId, UserProgress progress)
     {
-        // セッション情報を保存
-        await js.InvokeVoidAsync("localStorage.setItem", "user_session", JsonSerializer.Serialize(session));
+        if (string.IsNullOrWhiteSpace(userId)) return;
+        await SaveAsync(GetUserKey(userId), progress);
     }
 
+    /// <summary>特定のユーザーの学習進捗を読み込み</summary>
+    public async Task<UserProgress?> LoadUserProgressAsync(string userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId)) return null;
+        return await LoadAsync<UserProgress>(GetUserKey(userId));
+    }
+
+    #endregion
+
+    #region セッション管理
+
+    /// <summary>ログインセッションの保存</summary>
+    public async Task SaveSessionAsync(UserSession session) =>
+        await SaveAsync("user_session", session);
+
+    /// <summary>有効期限をチェックしながらセッションを取得</summary>
     public async Task<UserSession?> GetSessionAsync()
     {
-        var json = await js.InvokeAsync<string>("localStorage.getItem", "user_session");
-        if (string.IsNullOrEmpty(json)) return null;
+        var session = await LoadAsync<UserSession>("user_session");
+        if (session == null) return null;
 
-        var session = JsonSerializer.Deserialize<UserSession>(json);
-
-        // 1ヶ月（30日）経過しているかチェック
-        if (session != null && session.LoginDate.AddDays(30) < DateTime.Now)
+        // 保存は常にUTCで行い、比較もUTCで行う（Copilot指摘3の対応）
+        // ※LoginDateが保存時にUTCであることを前提にしているよ
+        if (session.LoginDate.AddDays(30) < DateTime.UtcNow)
         {
-            await js.InvokeVoidAsync("localStorage.removeItem", "user_session");
+            await DeleteAsync("user_session");
             return null;
         }
         return session;
     }
 
-    // データを削除する
-    public async Task DeleteAsync(string key)
-    {
-        // JavaScript の localStorage.removeItem を呼び出す
-        await js.InvokeVoidAsync("localStorage.removeItem", key);
-    }
+    #endregion
 }
-

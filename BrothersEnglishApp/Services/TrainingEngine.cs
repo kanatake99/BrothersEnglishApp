@@ -1,4 +1,5 @@
-﻿using BrothersEnglishApp.Models;
+﻿// TrainingEngine.cs
+using BrothersEnglishApp.Models;
 
 namespace BrothersEnglishApp.Services;
 
@@ -12,6 +13,7 @@ public class TrainingResult
 
 public class Question
 {
+    public string WordId { get; set; } = "";
     public string QuestionText { get; set; } = "";
     public string CorrectAnswer { get; set; } = "";
     public List<string> Options { get; set; } = [];
@@ -22,19 +24,28 @@ public class TrainingEngine
 {
     // 前回の単語IDを一時的に保持する変数
     private string? _lastWordId;
+    // Studyセッション中に出題したIDとその回数を記録する
+    private Dictionary<string, int> _sessionWordCounts = new();
+
+    // セッション開始時（または終了時）に履歴をリセットするメソッド
+    public void ResetStudySession()
+    {
+        _sessionWordCounts.Clear();
+        _lastWordId = null;
+    }
 
     // --- Training用ロジック ---
     public EnglishWord? GetNextWord(List<EnglishWord> allWords, UserProgress userProgress, int dailyGoal)
     {
-        var todayUtc = DateTime.UtcNow.Date;
+        var today = DateTime.Now.Date;
         var todayCount = userProgress.WordStatuses.Count(s =>
-            s.LastReviewed.Date == todayUtc && s.Status >= 1);
+            s.LastReviewed.Date == today && s.Status >= 1);
 
         if (todayCount >= dailyGoal) return null;
 
         var candidates = allWords.Where(w =>
             !userProgress.WordStatuses.Any(s =>
-                s.WordId == w.Id && s.LastReviewed.Date == todayUtc));
+                s.WordId == w.Id && s.LastReviewed.Date == today));
 
         return candidates
             .OrderByDescending(w => w.Level)
@@ -99,32 +110,67 @@ public class TrainingEngine
     public Question GenerateStudyQuestion(List<EnglishWord> allWords, UserProgress? userProgress)
     {
         var todayUtc = DateTime.UtcNow.Date;
+        EnglishWord? target = null;
 
-        // 1. 出題候補（pool）の作成
-        var todayWords = allWords.Where(w =>
-            userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.LastReviewed.Date == todayUtc && s.Status >= 1) ?? false
+        // --- ① 今日の学習単語（未出題分を優先） ---
+        var todayLearned = allWords.Where(w =>
+            userProgress?.WordStatuses.Any(s =>
+                s.WordId == w.Id &&
+                s.LastReviewed.Date == todayUtc &&
+                s.Status >= 1) ?? false
         ).ToList();
 
-        List<EnglishWord> pool = todayWords.Count < 3
-                    ? (allWords.Where(w => userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false).ToList())
-                    : todayWords;
+        var freshWords = todayLearned
+            .Where(w => !_sessionWordCounts.ContainsKey(w.Id))
+            .ToList();
 
-        if (pool.Count == 0) pool = allWords.Take(20).ToList();
+        if (freshWords.Any())
+        {
+            target = freshWords[Random.Shared.Next(freshWords.Count)];
+        }
+        // --- ② ミスが多い単語（まだ今日のセッションで出してないものを優先） ---
+        else
+        {
+            var weakWords = allWords
+                .Where(w => userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.IncorrectCount > 0) ?? false)
+                .OrderByDescending(w => userProgress?.WordStatuses.First(s => s.WordId == w.Id).IncorrectCount)
+                .ToList();
 
-        // ★ ここがポイント：前回と違う単語を選ぶロジック
-        // poolが2件以上あれば、前回出したID以外のものに絞り込む
-        var finalPool = (pool.Count > 1 && _lastWordId != null)
-            ? pool.Where(w => w.Id != _lastWordId).ToList()
-            : pool;
+            // 未出題の苦手単語があるかチェック
+            var freshWeakWords = weakWords.Where(w => !_sessionWordCounts.ContainsKey(w.Id)).ToList();
 
-        // 2. ターゲットの決定
-        var target = finalPool[Random.Shared.Next(finalPool.Count)];
+            if (freshWeakWords.Any())
+            {
+                target = freshWeakWords.First();
+            }
+            else
+            {
+                // --- ③ 【新設】エンドレス・ランダムモード ---
+                // 学習済みの全単語から、直前と違うものをランダムに選ぶ
+                var masteredPool = allWords.Where(w =>
+                    userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false
+                ).ToList();
 
-        // ★ 今回のIDを「前回のID」として保存しておく
+                if (masteredPool.Any())
+                {
+                    var finalPool = (masteredPool.Count > 1 && _lastWordId != null)
+                        ? masteredPool.Where(w => w.Id != _lastWordId).ToList()
+                        : masteredPool;
+                    target = finalPool[Random.Shared.Next(finalPool.Count)];
+                }
+            }
+        }
+
+        // 万が一ターゲットが見つからない場合のフォールバック
+        if (target == null) target = allWords[Random.Shared.Next(allWords.Count)];
+
+        // セッション履歴に記録
         _lastWordId = target.Id;
+        if (!_sessionWordCounts.ContainsKey(target.Id)) _sessionWordCounts[target.Id] = 0;
+        _sessionWordCounts[target.Id]++;
 
+        // --- 選択肢の作成ロジック（ここは変更なし） ---
         bool isEngToJap = Random.Shared.Next(2) == 0;
-
         var options = new List<string> { isEngToJap ? target.Meaning : target.Word };
         var wrongCandidates = allWords.Where(w => w.Id != target.Id).OrderBy(_ => Guid.NewGuid()).Take(3);
         foreach (var w in wrongCandidates)
@@ -134,10 +180,34 @@ public class TrainingEngine
 
         return new Question
         {
+            WordId = target.Id,
             QuestionText = isEngToJap ? target.Word : target.Meaning,
             CorrectAnswer = isEngToJap ? target.Meaning : target.Word,
             Options = options.OrderBy(_ => Guid.NewGuid()).ToList(),
             IsEnglishToJapanese = isEngToJap
         };
+    }
+    // 学習結果の記録メソッド
+    public void RecordStudyResult(UserProgress progress, string wordId, bool isCorrect)
+    {
+        var status = progress.WordStatuses.FirstOrDefault(s => s.WordId == wordId);
+
+        // もし万が一、学習履歴にない単語を復習した場合は新しく作る
+        if (status == null)
+        {
+            status = new WordStatus { WordId = wordId, Status = 1 }; // 復習に出てる時点で既知扱い
+            progress.WordStatuses.Add(status);
+        }
+
+        status.LastReviewed = DateTime.UtcNow;
+
+        if (isCorrect)
+        {
+            status.CorrectCount++;
+        }
+        else
+        {
+            status.IncorrectCount++;
+        }
     }
 }

@@ -4,18 +4,24 @@
 window.speechHandlers = {
     speak: function (text) {
         if (!text) return;
-
-        // 前回の読み上げがあればキャンセル（声が重ならないように）
         window.speechSynthesis.cancel();
-
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = 'en-US';
         window.speechSynthesis.speak(msg);
     },
 
-    // 他にもJSが必要な処理（フォーカス移動など）があればここに追加できる
+    // 指定した要素にフォーカスを当てる（Training用）
     focusElement: function (element) {
-        if (element) element.focus();
+        if (element && typeof element.focus === 'function') {
+            element.focus();
+        }
+    },
+
+    // 現在のフォーカスを解除する（Studyのボタン選択時用）
+    blurActiveElement: function () {
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+            document.activeElement.blur();
+        }
     }
 };
 

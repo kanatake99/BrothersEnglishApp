@@ -62,7 +62,7 @@
             var session = new UserSession(user.Id, user.Name, DateTime.UtcNow);
 
             await UserContext.LoginAsync(session);
-            Nav.NavigateTo("/training");
+            Nav.NavigateTo("/");
         }
         else
         {

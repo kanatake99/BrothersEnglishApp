@@ -10,7 +10,7 @@
 
 <PageTitle>トレーニング</PageTitle>
 
-@if (currentWord == null)
+@if (_currentWord == null)
 {
     <div class="text-center mt-5">
         <span class="display-1">🎉</span>
@@ -18,6 +18,11 @@
         <p class="fs-5">@(Context.CurrentUser)くん、よく頑張ったね！</p>
 
         <div class="d-grid gap-3 col-10 col-md-6 mx-auto mt-4">
+            @* --- 追加：もっと学習するボタン --- *@
+            <button class="btn btn-outline-primary btn-lg shadow-sm py-3" @onclick="AddMoreStudy">
+                <i class="bi bi-plus-circle-fill me-2"></i>まだいける！もっと覚える
+            </button>
+
             @* メインの動線：ふくしゅうへ *@
             <button class="btn btn-success btn-lg shadow-sm py-3" @onclick='() => Nav.NavigateTo("study")'>
                 <i class="bi bi-play-circle-fill me-2"></i>今日の復習をする
@@ -35,14 +40,14 @@ else
             </div>
             <div class="text-end text-muted small">
                 @* Engineに現在の進捗を計算させるか、ここで簡易計算 *@
-                <strong>@GetCurrentProgress()</strong> / @appSettings.DailyGoal 問目
+                <strong>@GetCurrentProgress()</strong> / @(_userProgress?.DailyGoal ?? 10) 問目
             </div>
         </div>
 
         @* プログレスバー（視覚的に進み具合を見せる） *@
         <div class="progress mb-3" style="height: 10px;">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                 role="progressbar" 
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                 role="progressbar"
                  style="@_progressStyle"></div>
         </div>
 
@@ -50,36 +55,44 @@ else
         @* ステップ表示を少しコンパクトに *@
         <div class="text-center mb-4">
             <div class="d-flex justify-content-center align-items-end flex-column">
-                <div class="form-check form-switch mt-2">
-                    <input class="form-check-input" type="checkbox" id="autoSpeech"
-                           @bind="appSettings.IsAutoSpeechEnabled" @oninput="ToggleAutoSpeech" />
-                    <label class="form-check-label small text-muted" for="autoSpeech">
-                        単語読み上げ
-                    </label>
-                </div>
+                @if (_userProgress != null)
+                {
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input" type="checkbox" id="autoSpeech"
+                               @bind="_userProgress.IsAutoSpeechEnabled" @oninput="ToggleAutoSpeech" />
+                        <label class="form-check-label small text-muted" for="autoSpeech">
+                            単語読み上げ
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    @* ロード中の表示（お好みで） *@
+                    <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
+                }
             </div>
         </div>
-        
-        <div class="badge rounded-pill @(isReviewing ? "bg-danger" : "bg-warning text-dark") mb-2 px-4 py-3">
-            @if (isReviewing)
+
+        <div class="badge rounded-pill @(_isReviewing ? "bg-danger" : "bg-warning text-dark") mb-2 px-4 py-3">
+            @if (_isReviewing)
             {
                 <span>👀 よく見て覚えよう！</span>
             }
             else
             {
 
-                <span>@(isStep2 ? "🔥 見ないで入力！" : "📝 お手本通り入力！")</span>
+                <span>@(_isStep2 ? "🔥 見ないで入力！" : "📝 お手本通り入力！")</span>
             }
         </div>
 
         <div class="card shadow-sm p-3 mb-2">
             @* お手本エリア：スマホで見やすい高さに *@
             <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
-                @if (isReviewing || !isStep2)
+                @if (_isReviewing || !_isStep2)
                 {
-                    <h2 class="display-4 fw-bold text-primary mb-0">@currentWord.Word</h2>
+                    <h2 class="display-4 fw-bold text-primary mb-0">@_currentWord.Word</h2>
                     <div class="text-muted fs-4 ps-1">
-                        @currentWord.IPA@* ここで発音記号を表示 *@
+                        @_currentWord.IPA@* ここで発音記号を表示 *@
                     </div>
 
                 }
@@ -89,23 +102,23 @@ else
 
                 }
             </div>
-            
+
             @* 単語情報エリア *@
             <div class="mb-3">
                 <div class="text-center my-4">
-                    <span class="badge bg-success ">@currentWord.PartOfSpeech</span>
+                    <span class="badge bg-success ">@_currentWord.PartOfSpeech</span>
                     @* スピーカーボタン。クリックで Speak メソッドを実行！ *@
                     <button class="btn btn-outline-primary rounded-circle"
-                            @onclick="() => Speak(currentWord.Word)"
+                            @onclick="() => Speak(_currentWord.Word)"
                             title="音声を再生">
                         <i class="bi bi-volume-up-fill"></i>
                     </button>
                 </div>
-                <h2 class="fw-bold mt-1 mb-0" style="font-size: calc(1.5rem + 1.5vw);">@currentWord.Meaning</h2>
-             </div>
+                <h2 class="fw-bold mt-1 mb-0" style="font-size: calc(1.5rem + 1.5vw);">@_currentWord.Meaning</h2>
+            </div>
 
 
-            @if (isReviewing)
+            @if (_isReviewing)
             {
                 @* 修正：スマホで押しやすい、画面中央の巨大なボタン *@
                 <button class="btn btn-danger btn-lg w-100 shadow py-4 fs-3" @onclick="EndReview">
@@ -116,11 +129,11 @@ else
             {
                 <div class="form-group mb-2">
                     @* 修正後：スマホ最適化＋間違えた時の震え演出を追加！ *@
-                    <input @ref="wordInput"
-                           @bind="userInput"
+                    <input @ref="_wordInput"
+                           @bind="_userInput"
                            @bind:event="oninput"
                            @onkeyup="HandleKeyUp"
-                           class="form-control form-control-lg text-center fs-1 py-3 @(isWrong ? "shake border-danger text-danger" : "")"
+                           class="form-control form-control-lg text-center fs-1 py-3 @(_isWrong ? "shake border-danger text-danger" : "")"
                            type="text"
                            autocomplete="off"
                            autocorrect="off"
@@ -129,7 +142,7 @@ else
                 </div>
             }
 
-            @if (isCorrect)
+            @if (_isCorrect)
             {
                 <div class="alert alert-success py-2 mt-2 shadow-sm">✨ 正解！ ✨</div>
             }
@@ -138,22 +151,23 @@ else
 }
 
 @code {
-    private List<EnglishWord>? allWords;
-    private UserProgress? userProgress;
-    private EnglishWord? currentWord;
-    private ElementReference wordInput;
-    private string userInput = "";
-    private bool isStep2 = false;
-    private bool isCorrect = false;
-    private bool isReviewing = false; // 復習モードかどうか
-    private bool isWrong = false; // 震えさせるためのフラグ
-    private AppSettings appSettings = new();
+    // --- フィールド変数（プライベート変数には _ を付与して統一） ---
+    private List<EnglishWord>? _allWords;
+    private UserProgress? _userProgress;
+    private EnglishWord? _currentWord;
+    private ElementReference _wordInput;
+    private string _userInput = "";
+    private bool _isStep2 = false;
+    private bool _isCorrect = false;
+    private bool _isReviewing = false;
+    private bool _isWrong = false;
+    private int _extraGoal = 0;
 
-    // 矢印（=>）を使って、常に最新の進捗率を反映した「命令文」を作る
-    //インラインでの式展開（Expression Evaluation）を回避し、プロパティバインディングに寄せる
+    // プログレスバーの幅を計算する計算プロパティ
     private string _progressStyle => $"width: {GetProgressPercentage()}%;";
 
-    // コンポーネント初期化時の処理
+    // --- ライフサイクルメソッド ---
+
     protected override async Task OnInitializedAsync()
     {
         if (!Context.IsSelected)
@@ -162,109 +176,53 @@ else
             return;
         }
 
-        // サーバーから最新の単語リストをダウンロードする
-        allWords = await WordRepo.GetWordsAsync();
-        userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}")
-                ?? new UserProgress { UserName = Context.CurrentUser };
+        _allWords = await WordRepo.GetWordsAsync();
 
-        // 他の読み込み処理と一緒に AppSettings もロードする
-        var savedSettings = await Storage.LoadAsync<AppSettings>("AppSettings");
-        if (savedSettings != null) appSettings = savedSettings;
+        // ユーザー専用メソッドでロード
+        _userProgress = await Storage.LoadUserProgressAsync(Context.CurrentUserId)
+                ?? new UserProgress { UserName = Context.CurrentUser };
 
         await SelectNextWord();
     }
 
-    // トグルが切り替わった時に保存する
+    // --- ユーザー操作ハンドラー ---
+
     private async Task ToggleAutoSpeech(ChangeEventArgs e)
     {
-        appSettings.IsAutoSpeechEnabled = (bool)e.Value!;
-        await Storage.SaveAsync("AppSettings", appSettings);
+        if (_userProgress == null) return;
+
+        _userProgress.IsAutoSpeechEnabled = (bool)e.Value!;
+        await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
     }
 
-    // 今何問目かを計算する
-    private int GetCurrentProgress()
+    private async Task AddMoreStudy()
     {
-        if (userProgress == null) return 0;
-        // 今日正解した単語数 + 1（今解いている分）を返す
-        var todayDone = userProgress.WordStatuses.Count(s =>
-            s.LastReviewed.Date == DateTime.UtcNow.Date && s.Status >= 1);
-
-        // 目標数を超えないように調整
-        return Math.Min(todayDone + 1, appSettings.DailyGoal);
+        _extraGoal += 5;
+        await SelectNextWord();
     }
 
-    // プログレスバーの％を計算
-    private double GetProgressPercentage()
-    {
-        var current = GetCurrentProgress() - 1; // 解き終わった数
-        return ((double)current / appSettings.DailyGoal) * 100;
-    }
-
-    // 次の単語を選ぶメソッド
-    private async Task SelectNextWord()
-    {
-        if (allWords == null || userProgress == null) return;
-
-        // 複雑な判定は Engine に任せる！
-        currentWord = Engine.GetNextWord(allWords, userProgress, appSettings.DailyGoal);
-
-        userInput = "";
-        isStep2 = false;
-        isCorrect = false;
-        isReviewing = false;
-
-        StateHasChanged();
-
-        // 画面が切り替わるのを一瞬待ってから、入力欄にフォーカスを当てる
-        if (currentWord != null)
-        {
-            await Task.Delay(10);
-            await JS.InvokeVoidAsync("speechHandlers.focusElement", wordInput);
-
-            if (appSettings.IsAutoSpeechEnabled)
-            {
-                await Task.Delay(300);
-                await Speak(currentWord.Word);
-            }
-        } else
-        {
-             // ★目標達成した時のフラグ処理を追加
-            var todayKey = DateTime.UtcNow.ToString("yyyyMMdd");
-            if (!userProgress.ActivityLog.ContainsKey(todayKey))
-            {
-                userProgress.ActivityLog[todayKey] = new DayActivity();
-            }
-            userProgress.ActivityLog[todayKey].TrainingDone = true;
-
-            // 保存を忘れずに！
-            await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
-        }
-    }
-
-    // ユーザーの回答をチェックするメソッド
     private async Task CheckAnswer()
     {
-        if (currentWord == null || userProgress == null || isReviewing) return;
+        if (_currentWord == null || _userProgress == null || _isReviewing) return;
 
-        // 審判に判定を任せる
-        var result = Engine.ProcessAnswer(userInput, currentWord, userProgress, isStep2);
+        // Engineに判定を委譲
+        var result = Engine.ProcessAnswer(_userInput, _currentWord, _userProgress, _isStep2);
 
         if (result.IsCorrect)
         {
-            isCorrect = true;
+            _isCorrect = true;
             StateHasChanged();
             await Task.Delay(600);
 
             if (result.ShouldGoToStep2)
             {
-                isStep2 = true;
-                isCorrect = false;
-                userInput = "";
+                _isStep2 = true;
+                _isCorrect = false;
+                _userInput = "";
             }
             else if (result.IsFinished)
             {
-                // 保存して次へ
-                await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
+                await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
                 await SelectNextWord();
             }
         }
@@ -272,45 +230,96 @@ else
         {
             if (result.ShouldStartReview)
             {
-                await Storage.SaveAsync($"User_{Context.CurrentUserId}", userProgress);
-                isReviewing = true;
-                userInput = "";
+                await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+                _isReviewing = true;
+                _userInput = "";
             }
             else
             {
-                // Step1でのミス、または空文字など
-                isWrong = true;
+                _isWrong = true;
                 StateHasChanged();
                 await Task.Delay(500);
-                isWrong = false;
+                _isWrong = false;
             }
         }
         StateHasChanged();
     }
 
-    // 「覚えた！」ボタンを押した時
     private async Task EndReview()
     {
-        isReviewing = false;
-        userInput = "";
+        _isReviewing = false;
+        _userInput = "";
         StateHasChanged();
 
-        // 画面が切り替わるのを一瞬待ってから、入力欄にフォーカスを当てる
         await Task.Delay(10);
-        await JS.InvokeVoidAsync("focusElement", wordInput);
+        await JS.InvokeVoidAsync("speechHandlers.focusElement", _wordInput);
     }
 
-    // Enterキーでの送信対応
+    // --- ロジック・ユーティリティ ---
+
+    private async Task SelectNextWord()
+    {
+        if (_allWords == null || _userProgress == null) return;
+
+        int effectiveGoal = _userProgress.DailyGoal + _extraGoal;
+        _currentWord = Engine.GetNextWord(_allWords, _userProgress, effectiveGoal);
+
+        _userInput = "";
+        _isStep2 = false;
+        _isCorrect = false;
+        _isReviewing = false;
+        StateHasChanged();
+
+        if (_currentWord != null)
+        {
+            await Task.Delay(10);
+            await JS.InvokeVoidAsync("speechHandlers.focusElement", _wordInput);
+
+            if (_userProgress.IsAutoSpeechEnabled)
+            {
+                await Task.Delay(300);
+                await Speak(_currentWord.Word);
+            }
+        }
+        else
+        {
+            var todayKey = DateTime.Now.Date.ToString("yyyyMMdd");
+            if (!_userProgress.ActivityLog.ContainsKey(todayKey))
+            {
+                _userProgress.ActivityLog[todayKey] = new DayActivity();
+            }
+            _userProgress.ActivityLog[todayKey].TrainingDone = true;
+
+            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+        }
+    }
+
+    private int GetCurrentProgress()
+    {
+        if (_userProgress == null) return 0;
+
+        var today = DateTime.Now.Date;
+        var todayDone = _userProgress.WordStatuses.Count(s =>
+            s.LastReviewed.Date == today && s.Status >= 1);
+
+        return Math.Min(todayDone + 1, _userProgress.DailyGoal + _extraGoal);
+    }
+
+    private double GetProgressPercentage()
+    {
+        if (_userProgress == null || _userProgress.DailyGoal <= 0) return 0;
+
+        int targetGoal = _userProgress.DailyGoal + _extraGoal;
+        var current = GetCurrentProgress() - 1;
+
+        return ((double)current / targetGoal) * 100;
+    }
+
     private async Task HandleKeyUp(KeyboardEventArgs e)
     {
         if (e.Key == "Enter") await CheckAnswer();
     }
 
-    // 単語を読み上げるメソッド
-    private async Task Speak(string text)
-    {
-        // eval ではなく、定義した関数名を直接呼ぶ！
-        // 引数（text）を渡すだけなので、シングルクォートの考慮も不要で安全
+    private async Task Speak(string text) =>
         await JS.InvokeVoidAsync("speechHandlers.speak", text);
-    }
 }

@@ -5,11 +5,26 @@
 @inject LocalStorageService Storage
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
-@inject TrainingEngine Engine // トレーニングエンジンの注入
+
 
 <PageTitle>今日の復習</PageTitle>
 
 <div class="container mt-4">
+    @* --- 判定用オーバーレイ --- *@
+    @if (_showOverlay)
+    {
+        <div class="position-absolute top-50 start-50 translate-middle" style="z-index: 100; pointer-events: none;">
+            @if (_isLastAnswerCorrect)
+            {
+                <div class="display-1 text-success fw-bold animate__animated animate__zoomIn">○</div>
+            }
+            else
+            {
+                <div class="display-1 text-danger fw-bold animate__animated animate__shakeX">×</div>
+            }
+        </div>
+    }
+    @* --- メインコンテンツ --- *@
     @if (_isFinished)
     {
         <div class="text-center">
@@ -21,18 +36,20 @@
     }
     else if (_currentQuestion != null)
     {
-        <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+        <div class="card shadow-sm mx-auto" style="max-width: 500px; opacity: @(_showOverlay ? "0.5" : "1")">
             <div class="card-header bg-info text-white text-center">
                 がくしゅう中 (@(_doneCount + 1) / @_studyGoal)
             </div>
             <div class="card-body text-center p-5">
                 <p class="text-muted">@(_currentQuestion.IsEnglishToJapanese ? "これの意味は？" : "これは英語で？")</p>
                 <h1 class="display-4 mb-4">@_currentQuestion.QuestionText</h1>
-                
+
                 <div class="d-grid gap-3">
                     @foreach (var option in _currentQuestion.Options)
                     {
-                        <button class="btn btn-outline-primary btn-lg py-3 fs-4" @onclick="() => HandleAnswer(option)">
+                        @* classに @(id) とかつけてJSから触れるようにする *@
+                        <button class="btn btn-outline-primary btn-lg py-3 fs-4 quiz-button"
+                                @onclick="(e) => HandleAnswer(option, e)">
                             @option
                         </button>
                     }
@@ -49,6 +66,7 @@
 </div>
 
 @code {
+    // --- フィールド変数（命名規則：プライベートなものには _ をつける） ---
     private List<EnglishWord> _allWords = [];
     private UserProgress? _userProgress;
     private Question? _currentQuestion;
@@ -56,69 +74,103 @@
     private int _doneCount = 0;
     private bool _isFinished = false;
 
-    
+    // 演出用のフラグ
+    private bool _showOverlay = false;
+    private bool _isLastAnswerCorrect = false;
+
+    // --- ライフサイクルメソッド ---
+
     protected override async Task OnInitializedAsync()
     {
         _allWords = await WordRepo.GetWordsAsync();
-        _userProgress = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}");
-        var settings = await Storage.LoadAsync<AppSettings>("AppSettings");
-        _studyGoal = settings?.DailyGoal ?? 10;
 
-        GenerateNextQuestion();
+        // ★ 指摘4：専用メソッドでロードするように修正
+        _userProgress = await Storage.LoadUserProgressAsync(Context.CurrentUserId);
+
+        if (_userProgress != null)
+        {
+            // 目標数の設定
+            if (_userProgress.StudyGoal > 0)
+            {
+                _studyGoal = _userProgress.StudyGoal;
+            }
+            else
+            {
+                _studyGoal = _userProgress.DailyGoal > 0 ? _userProgress.DailyGoal : 10;
+            }
+        }
+        await GenerateNextQuestion();
     }
 
+    // --- ユーザー操作ハンドラー ---
 
-    private void GenerateNextQuestion()
+    /// <summary>回答を選択した時の処理</summary>
+    private async Task HandleAnswer(string selected, MouseEventArgs e)
+    {
+        if (_showOverlay || _currentQuestion == null) return;
+
+        // ★ 指摘9：evalを避けてフォーカス解除（別途JS側に定義した関数を呼ぶのが理想）
+        await JS.InvokeVoidAsync("speechHandlers.blurActiveElement");
+
+        bool isCorrect = (selected == _currentQuestion.CorrectAnswer);
+
+        if (_userProgress != null)
+        {
+            // エンジンに結果を記録させる
+            Engine.RecordStudyResult(_userProgress, _currentQuestion.WordId, isCorrect);
+
+            // ★ 保存メソッドを専用のものに差し替え
+            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+        }
+
+        // 正誤演出
+        _isLastAnswerCorrect = isCorrect;
+        _showOverlay = true;
+        StateHasChanged();
+
+        await Task.Delay(600); // 演出待機
+        _showOverlay = false;
+
+        if (isCorrect)
+        {
+            _doneCount++;
+            await GenerateNextQuestion();
+        }
+        // 不正解の場合は再表示されるので、そのまま
+
+        StateHasChanged();
+    }
+
+    // --- ロジック・ユーティリティ ---
+
+    /// <summary>次のクイズを生成する</summary>
+    private async Task GenerateNextQuestion()
     {
         if (_doneCount >= _studyGoal)
         {
-            FinishStudy();
+            await FinishStudy(); // ここで await する！これで警告が消えるよ
             return;
         }
 
-        // ★ロジックをEngineに丸投げ！
         _currentQuestion = Engine.GenerateStudyQuestion(_allWords, _userProgress);
     }
 
-    private async void FinishStudy()
+    /// <summary>学習完了時のフラグ更新と保存</summary>
+    private async Task FinishStudy()
     {
         _isFinished = true;
-        var todayKey = DateTime.UtcNow.ToString("yyyyMMdd");
+        var todayKey = DateTime.Now.ToString("yyyyMMdd");
+
         if (_userProgress != null)
         {
             if (!_userProgress.ActivityLog.ContainsKey(todayKey))
                 _userProgress.ActivityLog[todayKey] = new DayActivity();
 
             _userProgress.ActivityLog[todayKey].StudyDone = true;
-            await Storage.SaveAsync($"User_{Context.CurrentUserId}", _userProgress);
+            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
         }
         StateHasChanged();
     }
 
-    private async Task HandleAnswer(string selected)
-    {
-        if (selected == _currentQuestion?.CorrectAnswer)
-        {
-            _doneCount++;
-            GenerateNextQuestion();
-        }
-        else
-        {
-            await JS.InvokeVoidAsync("alert", "ざんねん！もういっかい！");
-        }
-    }
-
     private void GoReport() => Navigation.NavigateTo("report");
 }
-
-<style>
-    /* ボタンの中の文字を、データの通りのケース（大文字小文字）で表示する */
-    .btn {
-        text-transform: none !important;
-    }
-
-    /* ついでに問題文のデカい文字も勝手に変わらないようにガードしておく */
-    .display-4 {
-        text-transform: none !important;
-    }
-</style>

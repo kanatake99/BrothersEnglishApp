@@ -1,0 +1,47 @@
+﻿body {
+}
+
+@keyframes shakeX {
+    from, to {
+        transform: translate3d(0, 0, 0);
+    }
+
+    20%, 60% {
+        transform: translate3d(-10px, 0, 0);
+    }
+
+    40%, 80% {
+        transform: translate3d(10px, 0, 0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate__animated {
+    animation-duration: 0.5s;
+}
+
+.animate__zoomIn {
+    animation-name: zoomIn;
+}
+
+.animate__shakeX {
+    animation-name: shakeX;
+}
+
+.btn {
+    text-transform: none !important;
+}
+
+.display-4 {
+    text-transform: none !important;
+}
