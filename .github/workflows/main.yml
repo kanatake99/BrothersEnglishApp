@@ -2,33 +2,38 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [master] # mainブランチに保存されたら実行
+    branches: [master] # かんの環境に合わせて master を指定
 
 jobs:
   deploy-to-github-pages:
     runs-on: ubuntu-latest
     steps:
+      # 1. コードをチェックアウト
       - uses: actions/checkout@v4
 
+      # 2. .NET 8 をセットアップ
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x # 使用しているバージョンに合わせる
+          dotnet-version: 8.0.x
 
+      # 3. プロジェクトをビルドして発行（パスを修正済み！）
       - name: Publish .NET Project
-        run: dotnet publish BrothersEnglishApp.csproj -c Release -o release --nologo
+        run: dotnet publish BrothersEnglishApp/BrothersEnglishApp.csproj -c Release -o release --nologo
 
-      # GitHub Pages用の404対策（index.htmlをコピーするおまじない）
+      # 4. GitHub Pages 用のベースパス設定と 404 対策
       - name: Change base-tag and copy index.html to 404.html
         run: |
           sed -i 's/<base href="\/" \/>/<base href="\/BrothersEnglishApp\/" \/>/g' release/wwwroot/index.html
           cp release/wwwroot/index.html release/wwwroot/404.html
 
+      # 5. Jekyll を無効化（Blazorを正しく動かすため）
       - name: Add .nojekyll file
         run: touch release/wwwroot/.nojekyll
 
+      # 6. 生成されたファイルを gh-pages ブランチにデプロイ
       - name: Commit and Push to GitHub Pages branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: release/wwwroot
-          branch: gh-pages # 公開専用のブランチに送る
+          branch: gh-pages
