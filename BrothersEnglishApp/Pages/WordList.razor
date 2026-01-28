@@ -44,7 +44,7 @@
         <div class="list-group shadow-sm mt-1">
             @foreach (var group in words.GroupBy(w => w.Word[0].ToString().ToUpper()).OrderBy(g => g.Key))
             {
-                <h3 id="letter-@group.Key" class="bg-light p-2 mt-4 border-start border-4 border-primary">@group.Key</h3>
+                <h3 id="letter-@group.Key" class="bg-light p-2 mt-4 border-start border-4 border">@group.Key</h3>
 
                 @foreach (var w in group)
                 {

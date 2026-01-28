@@ -8,7 +8,12 @@
 <PageTitle>成績表 - @(Context.CurrentUser)</PageTitle>
 
 <div class="container mt-4">
-    <h3 class="mb-4">🏆 @(Context.CurrentUser)くんの成績表</h3>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">🏆 @(Context.CurrentUser)くんの成績表</h3>
+        <button class="btn btn-outline-secondary btn-sm" @onclick="OnInitializedAsync">
+            <i class="bi bi-arrow-clockwise"></i> 更新
+        </button>
+    </div>
 
     @if (_allWords == null || !_allWords.Any())
     {
@@ -16,35 +21,63 @@
     }
     else
     {
-        @* --- 1. 今日のリザルトセクション --- *@
-        <div class="card shadow-sm border-primary mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">✨ 今日の結果 (@DateTime.Now.ToString("MM/dd"))</h5>
+        @* --- 1. 全体の習得率（プログレスバー） --- *@
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-graph-up-arrow text-primary"></i> 全体の習得率</h5>
+                        @{
+                            var total = _allWords.Count;
+                            var mastered = _userProgress.WordStatuses.Count(s => s.Status >= 1);
+                            var progressPercent = total > 0 ? (mastered * 100 / total) : 0;
+                        }
+                        <div class="progress mb-2" style="height: 30px; border-radius: 15px;">
+                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                                 role="progressbar" style="width: @progressPercent%;">
+                                @(progressPercent)%
+                            </div>
+                        </div>
+                        <div class="text-center small text-muted">
+                            全 <strong>@total</strong> 単語中、<strong>@mastered</strong> 単語を学習したよ！
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
+        </div>
+
+        @* --- 2. 今日の学習リスト --- *@
+        <div class="card shadow-sm border-primary mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-calendar-check"></i> 今日の学習履歴</h5>
+                <span class="badge bg-white text-primary">@DateTime.Now.ToString("MM/dd")</span>
+            </div>
+            <div class="card-body p-0">
                 @if (!_todayStatuses.Any())
                 {
-                    <p class="text-muted mb-0">今日はまだ学習の記録がないよ。これから始める？</p>
+                    <div class="p-5 text-center">
+                        <p class="text-muted">今日はまだ学習の記録がないよ。<br>まずは「トレーニング」から始めてみよう！</p>
+                    </div>
                 }
                 else
                 {
-                    <div class="row text-center mb-3">
+                    <div class="row text-center py-3 bg-primary bg-opacity-10 g-0">
                         <div class="col">
-                            <div class="small text-muted">今日やった単語</div>
-                            <div class="h3">@_todayStatuses.Count()</div>
+                            <div class="small text-muted">今日解いた数</div>
+                            <div class="h4 mb-0">@_todayStatuses.Count</div>
                         </div>
                         <div class="col border-start">
-                            <div class="small text-muted">正解数</div>
-                            <div class="h3 text-success">@_todayCorrectTotal</div>
+                            <div class="small text-muted">正解（○）</div>
+                            <div class="h4 mb-0 text-success">@_todayCorrectTotal</div>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-sm align-middle">
-                            <thead class="table-light small">
+                    <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light sticky-top">
                                 <tr>
-                                    <th>単語</th>
-                                    <th>結果</th>
-                                    <th>時刻</th>
+                                    <th style="width: 50%;">単語 / 意味</th>
+                                    <th class="text-center">結果</th>
+                                    <th class="text-center">時刻</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,19 +85,23 @@
                                 {
                                     var word = _allWords.FirstOrDefault(w => w.Id == status.WordId);
                                     <tr>
-                                        <td><strong>@word?.Word</strong> <small class="text-muted">@word?.Meaning</small></td>
                                         <td>
+                                            <div class="fw-bold">@word?.Word</div>
+                                            <div class="small text-muted">@word?.Meaning</div>
+                                        </td>
+                                        <td class="text-center">
                                             @if (status.Status >= 1)
                                             {
-                                                <span class="text-success">○</span>
+                                                <span class="badge rounded-pill bg-success">○ 正解</span>
                                             }
                                             else
                                             {
-
-                                                <span class="text-danger">×</span>
+                                                <span class="badge rounded-pill bg-danger">× ミス</span>
                                             }
                                         </td>
-                                        <td class="small text-muted">@status.LastReviewed.ToLocalTime().ToString("HH:mm")</td>
+                                        <td class="text-center small text-muted">
+                                            @status.LastReviewed.ToLocalTime().ToString("HH:mm")
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -74,27 +111,29 @@
             </div>
         </div>
 
-        @* --- 2. 累計：ミスが多い順リスト --- *@
-        <div class="card shadow mb-5">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">📝 にがてな単語（全期間）</h5>
-                <span class="badge bg-danger">ミスが多い順</span>
+        @* --- 3. 累計：にがてな単語リスト --- *@
+        <div class="card shadow-sm border-danger mb-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> 要注意！にがてリスト</h5>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
                             <th>単語 / 意味</th>
-                            <th class="text-center">ミス (×)</th>
-                            <th class="text-center">正解 (○)</th>
-                            <th>判定</th>
+                            <th class="text-center">ミス(×)</th>
+                            <th class="text-center">正解(○)</th>
+                            <th class="text-center">判定</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var status in _userProgress.WordStatuses
-                                            .Where(s => s.IncorrectCount > 0) // ミスが1回以上あるもの
-                                            .OrderByDescending(s => s.IncorrectCount)
-                                            .ThenByDescending(s => s.LastReviewed))
+                        @{
+                            var weakWords = _userProgress.WordStatuses
+                            .Where(s => s.IncorrectCount > 0)
+                            .OrderByDescending(s => s.IncorrectCount)
+                            .Take(10); // 上位10件に絞る
+                        }
+                        @foreach (var status in weakWords)
                         {
                             var word = _allWords.FirstOrDefault(w => w.Id == status.WordId);
                             if (word == null) continue;
@@ -106,7 +145,7 @@
                                 </td>
                                 <td class="text-center text-danger fw-bold">@status.IncorrectCount</td>
                                 <td class="text-center text-success">@status.CorrectCount</td>
-                                <td>
+                                <td class="text-center">
                                     @if (status.IncorrectCount > status.CorrectCount)
                                     {
                                         <span class="badge bg-danger">にがて！</span>
@@ -134,13 +173,15 @@
     protected override async Task OnInitializedAsync()
     {
         _allWords = await WordRepo.GetWordsAsync();
-        var p = await Storage.LoadAsync<UserProgress>($"User_{Context.CurrentUserId}");
+
+        // 最新の進捗をロード
+        var p = await Storage.LoadUserProgressAsync(Context.CurrentUserId);
 
         if (p != null)
         {
             _userProgress = p;
 
-            // 今日のデータ（ローカル時間で判定）
+            // 今日のデータ抽出
             var today = DateTime.Today;
             _todayStatuses = _userProgress.WordStatuses
                 .Where(s => s.LastReviewed.ToLocalTime().Date == today)
