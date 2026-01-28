@@ -152,3 +152,7 @@ code {
     color: #2ed573;
     font-size: 1.2rem;
 }
+/* パスワード入力欄のドット（伏せ字）を消して文字を見せる */
+.force-reveal {
+    -webkit-text-security: none !important;
+}
