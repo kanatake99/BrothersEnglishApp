@@ -22,7 +22,6 @@
     else
     {
         @* 未ログイン：ログイン画面を表示 *@
-        @* ここで「login」というページを表示するようにするよ *@
         <BrothersEnglishApp.Pages.Login />
     }
 }
@@ -51,9 +50,6 @@
     {
         await UserContext.InitializeAsync();
         _isInitialized = true;
-
-        // 自動転送はここでは「あえてしない」のがコツ！
-        // ログインしていれば @Body が Home を表示してくれるからね。
     }
 
     [JSInvokable]

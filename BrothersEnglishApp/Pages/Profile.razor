@@ -3,6 +3,7 @@
 @using BrothersEnglishApp.Services
 @inject UserContext Context
 @inject LocalStorageService Storage
+@inject IJSRuntime JS
 
 <div class="container mt-4">
     <h3>⚙️ @(Context.CurrentUser)くんの設定</h3>
@@ -41,6 +42,24 @@
         </div>
     </div>
 </div>
+<div class="container mt-4 mb-4">
+    <div class="card shadow-sm mt-4 border-warning">
+        <div class="card-header bg-warning text-dark fw-bold">
+            🚀 システム
+        </div>
+        <div class="card-body">
+            <p class="small text-muted">
+                アプリがうまく動かない時や、最新の単語データが届かない時は、下のボタンを押して更新を確認してください。
+            </p>
+            <button class="btn btn-outline-danger w-100" @onclick="ForceUpdate">
+                <i class="bi bi-arrow-clockwise me-2"></i>アプリを強制的に更新する
+            </button>
+            <div class="text-center mt-2">
+                <small class="text-muted">現在のバージョン: 2026.02.03.1</small> @* 手動で日付などを入れると管理しやすい *@
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     private UserProgress _userProgress = new();
@@ -55,5 +74,15 @@
     {
         await Storage.SaveAsync($"User_{Context.CurrentUserId}", _userProgress);
         // 保存したよ！という通知や遷移をここに入れてもOK
+    }
+
+    private async Task ForceUpdate()
+    {
+        // 確認ダイアログを出してもいいな
+        var confirm = await JS.InvokeAsync<bool>("confirm", "アプリを再起動して最新版に更新しますか？");
+        if (confirm)
+        {
+            await JS.InvokeVoidAsync("activateUpdate");
+        }
     }
 }

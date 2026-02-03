@@ -1,7 +1,28 @@
-﻿window.setupKeyboard = (dotNetHelper) => {
-    // 既存のインスタンスがあれば破棄（二重生成防止）
+﻿/**
+ * 仮想キーボードの状態管理用グローバル変数
+ */
+window.keyboardInputBuffer = "";
+window.currentKeyboard = null;
+
+/**
+ * C#からいつでも呼び出し可能なクリア関数
+ * setupKeyboardの実行状況に関わらず、関数自体は常に存在する
+ */
+window.clearKeyboard = () => {
+    window.keyboardInputBuffer = "";
+    if (window.currentKeyboard && typeof window.currentKeyboard.setInput === "function") {
+        window.currentKeyboard.setInput("");
+    }
+};
+
+/**
+ * キーボードの初期化関数
+ */
+window.setupKeyboard = (dotNetHelper) => {
+    // 既存のインスタンスがあれば確実に破棄
     if (window.currentKeyboard) {
         window.currentKeyboard.destroy();
+        window.currentKeyboard = null;
     }
 
     const init = () => {
@@ -10,15 +31,12 @@
 
         const Keyboard = window.SimpleKeyboard.default;
         window.currentKeyboard = new Keyboard({
-            // onChange は無限ループの元になりやすいので、
-            // ボタンが押されたときだけ処理する方針に変える
             onKeyPress: button => {
                 if (button === "{enter}") {
                     dotNetHelper.invokeMethodAsync('OnKeyboardEnter');
                 } else if (button === "{backspace}") {
-                    // C#側の入力を一文字消す処理を呼ぶか、JS側で処理して送る
                     handleBackspace(dotNetHelper);
-                } else if (button.length === 1) { // 普通の文字（q, w, e...）
+                } else if (button.length === 1) {
                     handleInput(dotNetHelper, button);
                 }
             },
@@ -34,9 +52,6 @@
         });
     };
 
-    // 入力処理用の変数をトップレベル（またはwindow）で保持
-    window.keyboardInputBuffer = "";
-
     const handleInput = (helper, char) => {
         window.keyboardInputBuffer += char;
         helper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
@@ -47,12 +62,5 @@
         helper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
     };
 
-    // 公開：C#からキーボードをクリアできるようにする
-    window.clearKeyboard = () => {
-        window.keyboardInputBuffer = ""; // JS側のバッファをクリア
-        if (window.currentKeyboard) {
-            window.currentKeyboard.setInput(""); // 仮想キーボードの内部状態をクリア
-        }
-    };
     init();
 };

@@ -128,23 +128,22 @@ else
             else
             {
                 <div class="form-group mb-2">
+                    @* --- スマホ用 --- *@
                     @if (IsMobile)
                     {
-                        @* スマホ用：入力不可にして、simple-keyboardから値を入れる *@
-                        <input class="form-control form-control-lg text-center fs-1"
+                        <input class="form-control form-control-lg text-center fs-1 @(_isWrong ? "is-invalid shadow-sm" : "")"
                                @bind="_userInput"
                                readonly
                                placeholder="下のキーボードで打ってね" />
-
                     }
                     else
                     {
-                        @* PC用：これまでの使いやすい入力欄 *@
+                        @* --- PC用 --- *@
                         <input @ref="_wordInput"
                                @bind="_userInput"
                                @bind:event="oninput"
                                @onkeyup="HandleKeyUp"
-                               class="form-control form-control-lg text-center fs-1"
+                               class="form-control form-control-lg text-center fs-1 @(_isWrong ? "is-invalid shadow-sm" : "")"
                                type="text"
                                autocomplete="off"
                                placeholder="キーボードで入力してね" />
@@ -180,7 +179,6 @@ else
     private bool _isWrong = false;
     private int _extraGoal = 0;
     private bool IsMobile { get; set; }
-    private bool _isKeyboardInitialized = false;
     private bool _isKeyboardRendered = false;
 
 
@@ -247,7 +245,6 @@ else
     {
         if (_currentWord == null || _userProgress == null || _isReviewing) return;
 
-        // Engineに判定を委譲
         var result = Engine.ProcessAnswer(_userInput, _currentWord, _userProgress, _isStep2);
 
         if (result.IsCorrect)
@@ -261,11 +258,7 @@ else
                 _isStep2 = true;
                 _isCorrect = false;
                 _userInput = "";
-
-                if (IsMobile)
-                {
-                    await JS.InvokeVoidAsync("clearKeyboard"); // JS側のバッファもクリア
-                }
+                if (IsMobile) await JS.InvokeVoidAsync("clearKeyboard");
             }
             else if (result.IsFinished)
             {
@@ -280,13 +273,25 @@ else
                 await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
                 _isReviewing = true;
                 _userInput = "";
+                // 復習に入る時も、念のためキーボードバッファを消しておくと安全
+                if (IsMobile) await JS.InvokeVoidAsync("clearKeyboard");
             }
             else
             {
+                // --- ここから修正：間違えた時の演出 ---
                 _isWrong = true;
-                StateHasChanged();
-                await Task.Delay(500);
+                StateHasChanged(); // 赤枠 ＋ 震えるアニメーション開始
+
+                await Task.Delay(500); // 演出を見せるための待機
+
                 _isWrong = false;
+                _userInput = "";  // ★打ち直しのために文字を消す
+
+                if (IsMobile)
+                {
+                    await JS.InvokeVoidAsync("clearKeyboard"); // ★JS側のバッファも忘れず消去
+                }
+                // ------------------------------------
             }
         }
         StateHasChanged();
