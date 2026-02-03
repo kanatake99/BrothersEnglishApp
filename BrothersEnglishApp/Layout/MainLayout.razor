@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject UserContext UserContext
 @inject NavigationManager Nav
+@inject IJSRuntime JS
 
 @if (_isInitialized)
 {
@@ -25,9 +26,26 @@
         <BrothersEnglishApp.Pages.Login />
     }
 }
+@if (_newVersionAvailable)
+{
+    <div class="alert alert-info d-flex justify-content-between align-items-center m-3 shadow" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;">
+        <span>✨ 新しいアップデートがあります！</span>
+        <button class="btn btn-primary btn-sm" @onclick="UpdateApp">今すぐ更新</button>
+    </div>
+}
 
 @code {
     private bool _isInitialized;
+    private bool _newVersionAvailable = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // JSに自身（this）を渡し、通知を受け取れるようにする
+            await JS.InvokeVoidAsync("registerUpdateNotifier", DotNetObjectReference.Create(this));
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,5 +54,17 @@
 
         // 自動転送はここでは「あえてしない」のがコツ！
         // ログインしていれば @Body が Home を表示してくれるからね。
+    }
+
+    [JSInvokable]
+    public void ShowUpdateBanner()
+    {
+        _newVersionAvailable = true;
+        StateHasChanged();
+    }
+
+    private async Task UpdateApp()
+    {
+        await JS.InvokeVoidAsync("activateUpdate");
     }
 }

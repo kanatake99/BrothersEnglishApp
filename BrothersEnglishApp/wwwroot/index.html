@@ -46,6 +46,43 @@
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
     <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
 
+    <script>
+        // Blazorのインスタンスを保持する変数
+        let blazorUpdateNotifier;
+
+        window.registerUpdateNotifier = (dotnetHelper) => {
+            blazorUpdateNotifier = dotnetHelper;
+        };
+
+        navigator.serviceWorker.register('service-worker.js').then(registration => {
+            // 更新があるかチェック
+            registration.onupdatefound = () => {
+                const installingWorker = registration.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        // 新しいSWがインストールされた（待機状態）らBlazorに通知
+                        if (blazorUpdateNotifier) {
+                            blazorUpdateNotifier.invokeMethodAsync('ShowUpdateBanner');
+                        }
+                    }
+                };
+            };
+        });
+
+        // C#から呼ばれる更新実行関数
+        window.activateUpdate = () => {
+            navigator.serviceWorker.getRegistration().then(registration => {
+                if (registration && registration.waiting) {
+                    registration.waiting.postMessage('skip-waiting');
+                }
+            });
+        };
+
+        // SWが入れ替わったらページをリロード
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.reload();
+        });
+    </script>
 </body>
 
 </html>

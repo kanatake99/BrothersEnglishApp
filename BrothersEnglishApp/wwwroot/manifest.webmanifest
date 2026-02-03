@@ -1,6 +1,6 @@
 {
   "name": "BrothersEnglishApp",
-  "short_name": "BrothersEnglishApp",
+  "short_name": "Bro英単語",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
