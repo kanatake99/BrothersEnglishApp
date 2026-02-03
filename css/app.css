@@ -198,6 +198,47 @@ code {
     }
 }
 
+/* オーバーレイを画面中央に固定 */
+.overlay-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* 記号をめちゃくちゃデカくする */
+.huge-symbol {
+    font-size: 15rem; /* さっきの3倍以上のサイズだ！ */
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 5px 5px 0px rgba(0,0,0,0.1);
+    -webkit-text-stroke: 3px white; /* 縁取りを入れて視認性を上げる */
+}
+
+/* ×の時に「プヨンプヨン」と震えるアニメーション（自作） */
+@keyframes pudding {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.2, 0.8);
+    }
+
+    50% {
+        transform: scale(0.8, 1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate__pudding {
+    animation: pudding 0.4s ease-in-out;
+}
+
 /* =========================================================
    Home：カレンダー表示
    ========================================================= */
