@@ -13,14 +13,15 @@
     @* --- 判定用オーバーレイ --- *@
     @if (_showOverlay)
     {
-        <div class="position-absolute top-50 start-50 translate-middle" style="z-index: 100; pointer-events: none;">
+        @* pointer-events: none; はそのまま。クリックを邪魔しないためだ *@
+        <div class="overlay-container">
             @if (_isLastAnswerCorrect)
             {
-                <div class="display-1 text-success fw-bold animate__animated animate__zoomIn">○</div>
+                <div class="huge-symbol text-success animate__animated animate__bounceIn">○</div>
             }
             else
             {
-                <div class="display-1 text-danger fw-bold animate__animated animate__shakeX">×</div>
+                <div class="huge-symbol text-danger animate__animated animate__pudding">×</div>
             }
         </div>
     }
@@ -48,7 +49,8 @@
                     @foreach (var option in _currentQuestion.Options)
                     {
                         @* classに @(id) とかつけてJSから触れるようにする *@
-                        <button class="btn btn-outline-primary btn-lg py-3 fs-4 quiz-button"
+                        <button @key="option"
+                                class="btn btn-outline-primary btn-lg py-3 fs-4 quiz-button"
                                 @onclick="(e) => HandleAnswer(option, e)">
                             @option
                         </button>
@@ -128,7 +130,7 @@
         _showOverlay = true;
         StateHasChanged();
 
-        await Task.Delay(600); // 演出待機
+        await Task.Delay(800); // 演出待機
         _showOverlay = false;
 
         if (isCorrect)
@@ -153,6 +155,10 @@
         }
 
         _currentQuestion = Engine.GenerateStudyQuestion(_allWords, _userProgress);
+
+        await JS.InvokeVoidAsync("quizHandlers.resetButtons");  // ボタン状態リセット
+
+        StateHasChanged();
     }
 
     /// <summary>学習完了時のフラグ更新と保存</summary>

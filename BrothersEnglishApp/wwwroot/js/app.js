@@ -53,3 +53,11 @@ window.appFunctions = {
         });
     }
 };
+
+window.quizHandlers = {
+    resetButtons: () => {
+        // 全てのクイズボタンからフォーカスを外す
+        const buttons = document.querySelectorAll('.quiz-button');
+        buttons.forEach(btn => btn.blur());
+    }
+};
