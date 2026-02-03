@@ -1,406 +1,182 @@
 ﻿@page "/training"
-@using BrothersEnglishApp.Models
-@using BrothersEnglishApp.Services
-@inject LocalStorageService Storage
-@inject NavigationManager Nav
+@inject WordRepository WordRepo
+@inject TrainingEngine Engine
 @inject UserContext Context
-@inject IJSRuntime JS   // JavaScript呼び出し用
-@inject WordRepository WordRepo // 単語リポジトリの注入
-@inject TrainingEngine Engine // トレーニングエンジンの注入
-
-<PageTitle>トレーニング</PageTitle>
-
-@if (_currentWord == null)
-{
-    <div class="text-center mt-5">
-        <span class="display-1">🎉</span>
-        <h4 class="mt-3">今日の目標達成！</h4>
-        <p class="fs-5">@(Context.CurrentUser)くん、よく頑張ったね！</p>
-
-        <div class="d-grid gap-3 col-10 col-md-6 mx-auto mt-4">
-            @* --- 追加：もっと学習するボタン --- *@
-            <button class="btn btn-outline-primary btn-lg shadow-sm py-3" @onclick="AddMoreStudy">
-                <i class="bi bi-plus-circle-fill me-2"></i>まだいける！もっと覚える
-            </button>
-
-            @* メインの動線：ふくしゅうへ *@
-            <button class="btn btn-success btn-lg shadow-sm py-3" @onclick='() => Nav.NavigateTo("study")'>
-                <i class="bi bi-play-circle-fill me-2"></i>今日の復習をする
-            </button>
-        </div>
-    </div>
-}
-else
-{
-    <div class="container-fluid mt-2 text-center training-page">
-        @* --- 追加：進捗とユーザー名を表示するエリア --- *@
-        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-            <div class="text-start">
-                <span class="badge bg-secondary">ユーザー: @Context.CurrentUser</span>
-            </div>
-            <div class="text-end text-muted small">
-                @* Engineに現在の進捗を計算させるか、ここで簡易計算 *@
-                <strong>@GetCurrentProgress()</strong> / @(_userProgress?.DailyGoal ?? 10) 問目
-            </div>
-        </div>
-
-        @* プログレスバー（視覚的に進み具合を見せる） *@
-        <div class="progress mb-3" style="height: 10px;">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                 role="progressbar"
-                 style="@_progressStyle"></div>
-        </div>
-
-        @* containerをfluidにして横幅を有効活用 *@
-        @* ステップ表示を少しコンパクトに *@
-        <div class="text-center mb-4">
-            <div class="d-flex justify-content-center align-items-end flex-column">
-                @if (_userProgress != null)
-                {
-                    <div class="form-check form-switch mt-2">
-                        <input class="form-check-input" type="checkbox" id="autoSpeech"
-                               @bind="_userProgress.IsAutoSpeechEnabled" @oninput="ToggleAutoSpeech" />
-                        <label class="form-check-label small text-muted" for="autoSpeech">
-                            単語読み上げ
-                        </label>
-                    </div>
-                }
-                else
-                {
-                    @* ロード中の表示（お好みで） *@
-                    <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
-                }
-            </div>
-        </div>
-
-        <div class="badge rounded-pill @(_isReviewing ? "bg-danger" : "bg-warning text-dark") mb-2 px-4 py-3">
-            @if (_isReviewing)
-            {
-                <span>👀 よく見て覚えよう！</span>
-            }
-            else
-            {
-
-                <span>@(_isStep2 ? "🔥 見ないで入力！" : "📝 お手本通り入力！")</span>
-            }
-        </div>
-
-        <div class="card shadow-sm p-3 mb-2">
-            @* お手本エリア：スマホで見やすい高さに *@
-            <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
-                @if (_isReviewing || !_isStep2)
-                {
-                    <h2 class="display-4 fw-bold text-primary mb-0">@_currentWord.Word</h2>
-                    <div class="text-muted fs-4 ps-1">
-                        @_currentWord.IPA@* ここで発音記号を表示 *@
-                    </div>
-
-                }
-                else
-                {
-                    <h2 class="display-4 fw-bold text-muted mb-0" style="opacity: 0.1;">????</h2>
-
-                }
-            </div>
-
-            @* 単語情報エリア *@
-            <div class="mb-3">
-                <div class="text-center my-4">
-                    <span class="badge bg-success ">@_currentWord.PartOfSpeech</span>
-                    @* スピーカーボタン。クリックで Speak メソッドを実行！ *@
-                    <button class="btn btn-outline-primary rounded-circle"
-                            @onclick="() => Speak(_currentWord.Word)"
-                            title="音声を再生">
-                        <i class="bi bi-volume-up-fill"></i>
-                    </button>
-                </div>
-                <h2 class="fw-bold mt-1 mb-0" style="font-size: calc(1.5rem + 1.5vw);">@_currentWord.Meaning</h2>
-            </div>
+@inject LocalStorageService Storage
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
 
 
-            @if (_isReviewing)
-            {
-                @* 修正：スマホで押しやすい、画面中央の巨大なボタン *@
-                <button class="btn btn-danger btn-lg w-100 shadow py-4 fs-3" @onclick="EndReview">
-                    もう一度入力する🚀
-                </button>
-            }
-            else
-            {
-                <div class="form-group mb-2">
-                    @* --- スマホ用 --- *@
-                    @if (IsMobile)
-                    {
-                        <input class="form-control form-control-lg text-center fs-1 @(_isWrong ? "is-invalid shadow-sm" : "")"
-                               @bind="_userInput"
-                               readonly
-                               placeholder="下のキーボードで打ってね" />
-                    }
-                    else
-                    {
-                        @* --- PC用 --- *@
-                        <input @ref="_wordInput"
-                               @bind="_userInput"
-                               @bind:event="oninput"
-                               @onkeyup="HandleKeyUp"
-                               class="form-control form-control-lg text-center fs-1 @(_isWrong ? "is-invalid shadow-sm" : "")"
-                               type="text"
-                               autocomplete="off"
-                               placeholder="キーボードで入力してね" />
-                    }
-                </div>
-            }
+<PageTitle>今日の復習</PageTitle>
 
-            @if (_isCorrect)
-            {
-                <div class="alert alert-success py-2 mt-2 shadow-sm">✨ 正解！ ✨</div>
-            }
-        </div>
-    </div>
-    @if (IsMobile)
+<div class="container mt-4">
+    @* --- 判定用オーバーレイ --- *@
+    @if (_showOverlay)
     {
-        @* 表示・非表示の切り替えは、Bootstrapの d-none クラスだけで制御する *@
-        <div class="simple-keyboard-container bg-light border-top py-2 @(_isReviewing ? "d-none" : "")">
-            <div class="simple-keyboard"></div>
+        @* pointer-events: none; はそのまま。クリックを邪魔しないためだ *@
+        <div class="overlay-container">
+            @if (_isLastAnswerCorrect)
+            {
+                <div class="huge-symbol text-success animate__animated animate__bounceIn">○</div>
+            }
+            else
+            {
+                <div class="huge-symbol text-danger animate__animated animate__pudding">×</div>
+            }
         </div>
     }
-}
+    @* --- メインコンテンツ --- *@
+    @if (_isFinished)
+    {
+        <div class="text-center">
+            <h2>おつかれさま！</h2>
+            <p>今日の 学習は 終わりだよ。</p>
+            <div class="display-1 text-success mb-4"><i class="bi bi-trophy-fill"></i></div>
+            <button class="btn btn-primary btn-lg" @onclick="GoReport">成績表を 見る</button>
+        </div>
+    }
+    else if (_currentQuestion != null)
+    {
+        <div class="card shadow-sm mx-auto" style="max-width: 500px; opacity: @(_showOverlay ? "0.5" : "1")">
+            <div class="card-header bg-info text-white text-center">
+                がくしゅう中 (@(_doneCount + 1) / @_studyGoal)
+            </div>
+            <div class="card-body text-center p-5">
+                <p class="text-muted">@(_currentQuestion.IsEnglishToJapanese ? "これの意味は？" : "これは英語で？")</p>
+                <h1 class="display-4 mb-4">@_currentQuestion.QuestionText</h1>
+
+                <div class="d-grid gap-3">
+                    @foreach (var option in _currentQuestion.Options)
+                    {
+                        @* classに @(id) とかつけてJSから触れるようにする *@
+                        <button @key="option"
+                                class="btn btn-outline-primary btn-lg py-3 fs-4 quiz-button"
+                                @onclick="(e) => HandleAnswer(option, e)">
+                            @option
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <p>きょう おぼえた単語を よみこみ中...</p>
+        </div>
+    }
+</div>
 
 @code {
-    // --- フィールド変数（プライベート変数には _ を付与して統一） ---
-    private List<EnglishWord>? _allWords;
+    // --- フィールド変数（命名規則：プライベートなものには _ をつける） ---
+    private List<EnglishWord> _allWords = [];
     private UserProgress? _userProgress;
-    private EnglishWord? _currentWord;
-    private ElementReference _wordInput;
-    private string _userInput = "";
-    private bool _isStep2 = false;
-    private bool _isCorrect = false;
-    private bool _isReviewing = false;
-    private bool _isWrong = false;
-    private int _extraGoal = 0;
-    private bool IsMobile { get; set; }
-    private bool _isKeyboardRendered = false;
+    private Question? _currentQuestion;
+    private int _studyGoal = 10;
+    private int _doneCount = 0;
+    private bool _isFinished = false;
 
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var ua = await JS.InvokeAsync<string>("eval", "navigator.userAgent");
-            IsMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
-            StateHasChanged();
-            return;
-        }
-        // 初回かつ、要素が存在する時だけ1回だけ初期化する
-        if (IsMobile && !_isKeyboardRendered)
-        {
-            var elExists = await JS.InvokeAsync<bool>("eval", "document.querySelector('.simple-keyboard') !== null");
-            if (elExists)
-            {
-                _isKeyboardRendered = true;
-                await JS.InvokeVoidAsync("setupKeyboard", DotNetObjectReference.Create(this));
-            }
-        }
-    }
-
-    // プログレスバーの幅を計算する計算プロパティ
-    private string _progressStyle => $"width: {GetProgressPercentage()}%;";
+    // 演出用のフラグ
+    private bool _showOverlay = false;
+    private bool _isLastAnswerCorrect = false;
 
     // --- ライフサイクルメソッド ---
 
     protected override async Task OnInitializedAsync()
     {
-        if (!Context.IsSelected)
-        {
-            Nav.NavigateTo("/");
-            return;
-        }
-
         _allWords = await WordRepo.GetWordsAsync();
 
-        // ユーザー専用メソッドでロード
-        _userProgress = await Storage.LoadUserProgressAsync(Context.CurrentUserId)
-                ?? new UserProgress { UserName = Context.CurrentUser };
+        // ★ 指摘4：専用メソッドでロードするように修正
+        _userProgress = await Storage.LoadUserProgressAsync(Context.CurrentUserId);
 
-        await SelectNextWord();
+        if (_userProgress != null)
+        {
+            // 目標数の設定
+            if (_userProgress.StudyGoal > 0)
+            {
+                _studyGoal = _userProgress.StudyGoal;
+            }
+            else
+            {
+                _studyGoal = _userProgress.DailyGoal > 0 ? _userProgress.DailyGoal : 10;
+            }
+        }
+        await GenerateNextQuestion();
     }
 
     // --- ユーザー操作ハンドラー ---
 
-    private async Task ToggleAutoSpeech(ChangeEventArgs e)
+    /// <summary>回答を選択した時の処理</summary>
+    private async Task HandleAnswer(string selected, MouseEventArgs e)
     {
-        if (_userProgress == null) return;
+        if (_showOverlay || _currentQuestion == null) return;
 
-        _userProgress.IsAutoSpeechEnabled = (bool)e.Value!;
-        await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
-    }
+        // ★ 指摘9：evalを避けてフォーカス解除（別途JS側に定義した関数を呼ぶのが理想）
+        await JS.InvokeVoidAsync("speechHandlers.blurActiveElement");
 
-    private async Task AddMoreStudy()
-    {
-        _extraGoal += 5;
-        await SelectNextWord();
-    }
+        bool isCorrect = (selected == _currentQuestion.CorrectAnswer);
 
-    private async Task CheckAnswer()
-    {
-        if (_currentWord == null || _userProgress == null || _isReviewing) return;
-
-        var result = Engine.ProcessAnswer(_userInput, _currentWord, _userProgress, _isStep2);
-
-        if (result.IsCorrect)
+        if (_userProgress != null)
         {
-            _isCorrect = true;
-            StateHasChanged();
-            await Task.Delay(600);
+            // エンジンに結果を記録させる
+            Engine.RecordStudyResult(_userProgress, _currentQuestion.WordId, isCorrect);
 
-            if (result.ShouldGoToStep2)
-            {
-                _isStep2 = true;
-                _isCorrect = false;
-                _userInput = "";
-                if (IsMobile) await JS.InvokeVoidAsync("clearKeyboard");
-            }
-            else if (result.IsFinished)
-            {
-                await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
-                await SelectNextWord();
-            }
-        }
-        else
-        {
-            if (result.ShouldStartReview)
-            {
-                await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
-                _isReviewing = true;
-                _userInput = "";
-                // 復習に入る時も、念のためキーボードバッファを消しておくと安全
-                if (IsMobile) await JS.InvokeVoidAsync("clearKeyboard");
-            }
-            else
-            {
-                // --- ここから修正：間違えた時の演出 ---
-                _isWrong = true;
-                StateHasChanged(); // 赤枠 ＋ 震えるアニメーション開始
-
-                await Task.Delay(500); // 演出を見せるための待機
-
-                _isWrong = false;
-                _userInput = "";  // ★打ち直しのために文字を消す
-
-                if (IsMobile)
-                {
-                    await JS.InvokeVoidAsync("clearKeyboard"); // ★JS側のバッファも忘れず消去
-                }
-                // ------------------------------------
-            }
-        }
-        StateHasChanged();
-    }
-
-    private async Task EndReview()
-    {
-        _isReviewing = false;
-        _userInput = "";
-
-        if (IsMobile)
-        {
-            await JS.InvokeVoidAsync("clearKeyboard"); // これを追加！
+            // ★ 保存メソッドを専用のものに差し替え
+            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
         }
 
+        // 正誤演出
+        _isLastAnswerCorrect = isCorrect;
+        _showOverlay = true;
         StateHasChanged();
 
-        await Task.Delay(10);
-        // PC用のフォーカス処理。JS側でエラーにならないよう安全に。
-        await JS.InvokeVoidAsync("speechHandlers.focusElement", _wordInput);
+        await Task.Delay(800); // 演出待機
+        _showOverlay = false;
+
+        if (isCorrect)
+        {
+            _doneCount++;
+            await GenerateNextQuestion();
+        }
+        // 不正解の場合は再表示されるので、そのまま
+
+        StateHasChanged();
     }
 
     // --- ロジック・ユーティリティ ---
 
-    private async Task SelectNextWord()
+    /// <summary>次のクイズを生成する</summary>
+    private async Task GenerateNextQuestion()
     {
-        if (_allWords == null || _userProgress == null) return;
-
-        int effectiveGoal = _userProgress.DailyGoal + _extraGoal;
-        _currentWord = Engine.GetNextWord(_allWords, _userProgress, effectiveGoal);
-
-        _userInput = "";
-        _isStep2 = false;
-        _isCorrect = false;
-        _isReviewing = false;
-        StateHasChanged();
-
-        if (_currentWord != null)
+        if (_doneCount >= _studyGoal)
         {
-            await Task.Delay(10);
-            await JS.InvokeVoidAsync("speechHandlers.focusElement", _wordInput);
-
-            if (_userProgress.IsAutoSpeechEnabled)
-            {
-                await Task.Delay(300);
-                await Speak(_currentWord.Word);
-            }
+            await FinishStudy(); // ここで await する！これで警告が消えるよ
+            return;
         }
-        else
-        {
-            var todayKey = DateTime.Now.Date.ToString("yyyyMMdd");
-            if (!_userProgress.ActivityLog.ContainsKey(todayKey))
-            {
-                _userProgress.ActivityLog[todayKey] = new DayActivity();
-            }
-            _userProgress.ActivityLog[todayKey].TrainingDone = true;
 
+        _currentQuestion = Engine.GenerateStudyQuestion(_allWords, _userProgress);
+
+        await JS.InvokeVoidAsync("quizHandlers.resetButtons");  // ボタン状態リセット
+
+        StateHasChanged();
+    }
+
+    /// <summary>学習完了時のフラグ更新と保存</summary>
+    private async Task FinishStudy()
+    {
+        _isFinished = true;
+        var todayKey = DateTime.Now.ToString("yyyyMMdd");
+
+        if (_userProgress != null)
+        {
+            if (!_userProgress.ActivityLog.ContainsKey(todayKey))
+                _userProgress.ActivityLog[todayKey] = new DayActivity();
+
+            _userProgress.ActivityLog[todayKey].StudyDone = true;
             await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
         }
-        // キーボードの内容もクリア
-        _userInput = "";
-        if (IsMobile)
-        {
-            await JS.InvokeVoidAsync("clearKeyboard");
-        }
         StateHasChanged();
     }
 
-    private int GetCurrentProgress()
-    {
-        if (_userProgress == null) return 0;
-
-        var today = DateTime.Now.Date;
-        var todayDone = _userProgress.WordStatuses.Count(s =>
-            s.LastReviewed.Date == today && s.Status >= 1);
-
-        return Math.Min(todayDone + 1, _userProgress.DailyGoal + _extraGoal);
-    }
-
-    private double GetProgressPercentage()
-    {
-        if (_userProgress == null || _userProgress.DailyGoal <= 0) return 0;
-
-        int targetGoal = _userProgress.DailyGoal + _extraGoal;
-        var current = GetCurrentProgress() - 1;
-
-        return ((double)current / targetGoal) * 100;
-    }
-
-    private async Task HandleKeyUp(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter") await CheckAnswer();
-    }
-
-    private async Task Speak(string text) =>
-        await JS.InvokeVoidAsync("speechHandlers.speak", text);
-
-    // JSから呼ばれる入力用メソッド
-    [JSInvokable]
-    public async Task OnKeyboardInput(string input)
-    {
-        _userInput = input;
-        StateHasChanged();
-    }
-
-    // JSから呼ばれるEnterキー用メソッド
-    [JSInvokable]
-    public async Task OnKeyboardEnter()
-    {
-        await CheckAnswer();
-    }
+    private void GoReport() => Navigation.NavigateTo("report");
 }

@@ -25,21 +25,21 @@
         @* メインメニュー（カード形式で押しやすく） *@
         <div class="row g-4 justify-content-center">
             <div class="col-6 col-md-4">
-                <div class="card h-100 shadow-sm border-warning text-center p-3 btn btn-light" @onclick='() => Nav.NavigateTo("training")'>
+                <div class="card h-100 shadow-sm border-success text-center p-3 btn btn-light" @onclick='() => Nav.NavigateTo("study")'>
                     <div class="display-3">📝</div>
                     <div class="card-body p-1">
                         <h5 class="card-title fw-bold">覚える</h5>
-                        <p class="small text-muted mb-0">Training</p>
+                        <p class="small text-muted mb-0">Study</p>
                     </div>
                 </div>
             </div>
 
             <div class="col-6 col-md-4">
-                <div class="card h-100 shadow-sm border-success text-center p-3 btn btn-light" @onclick='() => Nav.NavigateTo("study")'>
+                <div class="card h-100 shadow-sm border-warning text-center p-3 btn btn-light" @onclick='() => Nav.NavigateTo("training")'>
                     <div class="display-3">🏁</div>
                     <div class="card-body p-1">
                         <h5 class="card-title fw-bold">復習</h5>
-                        <p class="small text-muted mb-0">Study</p>
+                        <p class="small text-muted mb-0">Training</p>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,11 @@
 html, body {
     font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
 }
+/* ページ全体でスクロールバーのガタつきを防止 */
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
 
 /* h1 にフォーカスが当たった時のアウトラインを消す
    （主にBlazorの自動フォーカス対策） */

@@ -1,16 +1,21 @@
-﻿// TrainingEngine.cs
-using BrothersEnglishApp.Models;
+﻿using BrothersEnglishApp.Models;
 
 namespace BrothersEnglishApp.Services;
 
+/// <summary>
+/// トレーニングの結果を保持するクラス
+/// </summary>
 public class TrainingResult
 {
     public bool IsCorrect { get; set; }
-    public bool ShouldGoToStep2 { get; set; }
-    public bool ShouldStartReview { get; set; }
-    public bool IsFinished { get; set; }
+    public bool ShouldGoToStep2 { get; set; } // お手本入力後の「見ないで入力」へ進むか
+    public bool ShouldStartReview { get; set; } // ミス時に復習（お手本確認）へ戻るか
+    public bool IsFinished { get; set; } // その単語の学習が完了したか
 }
 
+/// <summary>
+/// クイズ（Study用）の出題データを保持するクラス
+/// </summary>
 public class Question
 {
     public string WordId { get; set; } = "";
@@ -20,39 +25,54 @@ public class Question
     public bool IsEnglishToJapanese { get; set; }
 }
 
+/// <summary>
+/// 学習ロジックの中核を担うエンジン
+/// </summary>
 public class TrainingEngine
 {
-    // 前回の単語IDを一時的に保持する変数
-    private string? _lastWordId;
-    // Studyセッション中に出題したIDとその回数を記録する
-    private Dictionary<string, int> _sessionWordCounts = new();
+    private string? _lastWordId; // 直前の出題と同じ単語が連続しないように保持
+    private Dictionary<string, int> _sessionWordCounts = new(); // セッション内での出題回数管理
 
-    // セッション開始時（または終了時）に履歴をリセットするメソッド
+    /// <summary>
+    /// Studyセッションの履歴をリセット
+    /// </summary>
     public void ResetStudySession()
     {
         _sessionWordCounts.Clear();
         _lastWordId = null;
     }
 
-    // --- Training用ロジック ---
+    // --- Training（新規学習）用ロジック ---
+
+    /// <summary>
+    /// 次に学習すべき単語を取得する
+    /// </summary>
     public EnglishWord? GetNextWord(List<EnglishWord> allWords, UserProgress userProgress, int dailyGoal)
     {
-        var today = DateTime.Now.Date;
+        // 重要：サーバー・クライアント間の時差による進捗の不整合を防ぐため、
+        // 判定はすべて UTC(世界標準時) の日付で統一する。
+        var todayUtc = DateTime.UtcNow.Date;
+
+        // 今日の学習完了数をカウント（今日ステータスが1以上になったもの）
         var todayCount = userProgress.WordStatuses.Count(s =>
-            s.LastReviewed.Date == today && s.Status >= 1);
+            s.LastReviewed.Date == todayUtc && s.Status >= 1);
 
         if (todayCount >= dailyGoal) return null;
 
+        // まだ今日一度も触れていない単語を候補にする
         var candidates = allWords.Where(w =>
             !userProgress.WordStatuses.Any(s =>
-                s.WordId == w.Id && s.LastReviewed.Date == today));
+                s.WordId == w.Id && s.LastReviewed.Date == todayUtc));
 
         return candidates
-            .OrderByDescending(w => w.Level)
-            .ThenBy(_ => Guid.NewGuid())
+            .OrderByDescending(w => w.Level) // レベルが高い（難しい）ものから
+            .ThenBy(_ => Guid.NewGuid())     // 同レベル内ではランダム
             .FirstOrDefault();
     }
 
+    /// <summary>
+    /// 入力された回答を検証し、次のアクションを決定する
+    /// </summary>
     public TrainingResult ProcessAnswer(string userInput, EnglishWord currentWord, UserProgress userProgress, bool isStep2)
     {
         var result = new TrainingResult();
@@ -60,22 +80,26 @@ public class TrainingEngine
             userInput.Trim(),
             currentWord.Word,
             StringComparison.OrdinalIgnoreCase);
+
         result.IsCorrect = isCorrect;
 
         if (isCorrect)
         {
             if (!isStep2)
             {
+                // Step1（お手本あり）正解なら Step2（見ないで入力）へ
                 result.ShouldGoToStep2 = true;
             }
             else
             {
+                // Step2 正解でその単語の学習ステータスを更新
                 UpdateWordStatus(userProgress, currentWord.Id, true);
                 result.IsFinished = true;
             }
         }
         else
         {
+            // Step2（見ないで入力）で間違えた場合は、強制復習モードへ
             if (isStep2 && !string.IsNullOrEmpty(userInput))
             {
                 UpdateWordStatus(userProgress, currentWord.Id, false);
@@ -85,6 +109,9 @@ public class TrainingEngine
         return result;
     }
 
+    /// <summary>
+    /// 単語の学習ステータス（習熟度や履歴）を更新する
+    /// </summary>
     private void UpdateWordStatus(UserProgress progress, string wordId, bool isCorrect)
     {
         var status = progress.WordStatuses.FirstOrDefault(s => s.WordId == wordId);
@@ -96,8 +123,9 @@ public class TrainingEngine
 
         if (isCorrect)
         {
-            status.Status = 1;
+            status.Status = 1; // 1: 学習済み
             status.CorrectCount++;
+            // 保存は UTC で行い、判定ロジックと整合性を保つ
             status.LastReviewed = DateTime.UtcNow;
         }
         else
@@ -106,13 +134,17 @@ public class TrainingEngine
         }
     }
 
-    // --- Study用ロジック ---
+    // --- Study（復習クイズ）用ロジック ---
+
+    /// <summary>
+    /// 復習用のクイズを生成する
+    /// </summary>
     public Question GenerateStudyQuestion(List<EnglishWord> allWords, UserProgress? userProgress)
     {
         var todayUtc = DateTime.UtcNow.Date;
         EnglishWord? target = null;
 
-        // --- ① 今日の学習単語（未出題分を優先） ---
+        // ① 優先：今日新しく覚えた単語（未出題分）
         var todayLearned = allWords.Where(w =>
             userProgress?.WordStatuses.Any(s =>
                 s.WordId == w.Id &&
@@ -128,7 +160,7 @@ public class TrainingEngine
         {
             target = freshWords[Random.Shared.Next(freshWords.Count)];
         }
-        // --- ② ミスが多い単語（まだ今日のセッションで出してないものを優先） ---
+        // ② 次点：過去に間違えたことがある苦手単語
         else
         {
             var weakWords = allWords
@@ -136,7 +168,6 @@ public class TrainingEngine
                 .OrderByDescending(w => userProgress?.WordStatuses.First(s => s.WordId == w.Id).IncorrectCount)
                 .ToList();
 
-            // 未出題の苦手単語があるかチェック
             var freshWeakWords = weakWords.Where(w => !_sessionWordCounts.ContainsKey(w.Id)).ToList();
 
             if (freshWeakWords.Any())
@@ -145,8 +176,7 @@ public class TrainingEngine
             }
             else
             {
-                // --- ③ 【新設】エンドレス・ランダムモード ---
-                // 学習済みの全単語から、直前と違うものをランダムに選ぶ
+                // ③ 最終：学習済みプールからランダム（無限モード）
                 var masteredPool = allWords.Where(w =>
                     userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false
                 ).ToList();
@@ -161,17 +191,18 @@ public class TrainingEngine
             }
         }
 
-        // 万が一ターゲットが見つからない場合のフォールバック
+        // フォールバック（未学習含む完全ランダム）
         if (target == null) target = allWords[Random.Shared.Next(allWords.Count)];
 
-        // セッション履歴に記録
         _lastWordId = target.Id;
         if (!_sessionWordCounts.ContainsKey(target.Id)) _sessionWordCounts[target.Id] = 0;
         _sessionWordCounts[target.Id]++;
 
-        // --- 選択肢の作成ロジック（ここは変更なし） ---
+        // 出題形式（英→日 / 日→英）をランダム決定
         bool isEngToJap = Random.Shared.Next(2) == 0;
         var options = new List<string> { isEngToJap ? target.Meaning : target.Word };
+
+        // 不正解の選択肢を3つ作成
         var wrongCandidates = allWords.Where(w => w.Id != target.Id).OrderBy(_ => Guid.NewGuid()).Take(3);
         foreach (var w in wrongCandidates)
         {
@@ -187,15 +218,17 @@ public class TrainingEngine
             IsEnglishToJapanese = isEngToJap
         };
     }
-    // 学習結果の記録メソッド
+
+    /// <summary>
+    /// Studyセッションでの回答結果を記録する
+    /// </summary>
     public void RecordStudyResult(UserProgress progress, string wordId, bool isCorrect)
     {
         var status = progress.WordStatuses.FirstOrDefault(s => s.WordId == wordId);
 
-        // もし万が一、学習履歴にない単語を復習した場合は新しく作る
         if (status == null)
         {
-            status = new WordStatus { WordId = wordId, Status = 1 }; // 復習に出てる時点で既知扱い
+            status = new WordStatus { WordId = wordId, Status = 1 };
             progress.WordStatuses.Add(status);
         }
 
