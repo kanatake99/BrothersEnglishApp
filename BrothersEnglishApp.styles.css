@@ -160,11 +160,11 @@ main[b-jprstewj4n] {
         overflow-y: auto;
     }
 }
-/* /Pages/Study.razor.rz.scp.css */
-body[b-nr8laaosus] {
+/* /Pages/Training.razor.rz.scp.css */
+body[b-9cru248ey4] {
 }
 
-@keyframes shakeX-b-nr8laaosus {
+@keyframes shakeX-b-9cru248ey4 {
     from, to {
         transform: translate3d(0, 0, 0);
     }
@@ -178,7 +178,7 @@ body[b-nr8laaosus] {
     }
 }
 
-@keyframes zoomIn-b-nr8laaosus {
+@keyframes zoomIn-b-9cru248ey4 {
     from {
         opacity: 0;
         transform: scale3d(0.3, 0.3, 0.3);
@@ -189,22 +189,22 @@ body[b-nr8laaosus] {
     }
 }
 
-.animate__animated[b-nr8laaosus] {
+.animate__animated[b-9cru248ey4] {
     animation-duration: 0.5s;
 }
 
-.animate__zoomIn[b-nr8laaosus] {
-    animation-name: zoomIn-b-nr8laaosus;
+.animate__zoomIn[b-9cru248ey4] {
+    animation-name: zoomIn-b-9cru248ey4;
 }
 
-.animate__shakeX[b-nr8laaosus] {
-    animation-name: shakeX-b-nr8laaosus;
+.animate__shakeX[b-9cru248ey4] {
+    animation-name: shakeX-b-9cru248ey4;
 }
 
-.btn[b-nr8laaosus] {
+.btn[b-9cru248ey4] {
     text-transform: none !important;
 }
 
-.display-4[b-nr8laaosus] {
+.display-4[b-9cru248ey4] {
     text-transform: none !important;
 }
