@@ -32,7 +32,7 @@
 }
 else
 {
-    <div class="container-fluid mt-2 text-center">
+    <div class="container-fluid mt-2 text-center training-page">
         @* --- 追加：進捗とユーザー名を表示するエリア --- *@
         <div class="d-flex justify-content-between align-items-center mb-2 px-2">
             <div class="text-start">
@@ -128,19 +128,27 @@ else
             else
             {
                 <div class="form-group mb-2">
-                    @* 修正後：スマホ最適化＋間違えた時の震え演出を追加！ *@
-                    <input @ref="_wordInput"
-                           @bind="_userInput"
-                           @bind:event="oninput"
-                           @onkeyup="HandleKeyUp"
-                           class="form-control form-control-lg text-center fs-1 py-3 force-reveal @(_isWrong ? "shake border-danger text-danger" : "")"
-                           type="password"
-                           autocomplete="off"
-                           autocorrect="off"
-                           autocapitalize="none" 
-                           spellcheck="false"
-                           inputmode="email"
-                           placeholder="入力してね" />
+                    @if (IsMobile)
+                    {
+                        @* スマホ用：入力不可にして、simple-keyboardから値を入れる *@
+                        <input class="form-control form-control-lg text-center fs-1"
+                               @bind="_userInput"
+                               readonly
+                               placeholder="下のキーボードで打ってね" />
+
+                    }
+                    else
+                    {
+                        @* PC用：これまでの使いやすい入力欄 *@
+                        <input @ref="_wordInput"
+                               @bind="_userInput"
+                               @bind:event="oninput"
+                               @onkeyup="HandleKeyUp"
+                               class="form-control form-control-lg text-center fs-1"
+                               type="text"
+                               autocomplete="off"
+                               placeholder="キーボードで入力してね" />
+                    }
                 </div>
             }
 
@@ -150,6 +158,13 @@ else
             }
         </div>
     </div>
+    @if (IsMobile)
+    {
+        @* 表示・非表示の切り替えは、Bootstrapの d-none クラスだけで制御する *@
+        <div class="simple-keyboard-container bg-light border-top py-2 @(_isReviewing ? "d-none" : "")">
+            <div class="simple-keyboard"></div>
+        </div>
+    }
 }
 
 @code {
@@ -164,6 +179,31 @@ else
     private bool _isReviewing = false;
     private bool _isWrong = false;
     private int _extraGoal = 0;
+    private bool IsMobile { get; set; }
+    private bool _isKeyboardInitialized = false;
+    private bool _isKeyboardRendered = false;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var ua = await JS.InvokeAsync<string>("eval", "navigator.userAgent");
+            IsMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
+            StateHasChanged();
+            return;
+        }
+        // 初回かつ、要素が存在する時だけ1回だけ初期化する
+        if (IsMobile && !_isKeyboardRendered)
+        {
+            var elExists = await JS.InvokeAsync<bool>("eval", "document.querySelector('.simple-keyboard') !== null");
+            if (elExists)
+            {
+                _isKeyboardRendered = true;
+                await JS.InvokeVoidAsync("setupKeyboard", DotNetObjectReference.Create(this));
+            }
+        }
+    }
 
     // プログレスバーの幅を計算する計算プロパティ
     private string _progressStyle => $"width: {GetProgressPercentage()}%;";
@@ -221,6 +261,11 @@ else
                 _isStep2 = true;
                 _isCorrect = false;
                 _userInput = "";
+
+                if (IsMobile)
+                {
+                    await JS.InvokeVoidAsync("clearKeyboard"); // JS側のバッファもクリア
+                }
             }
             else if (result.IsFinished)
             {
@@ -251,9 +296,16 @@ else
     {
         _isReviewing = false;
         _userInput = "";
+
+        if (IsMobile)
+        {
+            await JS.InvokeVoidAsync("clearKeyboard"); // これを追加！
+        }
+
         StateHasChanged();
 
         await Task.Delay(10);
+        // PC用のフォーカス処理。JS側でエラーにならないよう安全に。
         await JS.InvokeVoidAsync("speechHandlers.focusElement", _wordInput);
     }
 
@@ -294,6 +346,13 @@ else
 
             await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
         }
+        // キーボードの内容もクリア
+        _userInput = "";
+        if (IsMobile)
+        {
+            await JS.InvokeVoidAsync("clearKeyboard");
+        }
+        StateHasChanged();
     }
 
     private int GetCurrentProgress()
@@ -324,4 +383,19 @@ else
 
     private async Task Speak(string text) =>
         await JS.InvokeVoidAsync("speechHandlers.speak", text);
+
+    // JSから呼ばれる入力用メソッド
+    [JSInvokable]
+    public async Task OnKeyboardInput(string input)
+    {
+        _userInput = input;
+        StateHasChanged();
+    }
+
+    // JSから呼ばれるEnterキー用メソッド
+    [JSInvokable]
+    public async Task OnKeyboardEnter()
+    {
+        await CheckAnswer();
+    }
 }

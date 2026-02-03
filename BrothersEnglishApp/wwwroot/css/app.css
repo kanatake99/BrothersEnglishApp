@@ -17,7 +17,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -152,7 +152,50 @@ code {
     color: #2ed573;
     font-size: 1.2rem;
 }
-/* パスワード入力欄のドット（伏せ字）を消して文字を見せる */
-.force-reveal {
-    -webkit-text-security: none !important;
+
+/* 画面下に固定するカスタムキーボード用のスタイル */
+
+.simple-keyboard-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom); /* iPhoneの画面下のバー対策 */
+}
+
+.training-page {
+    padding-bottom: 260px !important;
+}
+
+/* ナビバーの中の container-fluid は余白を 0 に固定して安全策をとる */
+.navbar .container-fluid {
+    padding-bottom: 0 !important;
+}
+
+.simple-keyboard-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #f8f5f0; /* --bs-light の色に合わせると綺麗 */
+    border-top: 1px solid #dfd7ca; /* --bs-border-color */
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.simple-keyboard-container.d-none {
+    display: none !important;
+}
+/* inputの文字は大きいまま、placeholderだけサイズを調整する */
+input.fs-1::placeholder {
+    font-size: 1.2rem !important; /* 好みのサイズに調整してくれ */
+    opacity: 0.6; /* 少し薄くするとより「ヒント」っぽくなるぜ */
+}
+
+/* スマホでの表示がさらに崩れないように保険をかける */
+@media (max-width: 576px) {
+    input.fs-1::placeholder {
+        font-size: 1rem !important;
+    }
 }
