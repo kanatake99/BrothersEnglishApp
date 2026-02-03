@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrothersEnglishApp</title>
     <base href="/BrothersEnglishApp/" />
-    <link href="_framework/dotnet.0b2pqqqa92.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-7PmXc97RqiQTHMHOKLwM16spS53U+drmH7ADsRd2a4Q=" />
+    <link href="_framework/dotnet.dsw514vigv.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-PdYHSIqoLBJZqOQmmfANazC6SdovQhiV4s3bdaFNAqs=" />
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="BrothersEnglishApp.styles.css" rel="stylesheet" />
     <link href="manifest.webmanifest" rel="manifest" />
@@ -18,7 +19,7 @@
     <script type="importmap">{
   "imports": {
     "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.66stpp682q.js",
-    "./_framework/dotnet.js": "./_framework/dotnet.0b2pqqqa92.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.dsw514vigv.js",
     "./_framework/dotnet.native.js": "./_framework/dotnet.native.87vtjjdetb.js",
     "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.2tx45g8lli.js"
   },
@@ -26,8 +27,8 @@
   "integrity": {
     "./_framework/blazor.webassembly.66stpp682q.js": "sha256-3lCWrko3zwspV40aQhs2S/IMkRSarnHRKIdkHhuXIBA=",
     "./_framework/blazor.webassembly.js": "sha256-3lCWrko3zwspV40aQhs2S/IMkRSarnHRKIdkHhuXIBA=",
-    "./_framework/dotnet.0b2pqqqa92.js": "sha256-7PmXc97RqiQTHMHOKLwM16spS53U+drmH7ADsRd2a4Q=",
-    "./_framework/dotnet.js": "sha256-7PmXc97RqiQTHMHOKLwM16spS53U+drmH7ADsRd2a4Q=",
+    "./_framework/dotnet.dsw514vigv.js": "sha256-PdYHSIqoLBJZqOQmmfANazC6SdovQhiV4s3bdaFNAqs=",
+    "./_framework/dotnet.js": "sha256-PdYHSIqoLBJZqOQmmfANazC6SdovQhiV4s3bdaFNAqs=",
     "./_framework/dotnet.native.87vtjjdetb.js": "sha256-zE11fbcG2CeLl1Zi+NJgMOfWpdjuUWNte+icrtAO58I=",
     "./_framework/dotnet.native.js": "sha256-zE11fbcG2CeLl1Zi+NJgMOfWpdjuUWNte+icrtAO58I=",
     "./_framework/dotnet.runtime.2tx45g8lli.js": "sha256-2lZh9yO0fnzm3Xt7yV+Kox3DH3nK7L8hDhm84VT1xco=",
@@ -58,8 +59,48 @@
         <span class="dismiss">🗙</span>
     </div>
     <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+    <script src="js/keyboard.js"></script>
     <script src="_framework/blazor.webassembly.66stpp682q.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+
+    <script>
+        // Blazorのインスタンスを保持する変数
+        let blazorUpdateNotifier;
+
+        window.registerUpdateNotifier = (dotnetHelper) => {
+            blazorUpdateNotifier = dotnetHelper;
+        };
+
+        navigator.serviceWorker.register('service-worker.js').then(registration => {
+            // 更新があるかチェック
+            registration.onupdatefound = () => {
+                const installingWorker = registration.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        // 新しいSWがインストールされた（待機状態）らBlazorに通知
+                        if (blazorUpdateNotifier) {
+                            blazorUpdateNotifier.invokeMethodAsync('ShowUpdateBanner');
+                        }
+                    }
+                };
+            };
+        });
+
+        // C#から呼ばれる更新実行関数
+        window.activateUpdate = () => {
+            navigator.serviceWorker.getRegistration().then(registration => {
+                if (registration && registration.waiting) {
+                    registration.waiting.postMessage('skip-waiting');
+                }
+            });
+        };
+
+        // SWが入れ替わったらページをリロード
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.reload();
+        });
+    </script>
 </body>
 
 </html>
