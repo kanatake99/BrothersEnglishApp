@@ -254,6 +254,37 @@ code {
     display: none !important;
 }
 
+/* モバイル時の仮想キーボード全体の調整 */
+.simple-keyboard {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+    /* 各ボタン（キー）の高さを出して押しやすくする */
+    .simple-keyboard .hg-button {
+        height: 65px !important; /* 以前より高さをアップ（標準は約40-50px） */
+        font-size: 1.4rem !important; /* 文字も少し大きくして視認性アップ */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff !important;
+        border-bottom: 3px solid #b5b5b5 !important; /* 立体感を出してボタンらしく */
+    }
+
+    /* 決定ボタン（Enter）やBackspaceをもっと目立たせる場合 */
+    .simple-keyboard .hg-button-enter,
+    .simple-keyboard .hg-button-backspace {
+        background: #e0e0e0 !important;
+        font-weight: bold;
+    }
+
+    /* タップした時の反応を分かりやすく（フィードバック強化） */
+    .simple-keyboard .hg-button:active {
+        background: #efefef !important;
+        transform: translateY(2px);
+        border-bottom: none !important;
+    }
+
 /* =========================================================
    ナビバー：ハンバーガーアイコン自作
    ========================================================= */
