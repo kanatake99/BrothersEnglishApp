@@ -165,14 +165,14 @@
     private async Task FinishStudy()
     {
         _isFinished = true;
-        var todayKey = DateTime.Now.ToString("yyyyMMdd");
 
         if (_userProgress != null)
         {
+            var todayKey = _userProgress.GetTodayKey();
             if (!_userProgress.ActivityLog.ContainsKey(todayKey))
                 _userProgress.ActivityLog[todayKey] = new DayActivity();
 
-            _userProgress.ActivityLog[todayKey].StudyDone = true;
+            _userProgress.ActivityLog[todayKey].TrainingDone = true;
             await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
         }
         StateHasChanged();

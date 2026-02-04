@@ -64,6 +64,15 @@ public class LocalStorageService(IJSRuntime js)
     /// <summary>特定のユーザーの学習進捗を保存</summary>
     public async Task SaveUserProgressAsync(string userId, UserProgress progress)
     {
+        // 保存前に念のため全ステータスの日付をUTCとして扱うようマーク
+        foreach (var status in progress.WordStatuses)
+        {
+            if (status.LastReviewed.Kind != DateTimeKind.Utc)
+            {
+                // Kindを強制的に変換（値は変えず、UTCであると宣言する）
+                status.LastReviewed = DateTime.SpecifyKind(status.LastReviewed, DateTimeKind.Utc);
+            }
+        }
         if (string.IsNullOrWhiteSpace(userId)) return;
         await SaveAsync(GetUserKey(userId), progress);
     }
