@@ -164,9 +164,9 @@ public class TrainingEngine
         else
         {
             var weakWords = allWords
-                .Where(w => userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.IncorrectCount > 0) ?? false)
-                .OrderByDescending(w => userProgress?.WordStatuses.First(s => s.WordId == w.Id).IncorrectCount)
-                .ToList();
+        .Where(w => userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.IncorrectCount > 0) ?? false)
+        .OrderByDescending(w => userProgress?.WordStatuses.FirstOrDefault(s => s.WordId == w.Id)?.IncorrectCount ?? 0)
+        .ToList();
 
             var freshWeakWords = weakWords.Where(w => !_sessionWordCounts.ContainsKey(w.Id)).ToList();
 

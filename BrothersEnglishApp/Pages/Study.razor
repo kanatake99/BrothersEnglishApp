@@ -1,12 +1,13 @@
 ﻿@page "/study"
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
+@implements IAsyncDisposable
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
 @inject UserContext Context
-@inject IJSRuntime JS   // JavaScript呼び出し用
-@inject WordRepository WordRepo // 単語リポジトリの注入
-@inject TrainingEngine Engine // トレーニングエンジンの注入
+@inject IJSRuntime JS
+@inject WordRepository WordRepo
+@inject TrainingEngine Engine
 
 <PageTitle>学習ページ</PageTitle>
 
@@ -181,6 +182,9 @@ else
     private int _extraGoal = 0;
     private bool IsMobile { get; set; }
     private bool _isKeyboardRendered = false;
+
+    // メモリリーク防止用の参照保持
+    private DotNetObjectReference<Study>? _keyboardRef;
     #endregion
 
     // --- プロパティ（重複を削除し、一つに統合） ---
@@ -207,7 +211,7 @@ else
     {
         if (firstRender)
         {
-            var ua = await JS.InvokeAsync<string>("eval", "navigator.userAgent");
+            var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
             IsMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
             StateHasChanged();
             return;
@@ -215,11 +219,12 @@ else
 
         if (IsMobile && !_isKeyboardRendered)
         {
-            var elExists = await JS.InvokeAsync<bool>("eval", "document.querySelector('.simple-keyboard') !== null");
+            var elExists = await JS.InvokeAsync<bool>("speechHandlers.elementExists", ".simple-keyboard");
             if (elExists)
             {
                 _isKeyboardRendered = true;
-                await JS.InvokeVoidAsync("setupKeyboard", DotNetObjectReference.Create(this));
+                _keyboardRef = DotNetObjectReference.Create(this);
+                await JS.InvokeVoidAsync("setupKeyboard", _keyboardRef);
             }
         }
     }
@@ -325,7 +330,7 @@ else
         else
         {
             // ★修正：日付判定を UTC に統一
-            var todayKey = DateTime.UtcNow.Date.ToString("yyyyMMdd");
+            var todayKey = _userProgress.GetTodayKey();
             if (!_userProgress.ActivityLog.ContainsKey(todayKey))
             {
                 _userProgress.ActivityLog[todayKey] = new DayActivity();
@@ -376,6 +381,20 @@ else
 
     [JSInvokable]
     public async Task OnKeyboardEnter() => await CheckAnswer();
-    #endregion
 
+    // 画面を離れる時に呼ばれる
+    public async ValueTask DisposeAsync()
+    {
+        if (_keyboardRef != null)
+        {
+            _keyboardRef.Dispose(); // C#側の参照を破棄
+            _keyboardRef = null;
+        }
+        try
+        {
+            if (IsMobile) await JS.InvokeVoidAsync("clearKeyboard");
+        }
+        catch { /* 既にJSが破棄されている場合の保険 */ }
+    }
+    #endregion
 }

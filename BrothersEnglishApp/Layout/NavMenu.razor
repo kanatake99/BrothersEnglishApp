@@ -5,8 +5,13 @@
 <div class="top-row ps-3 navbar bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand text-light" href="">BrothersEnglishApp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+        <button title="Navigation menu" class="navbar-toggler"
+                aria-expanded="@AriaExpandedValue"
+                @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon">
+                @* CSSのアニメーション用に中に一枚 span を入れる *@
+                <span></span>
+            </span>
         </button>
     </div>
 </div>
@@ -51,6 +56,8 @@
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    // 【追加】ボタンの×アニメーション制御用（文字列で "true" か "false" を返す）
+    private string AriaExpandedValue => (!collapseNavMenu).ToString().ToLower();
 
     private void ToggleNavMenu()
     {

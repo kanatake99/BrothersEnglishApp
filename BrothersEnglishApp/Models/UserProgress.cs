@@ -4,16 +4,22 @@
     {
         public string UserName { get; set; } = "";
         public List<WordStatus> WordStatuses { get; set; } = new();
-        public int DailyGoal { get; set; } = 10;      // 「覚える」用
-        public int StudyGoal { get; set; } = 15;      // 「復習」用
-        public Dictionary<string, DayActivity> ActivityLog { get; set; } = new(); // 日付（"yyyyMMdd"形式）をキーにして、その日の活動を保存する
+
+        public int DailyGoal { get; set; } = 10;  // 「Study（新しい単語）」用
+        public int TrainingGoal { get; set; } = 15; // 「Training（復習クイズ）」用
+
+        public Dictionary<string, DayActivity> ActivityLog { get; set; } = new();
         public bool IsAutoSpeechEnabled { get; set; } = true;
-        public string GetTodayKey() => DateTime.Now.ToString("yyyyMMdd");
+
+        // --- 修正：UTCベースに統一 ---
+        // これでサーバーとクライアント、どこの国で動かしても日付がズレなくなるぜ
+        public string GetTodayKey() => DateTime.UtcNow.ToString("yyyyMMdd");
     }
+
     public class DayActivity
     {
-        public bool TrainingDone { get; set; }
-        public bool StudyDone { get; set; }
-
+        // --- 修正：画面名に合わせてプロパティ名も変更 ---
+        public bool StudyDone { get; set; }    // 新規学習
+        public bool TrainingDone { get; set; } // 復習トレーニング
     }
 }
