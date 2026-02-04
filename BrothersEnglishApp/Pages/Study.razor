@@ -223,6 +223,9 @@ else
             if (elExists)
             {
                 _isKeyboardRendered = true;
+
+                // 既に参照があれば破棄してから新規作成
+                _keyboardRef?.Dispose();
                 _keyboardRef = DotNetObjectReference.Create(this);
                 await JS.InvokeVoidAsync("setupKeyboard", _keyboardRef);
             }
@@ -335,7 +338,7 @@ else
             {
                 _userProgress.ActivityLog[todayKey] = new DayActivity();
             }
-            _userProgress.ActivityLog[todayKey].TrainingDone = true;
+            _userProgress.ActivityLog[todayKey].StudyDone = true;
             await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
         }
 
@@ -385,16 +388,20 @@ else
     // 画面を離れる時に呼ばれる
     public async ValueTask DisposeAsync()
     {
-        if (_keyboardRef != null)
-        {
-            _keyboardRef.Dispose(); // C#側の参照を破棄
-            _keyboardRef = null;
-        }
+        // DotNetObjectReference を解放
+        _keyboardRef?.Dispose();
+        _keyboardRef = null;
+
+        // JS 側のキーボードを確実に破棄してバッファもクリア
         try
         {
-            if (IsMobile) await JS.InvokeVoidAsync("clearKeyboard");
+            await JS.InvokeVoidAsync("destroyKeyboard");
+            await JS.InvokeVoidAsync("clearKeyboard");
         }
-        catch { /* 既にJSが破棄されている場合の保険 */ }
+        catch
+        {
+            // JS 呼び出し失敗は無視（ログ化してもよい）
+        }
     }
     #endregion
 }

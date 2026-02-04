@@ -21,7 +21,7 @@ public class Question
     public string WordId { get; set; } = "";
     public string QuestionText { get; set; } = "";
     public string CorrectAnswer { get; set; } = "";
-    public List<string> Options { get; set; } = [];
+    public List<string> Options { get; set; } = new List<string>();
     public bool IsEnglishToJapanese { get; set; }
 }
 

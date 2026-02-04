@@ -1,7 +1,11 @@
 ﻿// wwwroot/js/app.js
 
-// ブラウザの読み上げ機能を呼び出す関数
+/**
+ * 汎用ヘルパー (speechHandlers)
+ * Blazor側からは "speechHandlers.関数名" で呼び出す
+ */
 window.speechHandlers = {
+    // 読み上げ
     speak: function (text) {
         if (!text) return;
         window.speechSynthesis.cancel();
@@ -10,60 +14,104 @@ window.speechHandlers = {
         window.speechSynthesis.speak(msg);
     },
 
-    // 指定した要素にフォーカスを当てる（Training用）
+    // フォーカス・UI操作
     focusElement: function (element) {
         if (element && typeof element.focus === 'function') {
             element.focus();
         }
     },
-    // UserAgent取得
-    getUserAgent: () => navigator.userAgent,
-
-    // 要素存在チェック
-    elementExists: (selector) => document.querySelector(selector) !== null,
-
-
-    // 現在のフォーカスを解除する（Studyのボタン選択時用）
     blurActiveElement: function () {
         if (document.activeElement && typeof document.activeElement.blur === 'function') {
             document.activeElement.blur();
         }
-    }
+    },
+
+    // 判定用（今回エラーになっていた場所）
+    getUserAgent: () => navigator.userAgent || "",
+    elementExists: (selector) => document.querySelector(selector) !== null
 };
 
-
-// スクロール操作を行う関数
+/**
+ * スクロール操作 (appFunctions)
+ */
 window.appFunctions = {
-    // 指定したIDの要素までスクロール
     scrollToElement: function (elementId) {
         const element = document.getElementById(elementId);
         if (element) {
-            // ヘッダーが固定されている場合は、その分少し上に余裕を持たせる
             const offset = 70;
             const bodyRect = document.body.getBoundingClientRect().top;
             const elementRect = element.getBoundingClientRect().top;
             const elementPosition = elementRect - bodyRect;
             const offsetPosition = elementPosition - offset;
 
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
     },
-    // 一番上までスクロール
     scrollToTop: function () {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };
 
+/**
+ * クイズ専用 (quizHandlers)
+ */
 window.quizHandlers = {
     resetButtons: () => {
-        // 全てのクイズボタンからフォーカスを外す
         const buttons = document.querySelectorAll('.quiz-button');
         buttons.forEach(btn => btn.blur());
     }
+};
+
+// --- 以下、Simple Keyboard 関連（グローバル関数として定義） ---
+
+window.keyboardInputBuffer = "";
+window.currentKeyboard = null;
+
+window.clearKeyboard = () => {
+    window.keyboardInputBuffer = "";
+    if (window.currentKeyboard && typeof window.currentKeyboard.setInput === "function") {
+        window.currentKeyboard.setInput("");
+    }
+};
+
+window.setupKeyboard = (dotNetHelper) => {
+    if (window.currentKeyboard) {
+        window.currentKeyboard.destroy();
+        window.currentKeyboard = null;
+    }
+
+    const el = document.querySelector(".simple-keyboard");
+    if (!el) return;
+
+    const Keyboard = window.SimpleKeyboard.default;
+    window.currentKeyboard = new Keyboard({
+        onKeyPress: button => {
+            if (button === "{enter}") {
+                dotNetHelper.invokeMethodAsync('OnKeyboardEnter');
+            } else if (button === "{backspace}") {
+                window.keyboardInputBuffer = window.keyboardInputBuffer.slice(0, -1);
+                dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
+            } else if (button.length === 1) {
+                window.keyboardInputBuffer += button;
+                dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
+            }
+        },
+        layout: {
+            'default': [
+                'q w e r t y u i o p',
+                'a s d f g h j k l',
+                'z x c v b n m {backspace}',
+                '{enter}'
+            ]
+        },
+        display: { '{enter}': '決定', '{backspace}': '⌫' }
+    });
+};
+
+window.destroyKeyboard = () => {
+    if (window.currentKeyboard) {
+        window.currentKeyboard.destroy();
+        window.currentKeyboard = null;
+    }
+    window.keyboardInputBuffer = "";
 };

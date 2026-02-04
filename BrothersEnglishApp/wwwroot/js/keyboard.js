@@ -64,3 +64,16 @@ window.setupKeyboard = (dotNetHelper) => {
 
     init();
 };
+
+window.destroyKeyboard = () => {
+    try {
+        if (window.currentKeyboard) {
+            if (typeof window.currentKeyboard.destroy === "function") {
+                window.currentKeyboard.destroy();
+            }
+            window.currentKeyboard = null;
+        }
+    } finally {
+        window.keyboardInputBuffer = "";
+    }
+};
