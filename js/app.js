@@ -16,6 +16,12 @@ window.speechHandlers = {
             element.focus();
         }
     },
+    // UserAgent取得
+    getUserAgent: () => navigator.userAgent,
+
+    // 要素存在チェック
+    elementExists: (selector) => document.querySelector(selector) !== null,
+
 
     // 現在のフォーカスを解除する（Studyのボタン選択時用）
     blurActiveElement: function () {
