@@ -1,13 +1,13 @@
 self.assetsManifest = {
-  "version": "DSzlOYT8",
+  "version": "M+Q5313c",
   "assets": [
     {
       "hash": "sha256-M66qCkSjZ7tVai1Fo2f9TbmdZAD9+v4KkaDgv9RcUjI=",
       "url": "BrothersEnglishApp.styles.css"
     },
     {
-      "hash": "sha256-cWiDFOqP52EXY8PXsuBq24SoeG7MzY6RpR+Xn5czlUY=",
-      "url": "_framework/BrothersEnglishApp.pazfokycpi.wasm"
+      "hash": "sha256-7WvUz2fouvF0Zt6ehKw9J/y7byf27yhLS11J7eLlnG0=",
+      "url": "_framework/BrothersEnglishApp.9xwt0o8tqc.wasm"
     },
     {
       "hash": "sha256-dSFHQdzKED8ZEULRDB63q5CbaoPluNws+1mcSFPU8DU=",
@@ -126,8 +126,8 @@ self.assetsManifest = {
       "url": "_framework/System.Runtime.InteropServices.JavaScript.yzg2xf6fe9.wasm"
     },
     {
-      "hash": "sha256-U0IYjBYFUoUD0MbeJ2cTMb8X2ConP4jdbGEOt9pwgJA=",
-      "url": "_framework/System.Runtime.ri3iwcxiyp.wasm"
+      "hash": "sha256-XJmi2ClRu880IELpmVZtYGQUbVHxX7KCoehKaenmy9g=",
+      "url": "_framework/System.Runtime.ol9rsp12sc.wasm"
     },
     {
       "hash": "sha256-E04MD5+M8yUnUB3bCz1aqecOvGzLKoWYaMzJ+vxfHro=",
@@ -154,8 +154,8 @@ self.assetsManifest = {
       "url": "_framework/blazor.webassembly.66stpp682q.js"
     },
     {
-      "hash": "sha256-ioV/+jbeAbTrramX8KKx7hcjkgQ222KHZ3vjUDuD8Qo=",
-      "url": "_framework/dotnet.em5og2zvzh.js"
+      "hash": "sha256-6EnFmTv13F26MzN4LugBIiyptXjveeYmJOcliD6JOgA=",
+      "url": "_framework/dotnet.4d8vyavjdd.js"
     },
     {
       "hash": "sha256-zE11fbcG2CeLl1Zi+NJgMOfWpdjuUWNte+icrtAO58I=",
@@ -202,15 +202,15 @@ self.assetsManifest = {
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-ShAMF329cdlPAN3b8UdVgxCU6EVjpy+Vsn+6pd7Lf+8=",
+      "hash": "sha256-AYVoe+tj+hbjxLs1MUS2tiz4PkcRF0rJSVDPcR7snkc=",
       "url": "index.html"
     },
     {
-      "hash": "sha256-FymFe8yfU7vUXdnMwMAQRBDhrU3j+cYSU31MTxfeEh0=",
+      "hash": "sha256-p92SRk3Q3y2OJU26RWbvShsqcCcD1f8mccgkmEZeeKc=",
       "url": "js/app.js"
     },
     {
-      "hash": "sha256-rq86nrp+Rg/OfUTch4nqxx8jVrjBdL7KW4/TP6mLQOc=",
+      "hash": "sha256-WcAuRv5jaXso5GzPqfIuoMJ2btwFL8W48V9WxX6Guzo=",
       "url": "js/keyboard.js"
     },
     {
