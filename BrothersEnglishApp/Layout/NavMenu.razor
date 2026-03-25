@@ -1,72 +1,86 @@
-﻿@using BrothersEnglishApp.Services 
+﻿@using BrothersEnglishApp.Services
 @inject UserContext Context
 @inject NavigationManager Nav
 
-<div class="top-row ps-3 navbar bg-primary">
+<div class="top-row ps-3 navbar bg-primary shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand text-light" href="">BrothersEnglishApp</a>
-        <button title="Navigation menu" class="navbar-toggler"
+        <a class="navbar-brand text-light fw-bold" href="">BrothersEnglishApp</a>
+        <button title="Navigation menu" class="navbar-toggler border-light"
                 aria-expanded="@AriaExpandedValue"
                 @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon">
-                @* CSSのアニメーション用に中に一枚 span を入れる *@
-                <span></span>
-            </span>
+            <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
+<div class="@NavMenuCssClass nav-scrollable bg-white border-end shadow" @onclick="ToggleNavMenu">
+    <nav class="nav flex-column py-2">
+        @* --- ホーム --- *@
+        <div class="nav-item px-3 mb-1">
+            <NavLink class="nav-link rounded px-3 py-2 text-primary-emphasis" href="" Match="NavLinkMatch.All">
+                <span class="me-3 fs-4">🏠</span> <span class="fw-bold">ホーム</span>
+            </NavLink>
+        </div>
 
-<div class="@NavMenuCssClass nav-scrollable bg-light" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3 fs-4">
-            <NavLink class="nav-link text-primary-emphasis" href="" Match="NavLinkMatch.All">
-                <span class="me-2 fs-3">🏠</span> Home
+        <hr class="mx-3 my-2 text-muted">
+
+        @* --- 単語セクション --- *@
+        <div class="px-4 py-1 small text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">単語の学習</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link rounded px-3 py-2" href="study">
+                <span class="me-3 fs-4">📝</span> <span>単語を覚える</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3 fs-4">
-            <NavLink class="nav-link text-primary-emphasis" href="study">
-                <span class="me-2 fs-3">📝</span> 覚える
+        <div class="nav-item px-3">
+            <NavLink class="nav-link rounded px-3 py-2" href="training">
+                <span class="me-3 fs-4">🏁</span> <span>単語の復習</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3 fs-4">
-            <NavLink class="nav-link text-primary-emphasis" href="training">
-                <span class="me-2 fs-3">🏁</span> 復習
+
+        <hr class="mx-3 my-2 text-muted">
+
+        @* --- 文セクション (✨新機能) --- *@
+        <div class="px-4 py-1 small text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">文の学習</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link rounded px-3 py-2" href="sentence-study">
+                <span class="me-3 fs-4">📖</span> <span>文を覚える</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3 fs-4">
-            <NavLink class="nav-link text-primary-emphasis" href="report">
-                <span class="me-2 fs-3">📋</span> 成績表
+        @* ※復習画面が出来たらここに追加するぜ *@
+
+        <hr class="mx-3 my-2 text-muted">
+
+        @* --- データ・設定セクション --- *@
+        <div class="px-4 py-1 small text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">データ</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link rounded px-3 py-2" href="report">
+                <span class="me-3 fs-4">📋</span> <span>がんばり記録</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3 fs-4">
-            <NavLink class="nav-link text-primary-emphasis" href="wordlist">
-                <span class="me-2 fs-3">📍</span> 単語一覧
+        <div class="nav-item px-3">
+            <NavLink class="nav-link rounded px-3 py-2" href="wordlist">
+                <span class="me-3 fs-4">📍</span> <span>単語リスト</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3 fs-4">
-            <NavLink class="nav-link text-primary-emphasis" href="profile">
-                <span class="me-2 fs-3">⚙️</span> 設定
+        <div class="nav-item px-3">
+            <NavLink class="nav-link rounded px-3 py-2" href="/settings">
+                <span class="me-3 fs-4">⚙️</span> <span>設定</span>
             </NavLink>
         </div>
+
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-    // 【追加】ボタンの×アニメーション制御用（文字列で "true" か "false" を返す）
     private string AriaExpandedValue => (!collapseNavMenu).ToString().ToLower();
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
 
     private async Task HandleLogout()
     {
         await Context.LogoutAsync();
-        Nav.NavigateTo("/", forceLoad: true); // 状態をクリアして戻る
+        Nav.NavigateTo("/", forceLoad: true);
     }
 }

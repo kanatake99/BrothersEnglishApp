@@ -108,5 +108,35 @@ public class LocalStorageService(IJSRuntime js)
         return session;
     }
 
+    // --- 引数なしで現在のセッションから進捗をロードする便利メソッド ---
+    public async Task<UserProgress> LoadProgressAsync()
+    {
+        var session = await GetSessionAsync();
+        if (session == null || string.IsNullOrWhiteSpace(session.UserId))
+        {
+            return new UserProgress();
+        }
+
+        var progress = await LoadUserProgressAsync(session.UserId);
+
+        // データの互換性維持：新しい項目がnullなら初期化するぜ
+        if (progress != null)
+        {
+            progress.Settings ??= new UserSettings();
+            progress.SentenceStatuses ??= new Dictionary<string, SentenceStatus>();
+            progress.ActivityLog ??= new Dictionary<string, DayActivity>();
+        }
+
+        return progress ?? new UserProgress();
+    }
+
+    // --- 引数なしで現在のセッションに進捗を保存する便利メソッド ---
+    public async Task SaveProgressAsync(UserProgress progress)
+    {
+        var session = await GetSessionAsync();
+        if (session == null || string.IsNullOrWhiteSpace(session.UserId)) return;
+
+        await SaveUserProgressAsync(session.UserId, progress);
+    }
     #endregion
 }

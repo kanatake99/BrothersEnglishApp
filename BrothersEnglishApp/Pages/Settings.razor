@@ -1,0 +1,133 @@
+﻿@page "/settings"
+@inject LocalStorageService Storage
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>設定 </PageTitle>
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2 class="mb-4"><i class="bi bi-gear-fill me-2"></i>学習設定</h2>
+
+    @if (_progress == null)
+    {
+        <div class="text-center"><div class="spinner-border text-primary"></div></div>
+    }
+    else
+    {
+        @* --- 英単語の設定 --- *@
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-alphabet-uppercase me-2"></i>英単語の設定
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">１日の新規学習数 (Study)</label>
+                    <input type="number" class="form-control" @bind="_progress.Settings.WordStudyGoal" min="1" max="50">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">１日の復習数 (Training)</label>
+                    <input type="number" class="form-control" @bind="_progress.Settings.WordTrainingGoal" min="1" max="100">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">読み上げ速度: <strong>@_progress.Settings.WordSpeechRate.ToString("0.0")</strong></label>
+                    <input type="range" class="form-range" min="0.5" max="1.5" step="0.1" @bind="_progress.Settings.WordSpeechRate">
+                    <div class="d-flex justify-content-between small text-muted">
+                        <span>ゆっくり</span><span>ふつう</span><span>速め</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* --- 文（イディオム）の設定 --- *@
+        <div class="card shadow-sm mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-chat-quote-fill me-2"></i>文（イディオム）の設定
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">１日の新規学習数 (Study)</label>
+                    <input type="number" class="form-control" @bind="_progress.Settings.SentenceStudyGoal" min="1" max="20">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">１日の復習数 (Training)</label>
+                    <input type="number" class="form-control" @bind="_progress.Settings.SentenceTrainingGoal" min="1" max="50">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">読み上げ速度: <strong>@_progress.Settings.SentenceSpeechRate.ToString("0.0")</strong></label>
+                    <input type="range" class="form-range" min="0.5" max="1.5" step="0.1" @bind="_progress.Settings.SentenceSpeechRate">
+                    <div class="d-flex justify-content-between small text-muted">
+                        <span>ゆっくり</span><span>ふつう</span><span>速め</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* --- 共通設定 --- *@
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="form-check form-switch fs-5">
+                    <input class="form-check-input" type="checkbox" id="autoSpeech" @bind="_progress.Settings.IsAutoSpeechEnabled">
+                    <label class="form-check-label" for="autoSpeech">自動読み上げを有効にする</label>
+                </div>
+            </div>
+        </div>
+
+        @* --- 保存ボタン --- *@
+        <div class="d-grid gap-2 mb-5">
+            <button class="btn btn-primary btn-lg py-3 shadow" @onclick="SaveSettings">
+                <i class="bi bi-save2 me-2"></i>設定を保存して戻る
+            </button>
+        </div>
+    }
+</div>
+<div class="container mt-4 mb-4">
+    <div class="card shadow-sm mt-4 border-warning">
+        <div class="card-header bg-warning text-dark fw-bold">
+            🚀 システム
+        </div>
+        <div class="card-body">
+            <p class="small text-muted">
+                アプリがうまく動かない時や、最新の単語データが届かない時は、下のボタンを押して更新を確認してください。
+            </p>
+            <button class="btn btn-outline-danger w-100" @onclick="ForceUpdate">
+                <i class="bi bi-arrow-clockwise me-2"></i>アプリを強制的に更新する
+            </button>
+            <div class="text-center mt-2">
+                <small class="text-muted">現在のバージョン:2026/03/22</small> @* 手動で日付などを入れると管理しやすい *@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private UserProgress? _progress;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _progress = await Storage.LoadProgressAsync();
+
+        // Settingsがnull（古いデータ）の場合は初期化しておく
+        if (_progress != null && _progress.Settings == null)
+        {
+            _progress.Settings = new UserSettings();
+        }
+    }
+
+    private async Task SaveSettings()
+    {
+        if (_progress == null) return;
+        await Storage.SaveProgressAsync(_progress);
+        Navigation.NavigateTo("/"); // トップへ戻る
+    }
+
+    private async Task ForceUpdate()
+    {
+        // 確認ダイアログ
+        var confirm = await JS.InvokeAsync<bool>("confirm", "アプリを再起動して最新版に更新しますか？");
+        if (confirm)
+        {
+            await JS.InvokeVoidAsync("activateUpdate");
+        }
+    }
+}

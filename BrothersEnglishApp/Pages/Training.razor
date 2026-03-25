@@ -86,19 +86,22 @@
     {
         _allWords = await WordRepo.GetWordsAsync();
 
-        // ★ 指摘4：専用メソッドでロードするように修正
-        _userProgress = await Storage.LoadUserProgressAsync(Context.CurrentUserId);
+        _userProgress = await Storage.LoadProgressAsync();
 
         if (_userProgress != null)
         {
             // 目標数の設定
-            if (_userProgress.TrainingGoal > 0)
+            // 0以下の場合はデフォルトの10問にする
+            _studyGoal = _userProgress.Settings.WordTrainingGoal > 0
+                                   ? _userProgress.Settings.WordTrainingGoal
+                                   : 10;
+            // 学習済み単語が1つもない場合は、フリーズ防止のために学習画面へ誘導するかメッセージを出す
+            var hasLearnedWords = _userProgress.WordStatuses.Any();
+            if (!hasLearnedWords)
             {
-                _studyGoal = _userProgress.TrainingGoal;
-            }
-            else
-            {
-                _studyGoal = _userProgress.DailyGoal > 0 ? _userProgress.DailyGoal : 10;
+                await JS.InvokeVoidAsync("alert", "まだ覚えた単語がないみたいだぜ。まずは「覚える」から始めてみよう！");
+                Navigation.NavigateTo("study");
+                return;
             }
         }
         await GenerateNextQuestion();
@@ -122,7 +125,7 @@
             Engine.RecordStudyResult(_userProgress, _currentQuestion.WordId, isCorrect);
 
             // ★ 保存メソッドを専用のものに差し替え
-            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+            await Storage.SaveProgressAsync(_userProgress);
         }
 
         // 正誤演出
@@ -173,7 +176,8 @@
                 _userProgress.ActivityLog[todayKey] = new DayActivity();
 
             _userProgress.ActivityLog[todayKey].TrainingDone = true;
-            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+
+            await Storage.SaveProgressAsync(_userProgress);
         }
         StateHasChanged();
     }

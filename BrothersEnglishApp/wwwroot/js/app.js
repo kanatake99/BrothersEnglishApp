@@ -6,12 +6,16 @@
  */
 window.speechHandlers = {
     // 読み上げ
-    speak: function (text) {
+    // rate 引数を追加（デフォルトは 1.0）
+    speak: function (text, rate = 1.0) {
         if (!text) return;
+        // すべての読み上げをキャンセルしてから開始
         window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'en-US';
-        window.speechSynthesis.speak(msg);
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = rate; // ここで速度を設定！ (0.1 〜 10.0)
+        window.speechSynthesis.speak(utterance);
     },
 
     // フォーカス・UI操作
@@ -62,11 +66,15 @@ window.quizHandlers = {
     }
 };
 
-// --- 以下、Simple Keyboard 関連（グローバル関数として定義） ---
-
+/**
+ * 仮想キーボードの状態管理用グローバル変数
+ */
 window.keyboardInputBuffer = "";
 window.currentKeyboard = null;
 
+/**
+ * C#から呼び出し可能なクリア関数
+ */
 window.clearKeyboard = () => {
     window.keyboardInputBuffer = "";
     if (window.currentKeyboard && typeof window.currentKeyboard.setInput === "function") {
@@ -74,14 +82,28 @@ window.clearKeyboard = () => {
     }
 };
 
+/**
+ * キーボードの初期化関数
+ * 単語・文の両方に対応した「フルセット」レイアウト
+ */
 window.setupKeyboard = (dotNetHelper) => {
+    // 既存のキーボードを破棄
     if (window.currentKeyboard) {
         window.currentKeyboard.destroy();
         window.currentKeyboard = null;
     }
 
     const el = document.querySelector(".simple-keyboard");
-    if (!el) return;
+    if (!el) {
+        console.error("Keyboard container (.simple-keyboard) not found!");
+        return;
+    }
+
+    // ライブラリが存在するか最終確認
+    if (!window.SimpleKeyboard) {
+        console.error("SimpleKeyboard library is not loaded!");
+        return;
+    }
 
     const Keyboard = window.SimpleKeyboard.default;
     window.currentKeyboard = new Keyboard({
@@ -91,7 +113,12 @@ window.setupKeyboard = (dotNetHelper) => {
             } else if (button === "{backspace}") {
                 window.keyboardInputBuffer = window.keyboardInputBuffer.slice(0, -1);
                 dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
-            } else if (button.length === 1) {
+            } else if (button === "{space}") {
+                // スペース入力をバッファに追加
+                window.keyboardInputBuffer += " ";
+                dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
+            } else {
+                // 通常の文字（a-z）およびアポストロフィ（'）
                 window.keyboardInputBuffer += button;
                 dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
             }
@@ -99,12 +126,16 @@ window.setupKeyboard = (dotNetHelper) => {
         layout: {
             'default': [
                 'q w e r t y u i o p',
-                'a s d f g h j k l',
+                'a s d f g h j k l \'', // アポストロフィを追加
                 'z x c v b n m {backspace}',
-                '{enter}'
+                '{space} {enter}'        // スペースキーを追加
             ]
         },
-        display: { '{enter}': '決定', '{backspace}': '⌫' }
+        display: {
+            '{enter}': '決定',
+            '{backspace}': '⌫',
+            '{space}': 'Space'
+        }
     });
 };
 

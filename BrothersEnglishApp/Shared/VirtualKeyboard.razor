@@ -1,0 +1,58 @@
+﻿@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+@if (_isMobile)
+{
+    <div class="simple-keyboard-container bg-light border-top py-2 @(Visible ? "" : "d-none")">
+        <div class="simple-keyboard"></div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool Visible { get; set; } = true;
+    [Parameter] public EventCallback<string> OnInput { get; set; }
+    [Parameter] public EventCallback OnEnter { get; set; }
+
+    private bool _isMobile;
+    private bool _isRendered;
+    private DotNetObjectReference<VirtualKeyboard>? _objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
+            _isMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
+            if (_isMobile)
+            {
+                _objRef = DotNetObjectReference.Create(this);
+                StateHasChanged(); // 再描画して .simple-keyboard を出現させる
+            }
+        }
+
+        if (_isMobile && !_isRendered)
+        {
+            // 要素が出現するのを待ってからセットアップ
+            if (await JS.InvokeAsync<bool>("speechHandlers.elementExists", ".simple-keyboard"))
+            {
+                await JS.InvokeVoidAsync("setupKeyboard", _objRef);
+                _isRendered = true;
+            }
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnKeyboardInput(string input) => await OnInput.InvokeAsync(input);
+
+    [JSInvokable]
+    public async Task OnKeyboardEnter() => await OnEnter.InvokeAsync();
+
+    // 外部からバッファを消したい時用
+    public async Task ClearAsync() => await JS.InvokeVoidAsync("clearKeyboard");
+
+    public async ValueTask DisposeAsync()
+    {
+        _objRef?.Dispose();
+        try { await JS.InvokeVoidAsync("destroyKeyboard"); } catch { }
+    }
+}

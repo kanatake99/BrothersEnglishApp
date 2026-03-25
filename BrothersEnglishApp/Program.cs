@@ -13,5 +13,7 @@ builder.Services.AddScoped<BrothersEnglishApp.Services.LocalStorageService>();
 builder.Services.AddScoped<UserContext>();
 builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<TrainingEngine>();
+builder.Services.AddScoped<SentenceRepository>();
+builder.Services.AddScoped<SentenceEngine>();
 
 await builder.Build().RunAsync();
