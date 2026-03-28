@@ -21,13 +21,33 @@ namespace BrothersEnglishApp.Services
         }
 
         // 表示用の穴埋め文を作成（例: with regard to -> ________）
+        // 表示用の穴埋め文を作成（例: difficult to predict -> _________ __ _______）
         public string GetQuestionText(string fullEnglish, string target)
         {
             if (string.IsNullOrEmpty(target)) return fullEnglish;
 
-            // 下線（アンダースコア）の数はTargetの長さに合わせてもいいが、
-            // 固定の長さ（________）の方が見た目がスッキリするぜ
-            return fullEnglish.Replace(target, "________", StringComparison.OrdinalIgnoreCase);
+            // 1. Targetを単語ごとに分割する（スペース区切り）
+            var words = target.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            // 2. 各単語を「文字数分のアンダーバー」に変換する
+            // 例: "difficult" -> "_________" (9文字)
+            var underlinedWords = words.Select(word =>
+            {
+                // 単語に含まれる記号（カンマやピリオド）はそのまま残すと親切だぜ
+                return Regex.Replace(word, @"[a-zA-Z0-9]", "_");
+            });
+
+            // 3. 半角スペースで繋ぎ直す
+            var replacement = string.Join(" ", underlinedWords);
+
+            // 4. 全文の中の target 部分を、生成したアンダーバー群に置き換える
+            // Regex.Replace を使うと大文字小文字を無視しつつ正確に置換できるぜ
+            return Regex.Replace(
+                fullEnglish,
+                Regex.Escape(target),
+                replacement,
+                RegexOptions.IgnoreCase
+            );
         }
 
         // Study（新規学習）用の問題を抽出

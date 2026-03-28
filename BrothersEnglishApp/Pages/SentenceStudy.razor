@@ -1,15 +1,18 @@
 ﻿@page "/sentence-study"
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
+@using BrothersEnglishApp.Shared
+@implements IAsyncDisposable
 @inject SentenceRepository Repo
 @inject SentenceEngine Engine
 @inject LocalStorageService Storage
 @inject IJSRuntime JS
 @inject NavigationManager Nav
+@inject SpeechService Speech
 
 <PageTitle>文の学習 (Study)</PageTitle>
 
-<div class="container mt-4" style="max-width: 700px;">
+<div class="container mt-3" style="max-width: 700px;">
     @if (_questions == null)
     {
         <div class="text-center mt-5">
@@ -19,6 +22,7 @@
     }
     else if (_isFinished)
     {
+        @* --- 完了画面 --- *@
         <div class="card shadow border-0 text-center p-5 animate__animated animate__fadeIn">
             <h2 class="text-success mb-4">🌟 学習完了！</h2>
             <p class="fs-5">今日の目標分をすべて終えたぜ！<br />💮カレンダーに印がついたぞ。</p>
@@ -27,53 +31,48 @@
     }
     else if (_currentQuestion != null)
     {
-        @* --- ヘッダー・進捗 --- *@
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="badge bg-secondary">Question @(_currentIndex + 1) / @(_questions.Count)</span>
-            <span class="small text-muted">ミス: @_missCount 回</span>
-        </div>
-        <div class="progress mb-4" style="height: 8px;">
-            <div class="progress-bar bg-success" style="width: @(GetProgressPercentage())%"></div>
-        </div>
+        @* --- プログレス・問題表示 --- *@
+        <StudyProgressBar Title="Question" 
+             Current="@(_currentIndex + 1)" 
+             Total="@_questions.Count" 
+             MissCount="@_missCount" />
 
         <div class="card shadow-sm border-0">
-            <div class="card-body p-4 text-center">
-                @* 1. 日本語表示 *@
+            <div class="card-body p-2 text-center">
                 <div class="alert alert-info mb-4 py-3 shadow-sm">
-                    <h4 class="mb-0 fw-bold">@_currentQuestion.Japaneseki-</h4>
+                    <h4 class="mb-0 fs-4">@_currentQuestion.Japanese</h4>
                 </div>
 
-                @* 2. 穴埋め英文表示 *@
+                @* --- 2. 穴埋め英文表示（修正後） --- *@
                 <div class="fs-3 mb-4 font-monospace border-bottom pb-3">
                     @Engine.GetQuestionText(_currentQuestion.English, _currentQuestion.Target)
                 </div>
 
-                @* 入力エリア *@
                 <div class="mb-4">
                     <input type="text" class="form-control form-control-lg text-center fs-2 border-primary border-2"
                            placeholder="答えを入力..."
-                           @bind="_userInput"
-                           @bind:event="oninput"
-                           @onkeyup="HandleKeyUp"
-                           readonly="@_isMobile"
-                           disabled="@_isCorrectState" />
+                           @bind="_userInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
+                           readonly="@_isMobile" disabled="@_isCorrectState" />
                 </div>
 
                 @if (!_isCorrectState)
                 {
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-lg py-3 shadow" @onclick="CheckAnswer"
-                                disabled="@string.IsNullOrWhiteSpace(_userInput)">
-                            判定する (Enter)
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm border-0" @onclick="PlayVoice">
+                        <button class="btn btn-secondary btn-lg border-1" @onclick="PlayVoice">
                             <i class="bi bi-volume-up"></i> 音声を聴く
                         </button>
+                        @* --- モバイルじゃない（PC）の時だけ「判定」ボタンを表示 --- *@
+                        @if (!_isMobile)
+                        {
+                            <button class="btn btn-primary btn-lg py-3 shadow" @onclick="CheckAnswer"
+                                    disabled="@string.IsNullOrWhiteSpace(_userInput)">
+                                判定する (Enter)
+                            </button>
+                        }
                     </div>
                 }
                 else
                 {
-                    @* 7. 正解時の表示 *@
                     <div class="animate__animated animate__zoomIn">
                         <div class="alert alert-success fw-bold fs-4 mb-3">💮 正解！</div>
                         <div class="card bg-light border-0 mb-4 text-start">
@@ -90,15 +89,18 @@
             </div>
         </div>
     }
-    @if (_isMobile)
-    {
-        <div class="simple-keyboard mt-4 animate__animated animate__fadeInUp"></div>
-    }
+
+    @* --- 【共通コンポーネント】 --- *@
+    <VirtualKeyboard @ref="_keyboard"
+                     Visible="@(!_isCorrectState && !_showPopup)"
+                     OnInput="val => { _userInput = val; StateHasChanged(); }"
+                     OnEnter="CheckAnswer" />
 </div>
 
-@* --- 演出用ポップアップ（オーバーレイ） --- *@
+@* --- 演出用ポップアップ（省略なし） --- *@
 @if (_showPopup)
 {
+    @* ...既存のポップアップコード... *@
     <div class="modal-backdrop fade show"></div>
     <div class="modal fade show d-block" style="top: 20%">
         <div class="modal-dialog modal-dialog-centered">
@@ -116,7 +118,6 @@
                     {
                         <p class="fs-5 mb-2">もう一度確認しよう！</p>
                         <h2 class="text-primary fw-bold mb-3">@_currentQuestion?.Target</h2>
-                        <p class="small text-muted">※同じように打ってみよう！</p>
                     }
                     <button class="btn btn-dark w-100 py-2" @onclick="ClosePopup">わかった！</button>
                 </div>
@@ -131,46 +132,37 @@
     private UserProgress? _progress;
     private int _currentIndex = 0;
     private string _userInput = "";
-    private int _missCount = 0;      // ミス回数
-    private bool _showPopup = false;  // ポップアップ表示フラグ
-    private bool _isCorrectState = false; // 正解してノート表示中か
-    private bool _isFinished = false;
-    private bool _isMobile = false;
-    private DotNetObjectReference<SentenceStudy>? _objRef;
+    private int _missCount = 0;
+    private bool _showPopup, _isCorrectState, _isFinished, _isMobile;
+    private VirtualKeyboard? _keyboard;
 
     protected override async Task OnInitializedAsync()
     {
         _progress = await Storage.LoadProgressAsync();
         var all = await Repo.GetSentencesAsync();
         _questions = Engine.GetStudyQuestions(all, _progress);
-
         if (_questions.Count == 0) _isFinished = true;
-        else
-        {
-            _currentQuestion = _questions[_currentIndex];
-            _isMobile = await CheckIfMobile();
-            if (_isMobile) _objRef = DotNetObjectReference.Create(this);
-        }
+        else _currentQuestion = _questions[_currentIndex];
+
+        // デバイス判定だけは保持
+        var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
+        _isMobile = ua.Contains("Android") || ua.Contains("iPhone") || ua.Contains("iPad");
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && _questions?.Any() == true)
+        if (firstRender)
         {
-            await PlayVoice(); // 1. 初回再生
-            if (_isMobile) await JS.InvokeVoidAsync("setupKeyboard", _objRef);
+            // 1. まずデバイス判定を済ませる
+            var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
+            _isMobile = ua.Contains("Android") || ua.Contains("iPhone") || ua.Contains("iPad");
+            StateHasChanged();
+
+            // 2. 1問目の音声を鳴らす
+            // ブラウザのブロックを避けるため、少しだけ待機してから実行する
+            await Task.Delay(500);
+            await PlayVoice();
         }
-    }
-
-    private async Task PlayVoice()
-    {
-        if (_currentQuestion != null && _progress != null)
-            await JS.InvokeVoidAsync("speechHandlers.speak", _currentQuestion.English, _progress.Settings.SentenceSpeechRate);
-    }
-
-    private async Task HandleKeyUp(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(_userInput)) await CheckAnswer();
     }
 
     private async Task CheckAnswer()
@@ -179,10 +171,10 @@
 
         if (Engine.CheckAnswer(_userInput, _currentQuestion.Target))
         {
-            // 7. 正解
             _isCorrectState = true;
             _missCount = 0;
-            // 進捗保存
+            // --- 正解したらお手本の英文を読み上げる ---
+            await PlayVoice();
             Engine.UpdateProgress(_progress!, _currentQuestion.Id, isStudy: true);
             await Storage.SaveProgressAsync(_progress!);
         }
@@ -190,49 +182,44 @@
         {
             _missCount++;
             _showPopup = true;
-
-            if (_missCount >= 2)
-            {
-                // 4. 二回以上間違えたら正しい文を読み上げ
-                await JS.InvokeVoidAsync("speechHandlers.speak", _currentQuestion.Target, _progress?.Settings.SentenceSpeechRate ?? 1.0);
-            }
+            if (_missCount >= 2 && _progress != null)
+                await Speech.SpeakAsync(_currentQuestion.Target, _progress.Settings.SentenceSpeechRate);
         }
     }
 
-    private void ClosePopup()
+    private async Task ResetInput()
+    {
+        _userInput = "";
+        if (_keyboard != null) await _keyboard.ClearAsync();
+    }
+
+    private async Task ClosePopup()
     {
         _showPopup = false;
-        _userInput = ""; // 3, 5. 再入力のためにクリア
+        await ResetInput();
     }
 
     private async Task NextQuestion()
     {
         _currentIndex++;
-        if (_currentIndex >= _questions!.Count)
-        {
-            _isFinished = true;
-            if (_isMobile) await JS.InvokeVoidAsync("destroyKeyboard");
-        }
+        if (_currentIndex >= _questions!.Count) _isFinished = true;
         else
         {
             _currentQuestion = _questions[_currentIndex];
-            _userInput = "";
             _missCount = 0;
             _isCorrectState = false;
+            await ResetInput();
             await PlayVoice();
-            if (_isMobile) await JS.InvokeVoidAsync("clearKeyboard");
         }
     }
 
-    private double GetProgressPercentage() => (_currentIndex / (double)_questions!.Count) * 100;
-
-    private async Task<bool> CheckIfMobile()
+    private async Task PlayVoice()
     {
-        var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
-        return ua.Contains("Android") || ua.Contains("iPhone") || ua.Contains("iPad");
+        if (_currentQuestion != null && _progress != null)
+            await Speech.SpeakAsync(_currentQuestion.English, _progress.Settings.SentenceSpeechRate);
     }
 
-    [JSInvokable] public void OnKeyboardInput(string input) { _userInput = input; StateHasChanged(); }
-    [JSInvokable] public async Task OnKeyboardEnter() => await CheckAnswer();
-    public void Dispose() => _objRef?.Dispose();
+    private async Task HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") await CheckAnswer(); }
+    public async ValueTask DisposeAsync() { }
+
 }

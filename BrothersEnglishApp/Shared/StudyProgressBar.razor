@@ -1,0 +1,21 @@
+﻿@* Shared/StudyProgressBar.razor *@
+<div class="d-flex justify-content-between align-items-center mb-1 px-2">
+    <span class="badge bg-secondary">@Title @Current / @Total</span>
+    @if (MissCount > 0)
+    {
+        <span class="small text-danger fw-bold">ミス: @MissCount 回</span>
+    }
+</div>
+<div class="progress mb-3" style="height: 10px;">
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+         style="width: @ProgressPercentage%; transition: width 0.3s ease;"></div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Question";
+    [Parameter] public int Current { get; set; }
+    [Parameter] public int Total { get; set; }
+    [Parameter] public int MissCount { get; set; }
+
+    private double ProgressPercentage => Total > 0 ? (double)(Current - 1) / Total * 100 : 0;
+}

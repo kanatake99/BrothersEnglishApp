@@ -2,10 +2,11 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @implements IAsyncDisposable
+@inject IJSRuntime JS
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
 @inject UserContext Context
-@inject IJSRuntime JS
+@inject SpeechService Speech
 @inject WordRepository WordRepo
 @inject TrainingEngine Engine
 
@@ -32,18 +33,13 @@ else
 {
     <div class="container-fluid mt-2 text-center training-page">
         @* --- ヘッダー・進捗 --- *@
-        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-            <span class="badge bg-secondary">ユーザー: @Context.CurrentUser</span>
-            <span class="small text-muted"><strong>@GetCurrentProgress()</strong> / @(_userProgress?.Settings?.WordStudyGoal ?? 10) 問目</span>
-        </div>
-
-        <div class="progress mb-3" style="height: 10px;">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="@_progressStyle"></div>
-        </div>
+        <StudyProgressBar Title="Word" 
+             Current="@GetCurrentProgress()" 
+             Total="@((_userProgress?.Settings?.WordStudyGoal ?? 10) + _extraGoal)" />
 
         @* --- 学習カード --- *@
         <div class="card shadow-sm p-3 mb-2">
-            <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
+            <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 @if (_isReviewing || !_isStep2)
                 {
                     <h2 class="display-4 fw-bold text-primary mb-0">@_currentWord.Word</h2>
@@ -93,8 +89,6 @@ else
     private bool IsMobile;
     private VirtualKeyboard? _keyboard;
 
-    private string _progressStyle => $"width: {GetProgressPercentage()}%;";
-
     protected override async Task OnInitializedAsync()
     {
         if (!Context.IsSelected) { Nav.NavigateTo("/"); return; }
@@ -112,7 +106,7 @@ else
             StateHasChanged();
         }
     }
-
+    // --- 答え合わせのロジックもエンジンに任せる --- //
     private async Task CheckAnswer()
     {
         if (_currentWord == null || _isReviewing) return;
@@ -132,14 +126,14 @@ else
             else { _isWrong = true; StateHasChanged(); await Task.Delay(500); _isWrong = false; await ResetInput(); }
         }
     }
-
+    // --- 入力リセットも一箇所にまとめる --- //
     private async Task ResetInput()
     {
         _userInput = "";
         if (_keyboard != null) await _keyboard.ClearAsync();
         StateHasChanged();
     }
-
+    // --- 次の単語を選ぶロジックもエンジンに任せる --- //
     private async Task SelectNextWord()
     {
         int effectiveGoal = (_userProgress?.Settings.WordStudyGoal ?? 10) + _extraGoal;
@@ -156,10 +150,17 @@ else
 
     private async Task EndReview() { _isReviewing = false; await ResetInput(); }
     private async Task HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") await CheckAnswer(); }
-    private async Task Speak(string text) => await JS.InvokeVoidAsync("speechHandlers.speak", text, _userProgress?.Settings.WordSpeechRate ?? 1.0);
+    // --- 音声再生は専用メソッドにまとめる --- //
+    private async Task Speak(string text)
+    {
+        if (_userProgress != null)
+        {
+            await Speech.SpeakAsync(text, _userProgress.Settings.WordSpeechRate);
+        }
+    }
+    
     private int GetCurrentProgress() => (_userProgress?.WordStatuses.Count(s => s.LastReviewed.Date == DateTime.UtcNow.Date && s.Status >= 1) ?? 0) + 1;
-    private double GetProgressPercentage() => (double)(GetCurrentProgress() - 1) / ((_userProgress?.Settings.WordStudyGoal ?? 10) + _extraGoal) * 100;
     private async Task AddMoreStudy() { _extraGoal += 5; await SelectNextWord(); }
 
-    public async ValueTask DisposeAsync() { /* VirtualKeyboard側で破棄されるぜ */ }
+    public async ValueTask DisposeAsync() { /* VirtualKeyboard側で破棄 */ }
 }
