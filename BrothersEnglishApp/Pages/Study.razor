@@ -1,14 +1,13 @@
 ﻿@page "/study"
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
-@implements IAsyncDisposable
-@inject IJSRuntime JS
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
 @inject UserContext Context
 @inject SpeechService Speech
 @inject WordRepository WordRepo
 @inject TrainingEngine Engine
+@inherits StudyPageBase
 
 <PageTitle>学習ページ</PageTitle>
 
@@ -66,16 +65,16 @@ else
             else
             {
                 <input class="form-control form-control-lg text-center fs-1 @(_isWrong ? "is-invalid" : "")"
-                       @bind="_userInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
+                       @bind="UserInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
                        readonly="@IsMobile" placeholder="@(IsMobile ? "下で打ってね" : "入力してね")" />
             }
         </div>
     </div>
 
-    @* --- 【ここがポイント】共通コンポーネントを配置 --- *@
-    <VirtualKeyboard @ref="_keyboard" 
+    @* --- 共通コンポーネントを配置 --- *@
+    <VirtualKeyboard @ref="Keyboard" 
                      Visible="!_isReviewing" 
-                     OnInput="val => { _userInput = val; StateHasChanged(); }" 
+                     OnInput="val => { UserInput = val; StateHasChanged(); }" 
                      OnEnter="CheckAnswer" />
 }
 
@@ -83,11 +82,8 @@ else
     private List<EnglishWord>? _allWords;
     private UserProgress? _userProgress;
     private EnglishWord? _currentWord;
-    private string _userInput = ""; // 一箇所に統合
     private bool _isStep2, _isCorrect, _isReviewing, _isWrong;
     private int _extraGoal;
-    private bool IsMobile;
-    private VirtualKeyboard? _keyboard;
 
     protected override async Task OnInitializedAsync()
     {
@@ -97,58 +93,60 @@ else
         await SelectNextWord();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnPageFirstRenderAsync()
     {
-        if (firstRender)
-        {
-            var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
-            IsMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
-            StateHasChanged();
-        }
+        await Task.Delay(500);
+        if (_currentWord != null && _userProgress?.Settings.IsAutoSpeechEnabled == true)
+            await Speak(_currentWord.Word);
     }
+
     // --- 答え合わせのロジックもエンジンに任せる --- //
     private async Task CheckAnswer()
     {
         if (_currentWord == null || _isReviewing) return;
-        var result = Engine.ProcessAnswer(_userInput, _currentWord, _userProgress!, _isStep2);
+        var result = Engine.ProcessAnswer(UserInput, _currentWord, _userProgress!, _isStep2);
 
         if (result.IsCorrect)
         {
             _isCorrect = true; StateHasChanged();
             await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress!);
             await Task.Delay(600);
-            if (result.ShouldGoToStep2) { _isStep2 = true; await ResetInput(); }
+            if (result.ShouldGoToStep2) { _isStep2 = true; await ResetInputAsync(); }
             else if (result.IsFinished) { await SelectNextWord(); }
         }
         else
         {
-            if (result.ShouldStartReview) { _isReviewing = true; await ResetInput(); }
-            else { _isWrong = true; StateHasChanged(); await Task.Delay(500); _isWrong = false; await ResetInput(); }
+            if (result.ShouldStartReview) { _isReviewing = true; await ResetInputAsync(); }
+            else { _isWrong = true; StateHasChanged(); await Task.Delay(500); _isWrong = false; await ResetInputAsync(); }
         }
     }
-    // --- 入力リセットも一箇所にまとめる --- //
-    private async Task ResetInput()
-    {
-        _userInput = "";
-        if (_keyboard != null) await _keyboard.ClearAsync();
-        StateHasChanged();
-    }
+
+
     // --- 次の単語を選ぶロジックもエンジンに任せる --- //
     private async Task SelectNextWord()
     {
         int effectiveGoal = (_userProgress?.Settings.WordStudyGoal ?? 10) + _extraGoal;
         _currentWord = Engine.GetNextWord(_allWords!, _userProgress!, effectiveGoal);
         _isStep2 = _isCorrect = _isReviewing = false;
-        await ResetInput();
+        await ResetInputAsync();
         if (_currentWord != null && _userProgress!.Settings.IsAutoSpeechEnabled) await Speak(_currentWord.Word);
         else if (_currentWord == null) 
         {
-            _userProgress!.ActivityLog[_userProgress.GetTodayKey()].StudyDone = true;
-            await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+            if (_userProgress != null)
+            {
+               var todayKey = _userProgress.GetTodayKey();
+                if (!_userProgress.ActivityLog.ContainsKey(todayKey))
+                {
+                    _userProgress.ActivityLog[todayKey] = new DayActivity();
+                }
+                _userProgress.ActivityLog[todayKey].StudyDone = true;
+                await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
+            }
+
         }
     }
 
-    private async Task EndReview() { _isReviewing = false; await ResetInput(); }
+    private async Task EndReview() { _isReviewing = false; await ResetInputAsync(); }
     private async Task HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") await CheckAnswer(); }
     // --- 音声再生は専用メソッドにまとめる --- //
     private async Task Speak(string text)
@@ -161,6 +159,4 @@ else
     
     private int GetCurrentProgress() => (_userProgress?.WordStatuses.Count(s => s.LastReviewed.Date == DateTime.UtcNow.Date && s.Status >= 1) ?? 0) + 1;
     private async Task AddMoreStudy() { _extraGoal += 5; await SelectNextWord(); }
-
-    public async ValueTask DisposeAsync() { /* VirtualKeyboard側で破棄 */ }
 }

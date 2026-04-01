@@ -54,5 +54,8 @@
         public int Status { get; set; } = 0; // 0:未学習, 1:学習済み
         public DateTime LastReviewed { get; set; } = DateTime.UtcNow;
         public int Level { get; set; }
+
+        public SentenceItem Sentence { get; set; } = new();
     }
+
 }

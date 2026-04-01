@@ -1,5 +1,176 @@
-﻿<h3>SentenceTraining</h3>
+﻿@page "/sentence-training"
+@inherits StudyPageBase
+@inject WordRepository WordRepo
+@inject TrainingEngine Engine
+@inject LocalStorageService Storage
+@inject NavigationManager Navigation
+
+<PageTitle>文の復習</PageTitle>
+
+<div class="container mt-4">
+    @if (_isFinished)
+    {
+        <div class="text-center">
+            <h2>トレーニング完了！</h2>
+            <p>今日の復習はバッチリだぜ。</p>
+            <div class="display-1 text-success mb-4"><i class="bi bi-check-circle-fill"></i></div>
+            <button class="btn btn-primary btn-lg" @onclick="() => Navigation.NavigateTo(string.Empty)">ホームへ戻る</button>
+        </div>
+    }
+    else if (_currentQuestion != null)
+    {
+        <StudyProgressBar Title="Sentence Training"
+                          Current="@(_doneCount + 1)"
+                          Total="@_totalGoal" />
+
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-body p-4 text-center">
+                
+                @* --- 問題の日本語訳 --- *@
+                <h5 class="text-muted mb-4">@_currentQuestion.Sentence.Japanese</h5>
+
+                @* --- 英文表示エリア --- *@
+                <div class="mb-5">
+                    <h2 class="display-6 lh-base">
+                        @foreach (var segment in _sentenceSegments)
+                        {
+                            if (segment.IsTarget)
+                            {
+                                @if (_isPenaltyMode)
+                                {
+                                    @* ペナルティモード：入力に応じて文字が埋まる *@
+                                    <span class="border-bottom border-danger text-danger px-2 mx-1">
+                                        @(string.IsNullOrEmpty(UserInput) ? "____" : UserInput)
+                                    </span>
+                                }
+                                else
+                                {
+                                    @* 通常モード：選択したチップが入る *@
+                                    <span class="badge bg-light border-bottom border-primary text-primary px-3 mx-1 shadow-sm" style="min-width: 80px;">
+                                        @(string.IsNullOrEmpty(_selectedChip) ? "____" : _selectedChip)
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <span>@segment.Text </span>
+                            }
+                        }
+                    </h2>
+                </div>
+
+                @* --- 操作エリア --- *@
+                @if (!_isPenaltyMode)
+                {
+                    @* ステージ3：チップ選択 *@
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        @foreach (var chip in _currentQuestion.Chips)
+                        {
+                            <button class="btn btn-outline-primary btn-lg rounded-pill px-4 py-2 shadow-sm fw-bold"
+                                    disabled="@(_selectedChip == chip)"
+                                    @onclick="() => HandleChipSelect(chip)">
+                                @chip
+                            </button>
+                        }
+                    </div>
+                    <div class="mt-4">
+                        <button class="btn btn-success btn-lg px-5 shadow"
+                                disabled="@(string.IsNullOrEmpty(_selectedChip))"
+                                @onclick="CheckAnswer">
+                            判定！
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    @* ステージ1：強制タイピング（ペナルティ） *@
+                    <div class="alert alert-danger mb-4 animate__animated animate__shakeX">
+                        <i class="bi bi-exclamation-triangle-fill"></i> 違うぜ！正解を正しく入力して体に刻め！
+                    </div>
+                    <p class="text-muted mb-1">正解: <strong class="text-dark">@_currentQuestion.CorrectAnswer</strong></p>
+                    
+                    @* StudyPageBase の仕組みを使ってキーボード入力を受け付ける *@
+                    <input type="text" class="form-control form-control-lg text-center mb-3"
+                           value="@UserInput" readonly />
+                    <VirtualKeyboard OnKeyPress="HandleVirtualKey" />
+                }
+
+            </div>
+        </div>
+    }
+</div>
 
 @code {
+    private List<EnglishWord> _allWords = [];
+    private UserProgress? _userProgress;
+    private SentenceQuestion? _currentQuestion;
+    private List<SentenceSegment> _sentenceSegments = [];
+    
+    private int _totalGoal = 5;
+    private int _doneCount = 0;
+    private bool _isFinished = false;
 
+    // 選択・入力状態
+    private string _selectedChip = "";
+    private bool _isPenaltyMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _allWords = await WordRepo.GetWordsAsync();
+        _userProgress = await Storage.LoadProgressAsync();
+        
+        // とりあえず5問。本当は SentenceItems の数に合わせて調整
+        await LoadNextQuestion();
+    }
+
+    private async Task LoadNextQuestion()
+    {
+        if (_doneCount >= _totalGoal)
+        {
+            _isFinished = true;
+            return;
+        }
+
+        // 本来は Engine からまだ覚えていない SentenceItem を取得
+        var nextSentence = Engine.GetNextSentenceToTrain(_userProgress);
+        if (nextSentence == null) { _isFinished = true; return; }
+
+        _currentQuestion = Engine.GenerateSentenceTraining(nextSentence, _allWords);
+        _sentenceSegments = Engine.SplitSentence(nextSentence.English, nextSentence.Target);
+        
+        _selectedChip = "";
+        _isPenaltyMode = false;
+        await ResetInputAsync();
+    }
+
+    private void HandleChipSelect(string chip) => _selectedChip = chip;
+
+    private async Task CheckAnswer()
+    {
+        if (_selectedChip == _currentQuestion?.CorrectAnswer)
+        {
+            // 正解！
+            _doneCount++;
+            await LoadNextQuestion();
+        }
+        else
+        {
+            // 不正解... ペナルティモードへ
+            _isPenaltyMode = true;
+            await ResetInputAsync();
+            StateHasChanged();
+        }
+    }
+
+    // --- ペナルティモード（タイピング）時の処理 ---
+    protected override async Task OnInputChangedAsync()
+    {
+        if (_isPenaltyMode && UserInput == _currentQuestion?.CorrectAnswer)
+        {
+            // 正解を打ち込めたら、少し待って次へ
+            await Task.Delay(500);
+            _doneCount++;
+            await LoadNextQuestion();
+        }
+    }
 }

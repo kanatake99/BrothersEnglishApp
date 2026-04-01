@@ -243,4 +243,104 @@ public class TrainingEngine
             status.IncorrectCount++;
         }
     }
+
+    // --- Sentence Training（文章入力）用ロジック ---
+    public List<string> GenerateSentenceChips(string target, List<EnglishWord> allWords)
+    {
+        var chips = new List<string> { target };
+        var random = new Random();
+
+        // 1. 固定の「機能語」リスト
+        var prepositions = new[] { "in", "on", "at", "for", "with", "to", "by", "of", "from", "up", "about" };
+        var auxiliaries = new[] { "can", "will", "shall", "may", "must", "do", "does", "did", "is", "am", "are", "was", "were" };
+
+        // 前置詞・助動詞判定
+        if (prepositions.Contains(target.ToLower()))
+        {
+            var dummies = prepositions.Where(x => x != target.ToLower())
+                                      .OrderBy(_ => random.Next()).Take(2);
+            chips.AddRange(dummies);
+        }
+        else if (auxiliaries.Contains(target.ToLower()))
+        {
+            var dummies = auxiliaries.Where(x => x != target.ToLower())
+                                     .OrderBy(_ => random.Next()).Take(2);
+            chips.AddRange(dummies);
+        }
+        else
+        {
+            // 2. master_words.json (allWords) から品詞一致で探す
+            var targetWordData = allWords.FirstOrDefault(w => w.Word.Equals(target, StringComparison.OrdinalIgnoreCase));
+
+            IEnumerable<string> dummies;
+            if (targetWordData != null)
+            {
+                // 同じ品詞（PartOfSpeech）を含む単語を抽出
+                dummies = allWords.Where(w => w.Word != target && w.PartOfSpeech.Contains(targetWordData.PartOfSpeech.Trim()))
+                                  .OrderBy(_ => random.Next()).Take(2)
+                                  .Select(w => w.Word);
+            }
+            else
+            {
+                // 辞書にない場合は完全ランダム
+                dummies = allWords.OrderBy(_ => random.Next()).Take(2).Select(w => w.Word);
+            }
+            chips.AddRange(dummies);
+        }
+
+        // 最後にシャッフルして返す
+        return chips.OrderBy(_ => random.Next()).ToList();
+    }
+
+    public SentenceQuestion GenerateSentenceTraining(SentenceItem sentence, List<EnglishWord> allWords)
+    {
+        // 1. チップを生成（さっきのロジックを使用）
+        var chips = GenerateSentenceChips(sentence.Target, allWords);
+
+        return new SentenceQuestion
+        {
+            Sentence = sentence,
+            Chips = chips,
+            CorrectAnswer = sentence.Target
+        };
+    }
+
+    // --- 文を分割するロジック ---
+    public List<SentenceSegment> SplitSentence(string english, string target)
+    {
+        var segments = new List<SentenceSegment>();
+        // ターゲット単語の場所で分割する（簡易版）
+        var parts = english.Split(new[] { target }, StringSplitOptions.None);
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(parts[i]))
+            {
+                segments.Add(new SentenceSegment { Text = parts[i], IsTarget = false });
+            }
+
+            // 最後のパーツ以外、またはパーツが1つでターゲットがある場合
+            if (i < parts.Length - 1)
+            {
+                segments.Add(new SentenceSegment { Text = target, IsTarget = true });
+            }
+        }
+        return segments;
+    }
+
+    // --- 次の問題を選ぶロジック（とりあえずランダム版） ---
+    public SentenceItem? GetNextSentenceToTrain(UserProgress? progress)
+    {
+        if (progress == null || progress.SentenceStatuses.Count == 0)
+        {
+            return new SentenceItem { English = "I go to the park.", Target = "go", Japanese = "私は公園に行きます。" };
+        }
+
+        // KeyValuePair の ?.Value を使うのではなく、一回変数に受けてから中身を取り出すぜ
+        var entry = progress.SentenceStatuses.OrderBy(_ => Guid.NewGuid()).FirstOrDefault();
+
+        // Dictionary の要素を FirstOrDefault すると KeyValuePair が返るから、
+        // その中の Value (SentenceStatus) から Sentence を取り出すんだ。
+        return entry.Value?.Sentence;
+    }
 }

@@ -2,13 +2,12 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @using BrothersEnglishApp.Shared
-@implements IAsyncDisposable
 @inject SentenceRepository Repo
 @inject SentenceEngine Engine
 @inject LocalStorageService Storage
-@inject IJSRuntime JS
 @inject NavigationManager Nav
 @inject SpeechService Speech
+@inherits StudyPageBase
 
 <PageTitle>文の学習 (Study)</PageTitle>
 
@@ -51,8 +50,8 @@
                 <div class="mb-4">
                     <input type="text" class="form-control form-control-lg text-center fs-2 border-primary border-2"
                            placeholder="答えを入力..."
-                           @bind="_userInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
-                           readonly="@_isMobile" disabled="@_isCorrectState" />
+                           @bind="UserInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
+                           readonly="@IsMobile" disabled="@_isCorrectState" />
                 </div>
 
                 @if (!_isCorrectState)
@@ -62,10 +61,10 @@
                             <i class="bi bi-volume-up"></i> 音声を聴く
                         </button>
                         @* --- モバイルじゃない（PC）の時だけ「判定」ボタンを表示 --- *@
-                        @if (!_isMobile)
+                        @if (!IsMobile)
                         {
                             <button class="btn btn-primary btn-lg py-3 shadow" @onclick="CheckAnswer"
-                                    disabled="@string.IsNullOrWhiteSpace(_userInput)">
+                                    disabled="@string.IsNullOrWhiteSpace(UserInput)">
                                 判定する (Enter)
                             </button>
                         }
@@ -91,9 +90,9 @@
     }
 
     @* --- 【共通コンポーネント】 --- *@
-    <VirtualKeyboard @ref="_keyboard"
+    <VirtualKeyboard @ref="Keyboard"
                      Visible="@(!_isCorrectState && !_showPopup)"
-                     OnInput="val => { _userInput = val; StateHasChanged(); }"
+                     OnInput="val => { UserInput = val; StateHasChanged(); }"
                      OnEnter="CheckAnswer" />
 </div>
 
@@ -131,10 +130,8 @@
     private SentenceItem? _currentQuestion;
     private UserProgress? _progress;
     private int _currentIndex = 0;
-    private string _userInput = "";
     private int _missCount = 0;
-    private bool _showPopup, _isCorrectState, _isFinished, _isMobile;
-    private VirtualKeyboard? _keyboard;
+    private bool _showPopup, _isCorrectState, _isFinished;
 
     protected override async Task OnInitializedAsync()
     {
@@ -143,33 +140,19 @@
         _questions = Engine.GetStudyQuestions(all, _progress);
         if (_questions.Count == 0) _isFinished = true;
         else _currentQuestion = _questions[_currentIndex];
-
-        // デバイス判定だけは保持
-        var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
-        _isMobile = ua.Contains("Android") || ua.Contains("iPhone") || ua.Contains("iPad");
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnPageFirstRenderAsync()
     {
-        if (firstRender)
-        {
-            // 1. まずデバイス判定を済ませる
-            var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
-            _isMobile = ua.Contains("Android") || ua.Contains("iPhone") || ua.Contains("iPad");
-            StateHasChanged();
-
-            // 2. 1問目の音声を鳴らす
-            // ブラウザのブロックを避けるため、少しだけ待機してから実行する
-            await Task.Delay(500);
-            await PlayVoice();
-        }
+        await Task.Delay(500);
+        await PlayVoice();
     }
 
     private async Task CheckAnswer()
     {
         if (_currentQuestion == null || _isCorrectState) return;
 
-        if (Engine.CheckAnswer(_userInput, _currentQuestion.Target))
+        if (Engine.CheckAnswer(UserInput, _currentQuestion.Target))
         {
             _isCorrectState = true;
             _missCount = 0;
@@ -187,16 +170,10 @@
         }
     }
 
-    private async Task ResetInput()
-    {
-        _userInput = "";
-        if (_keyboard != null) await _keyboard.ClearAsync();
-    }
-
     private async Task ClosePopup()
     {
         _showPopup = false;
-        await ResetInput();
+        await ResetInputAsync();
     }
 
     private async Task NextQuestion()
@@ -208,7 +185,7 @@
             _currentQuestion = _questions[_currentIndex];
             _missCount = 0;
             _isCorrectState = false;
-            await ResetInput();
+            await ResetInputAsync();
             await PlayVoice();
         }
     }
@@ -220,6 +197,5 @@
     }
 
     private async Task HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") await CheckAnswer(); }
-    public async ValueTask DisposeAsync() { }
 
 }

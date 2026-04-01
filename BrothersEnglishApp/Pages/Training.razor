@@ -1,9 +1,9 @@
 ﻿@page "/training"
+@inherits StudyPageBase
 @inject WordRepository WordRepo
 @inject TrainingEngine Engine
 @inject UserContext Context
 @inject LocalStorageService Storage
-@inject IJSRuntime JS
 @inject NavigationManager Navigation
 
 
@@ -37,25 +37,27 @@
     }
     else if (_currentQuestion != null)
     {
-        <div class="card shadow-sm mx-auto" style="max-width: 500px; opacity: @(_showOverlay ? "0.5" : "1")">
-            <div class="card-header bg-info text-white text-center">
-                がくしゅう中 (@(_doneCount + 1) / @_studyGoal)
-            </div>
+        @* --- プログレスバー --- *@
+        <StudyProgressBar Title="Training"
+                          Current="@(_doneCount + 1)"
+                          Total="@_studyGoal" />
+
+        <div class="card shadow-sm mx-auto @(IsMobile ? "w-100" : "") @(_showOverlay ? "training-card-overlay" : "training-card-active")"
+             style="max-width: 500px;">
             <div class="card-body text-center p-5">
                 <p class="text-muted">@(_currentQuestion.IsEnglishToJapanese ? "これの意味は？" : "これは英語で？")</p>
                 <h1 class="display-4 mb-4">@_currentQuestion.QuestionText</h1>
-
                 <div class="d-grid gap-3">
                     @foreach (var option in _currentQuestion.Options)
                     {
-                        @* classに @(id) とかつけてJSから触れるようにする *@
                         <button @key="option"
-                                class="btn btn-outline-primary btn-lg py-3 fs-4 quiz-button"
+                                class="btn btn-outline-primary @(IsMobile ? "btn-lg py-4" : "py-3") fs-4 quiz-button"
                                 @onclick="(e) => HandleAnswer(option, e)">
                             @option
                         </button>
                     }
                 </div>
+
             </div>
         </div>
     }
@@ -85,36 +87,33 @@
     protected override async Task OnInitializedAsync()
     {
         _allWords = await WordRepo.GetWordsAsync();
-
         _userProgress = await Storage.LoadProgressAsync();
 
         if (_userProgress != null)
         {
-            // 目標数の設定
-            // 0以下の場合はデフォルトの10問にする
-            _studyGoal = _userProgress.Settings.WordTrainingGoal > 0
-                                   ? _userProgress.Settings.WordTrainingGoal
-                                   : 10;
-            // 学習済み単語が1つもない場合は、フリーズ防止のために学習画面へ誘導するかメッセージを出す
-            var hasLearnedWords = _userProgress.WordStatuses.Any();
-            if (!hasLearnedWords)
-            {
-                await JS.InvokeVoidAsync("alert", "まだ覚えた単語がないみたいだぜ。まずは「覚える」から始めてみよう！");
-                Navigation.NavigateTo("study");
-                return;
-            }
+            _studyGoal = _userProgress.Settings.WordTrainingGoal > 0 ? _userProgress.Settings.WordTrainingGoal : 10;
         }
         await GenerateNextQuestion();
     }
 
     // --- ユーザー操作ハンドラー ---
+    // --- スマホ判定などが終わった直後に呼ばれる ---
+    protected override async Task OnPageFirstRenderAsync()
+    {
+        // 学習済み単語がない場合のチェックをここで行う
+        if (_userProgress != null && !_userProgress.WordStatuses.Any())
+        {
+            await JS.InvokeVoidAsync("alert", "まだ覚えた単語がないみたいだぜ。まずは「覚える」から始めてみよう！");
+            Navigation.NavigateTo("study");
+        }
+    }
 
     /// <summary>回答を選択した時の処理</summary>
     private async Task HandleAnswer(string selected, MouseEventArgs e)
     {
         if (_showOverlay || _currentQuestion == null) return;
 
-        // ★ 指摘9：evalを避けてフォーカス解除（別途JS側に定義した関数を呼ぶのが理想）
+        // ★ evalを避けてフォーカス解除（別途JS側に定義した関数を呼ぶのが理想）
         await JS.InvokeVoidAsync("speechHandlers.blurActiveElement");
 
         bool isCorrect = (selected == _currentQuestion.CorrectAnswer);

@@ -141,7 +141,30 @@
     }
 
     // --- カレンダー生成・操作ロジック (省略：以前と同じ) ---
-    private void GenerateCalendar() { /* ... */ }
+    private void GenerateCalendar()
+    {
+        _calendarWeeks.Clear();
+        var firstDay = new DateTime(_displayDate.Year, _displayDate.Month, 1);
+        var startDate = firstDay.AddDays(-(int)firstDay.DayOfWeek); // 日曜日から開始
+
+        var current = startDate;
+        for (int w = 0; w < 6; w++) // 最大6週
+        {
+            var week = new List<DateTime>();
+            for (int d = 0; d < 7; d++)
+            {
+                week.Add(current);
+                current = current.AddDays(1);
+            }
+            _calendarWeeks.Add(week);
+        
+            // 次の週の頭が翌月ならループを抜ける
+            if (current.Month != _displayDate.Month && current.DayOfWeek == DayOfWeek.Sunday)
+                break;
+        }
+        StateHasChanged();
+    }
+
     private void ChangeMonth(int m) { _displayDate = _displayDate.AddMonths(m); GenerateCalendar(); }
     private void GoToday() { _displayDate = DateTime.UtcNow; GenerateCalendar(); }
 
@@ -152,27 +175,24 @@
     }
 
     // --- 日付の「印」判定ロジック：ここを強化！ ---
-    private RenderFragment GetMark(DateTime date) => builder =>
+    private string GetMark(DateTime date)
     {
-        if (_userProgress == null) return;
+        if (_userProgress == null) return "";
+    
+        // 保存形式 (yyyyMMdd) に完全に合わせるぜ！
         var key = date.ToString("yyyyMMdd");
 
         if (_userProgress.ActivityLog.TryGetValue(key, out var activity))
         {
-            // 全部終わってたら「はなまる」！
-            // (単語の学習・復習、文の学習・復習がすべてDoneの場合)
-            bool allDone = activity.StudyDone && activity.TrainingDone &&
-                           activity.SentenceStudyDone && activity.SentenceTrainingDone;
+            // 判定ロジック：現状実装されているもので判定
+            // 文の復習 (SentenceTrainingDone) はまだ未実装なら、一旦除外しておくのが吉だ
+            bool allDone = activity.StudyDone &&
+                           activity.TrainingDone &&
+                           activity.SentenceStudyDone;
 
-            if (allDone)
-            {
-                builder.AddMarkupContent(0, "<span style='color: #ff4757;'>💮</span>");
-            }
-            else if (activity.StudyDone || activity.SentenceStudyDone)
-            {
-                // 何かしら手を付けていれば「がんばりマーク」
-                builder.AddMarkupContent(1, "<span style='color: #2ed573;'>⭐</span>");
-            }
+            if (allDone) return "💮";
+            if (activity.StudyDone || activity.SentenceStudyDone) return "⭐";
         }
-    };
+        return "";
+    }
 }
