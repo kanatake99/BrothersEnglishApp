@@ -2,7 +2,7 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @using BrothersEnglishApp.Shared
-@inject SentenceRepository Repo
+@inject WordRepository Repo
 @inject SentenceEngine Engine
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
@@ -25,6 +25,10 @@
         <div class="card shadow border-0 text-center p-5 animate__animated animate__fadeIn">
             <h2 class="text-success mb-4">🌟 学習完了！</h2>
             <p class="fs-5">今日の目標分をすべて終えたぜ！<br />💮カレンダーに印がついたぞ。</p>
+
+            <button class="btn btn-success btn-lg py-3" @onclick='() => Nav.NavigateTo("sentence-training")'>
+                <i class="bi bi-play-circle-fill me-2"></i>復習をする
+            </button>
             <button class="btn btn-primary btn-lg mt-3" @onclick='() => Nav.NavigateTo("/")'>トップへ戻る</button>
         </div>
     }
@@ -156,20 +160,30 @@
         {
             _isCorrectState = true;
             _missCount = 0;
-            // --- 正解したらお手本の英文を読み上げる ---
+        
             await PlayVoice();
-            Engine.UpdateProgress(_progress!, _currentQuestion.Id, isStudy: true);
+        
+            // 第4引数に「true (正解)」を渡すぜ
+            Engine.UpdateProgress(_progress!, _currentQuestion.Id, isStudy: true, isCorrect: true);
             await Storage.SaveProgressAsync(_progress!);
         }
         else
         {
             _missCount++;
             _showPopup = true;
+
+            // --- ここが重要！ 間違えた瞬間にも進捗を更新して保存するぜ ---
+            // 第4引数に「false (不正解)」を渡す。これで IncorrectCount が増える！
+            Engine.UpdateProgress(_progress!, _currentQuestion.Id, isStudy: true, isCorrect: false);
+            await Storage.SaveProgressAsync(_progress!);
+            // ------------------------------------------------------
+
             if (_missCount >= 2 && _progress != null)
                 await Speech.SpeakAsync(_currentQuestion.Target, _progress.Settings.SentenceSpeechRate);
         }
     }
 
+    
     private async Task ClosePopup()
     {
         _showPopup = false;

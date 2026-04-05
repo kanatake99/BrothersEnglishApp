@@ -1,0 +1,11 @@
+﻿/* 通常時は制限なし */
+.card-body {
+    transition: max-height 0.3s ease; /* 動きを滑らかにするとカッコいいぜ */
+}
+
+/* タイピング中（キーボード出現時）だけ適用！ */
+.is-typing {
+    max-height: 45vh; /* 画面の35%に抑える */
+    overflow-y: auto;
+    border-bottom: 2px solid #eee; /* 境界線を出すと見やすいぜ */
+}

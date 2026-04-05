@@ -108,27 +108,15 @@ window.setupKeyboard = (dotNetHelper) => {
     const Keyboard = window.SimpleKeyboard.default;
     window.currentKeyboard = new Keyboard({
         onKeyPress: button => {
-            if (button === "{enter}") {
-                dotNetHelper.invokeMethodAsync('OnKeyboardEnter');
-            } else if (button === "{backspace}") {
-                window.keyboardInputBuffer = window.keyboardInputBuffer.slice(0, -1);
-                dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
-            } else if (button === "{space}") {
-                // スペース入力をバッファに追加
-                window.keyboardInputBuffer += " ";
-                dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
-            } else {
-                // 通常の文字（a-z）およびアポストロフィ（'）
-                window.keyboardInputBuffer += button;
-                dotNetHelper.invokeMethodAsync('OnKeyboardInput', window.keyboardInputBuffer);
-            }
+            // JS側で文字列を組み立てるのをやめ、押されたキーの名前(q, w, {space}など)を直接送る
+            dotNetHelper.invokeMethodAsync('OnKeyboardInput', button);
         },
         layout: {
             'default': [
                 'q w e r t y u i o p',
-                'a s d f g h j k l \'', // アポストロフィを追加
+                'a s d f g h j k l \'',
                 'z x c v b n m {backspace}',
-                '{space} {enter}'        // スペースキーを追加
+                '{space} {enter}'
             ]
         },
         display: {

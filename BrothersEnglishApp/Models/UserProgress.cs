@@ -53,9 +53,10 @@
         public string Id { get; set; } = "";
         public int Status { get; set; } = 0; // 0:未学習, 1:学習済み
         public DateTime LastReviewed { get; set; } = DateTime.UtcNow;
+        public int CorrectCount { get; set; }   // 正解回数
+        public int IncorrectCount { get; set; } // ミス回数
         public int Level { get; set; }
 
-        public SentenceItem Sentence { get; set; } = new();
     }
 
 }

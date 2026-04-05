@@ -16,6 +16,8 @@
         public SentenceItem Sentence { get; set; } = new();
         public List<string> Chips { get; set; } = new();
         public string CorrectAnswer { get; set; } = "";
+
+        public List<string> TargetParts { get; set; } = new();
     }
 
     // --- 文を「普通の文字」と「穴埋め」に分けるための型 ---

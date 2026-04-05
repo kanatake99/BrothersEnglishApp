@@ -38,7 +38,7 @@ namespace BrothersEnglishApp.Pages
         // キーボードからの入力を受け取る共通メソッド
         protected virtual async Task HandleVirtualKey(string key)
         {
-            if (key == "BS")
+            if (key == "{backspace}")
             {
                 if (UserInput.Length > 0) UserInput = UserInput[..^1];
             }

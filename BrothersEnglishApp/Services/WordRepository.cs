@@ -7,15 +7,27 @@ namespace BrothersEnglishApp.Services;
 public class WordRepository(HttpClient http)
 {
     private List<EnglishWord>? _cachedWords;
+    private List<SentenceItem>? _cachedSentences; // 追加：文章のキャッシュ
 
     public async Task<List<EnglishWord>> GetWordsAsync()
     {
-        // すでに読み込み済みなら、それを返す（何度も通信しない）
         if (_cachedWords != null) return _cachedWords;
-
-        // 通信して JSON を取得
         _cachedWords = await http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json");
-
         return _cachedWords ?? [];
+    }
+
+    /// <summary>
+    /// 全文章データを取得するぜ。
+    /// data/master_sentences.json が存在することを前提としている。
+    /// </summary>
+    public async Task<List<SentenceItem>> GetSentencesAsync()
+    {
+        // すでに読み込み済みなら、それを返す
+        if (_cachedSentences != null) return _cachedSentences;
+
+        // 通信して JSON を取得（ファイル名はプロジェクトに合わせて調整してくれ）
+        _cachedSentences = await http.GetFromJsonAsync<List<SentenceItem>>("data/master_sentences.json");
+
+        return _cachedSentences ?? [];
     }
 }

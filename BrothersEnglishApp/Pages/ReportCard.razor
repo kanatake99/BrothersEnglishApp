@@ -22,82 +22,74 @@
     else
     {
         @* --- 1. 全体の習得率（プログレスバー） --- *@
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card shadow-sm border-0 bg-light">
+        <div class="row mb-4 g-3">
+            @* 単語の進捗 *@
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 bg-light h-100">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-graph-up-arrow text-primary"></i> 全体の習得率</h5>
+                        <h6 class="card-title fw-bold"><i class="bi bi-alphabet text-primary"></i> 単語の習得率</h6>
                         @{
-                            var total = _allWords.Count;
-                            var mastered = _userProgress.WordStatuses.Count(s => s.Status >= 1);
-                            var progressPercent = total > 0 ? (mastered * 100 / total) : 0;
+                            var wTotal = _allWords?.Count ?? 0;
+                            var wMastered = _userProgress.WordStatuses.Count(s => s.Status >= 1);
+                            var wPercent = wTotal > 0 ? (wMastered * 100 / wTotal) : 0;
                         }
-                        <div class="progress mb-2" style="height: 30px; border-radius: 15px;">
-                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
-                                 role="progressbar" style="width: @progressPercent%;">
-                                @(progressPercent)%
-                            </div>
+                        <div class="progress mb-2" style="height: 20px; border-radius: 10px;">
+                            <div class="progress-bar bg-success" style="width: @wPercent%;">@wPercent%</div>
                         </div>
-                        <div class="text-center small text-muted">
-                            全 <strong>@total</strong> 単語中、<strong>@mastered</strong> 単語を学習したよ！
+                        <div class="text-center small text-muted">@wTotal 語中 @wMastered 語</div>
+                    </div>
+                </div>
+            </div>
+            @* 文の進捗 (追加) *@
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 bg-light h-100">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold"><i class="bi bi-chat-quote text-info"></i> 文の習得率</h6>
+                        @{
+                            var sTotal = _allSentences?.Count ?? 0;
+                            var sMastered = _userProgress.SentenceStatuses.Values.Count(s => s.Status >= 1);
+                            var sPercent = sTotal > 0 ? (sMastered * 100 / sTotal) : 0;
+                        }
+                        <div class="progress mb-2" style="height: 20px; border-radius: 10px;">
+                            <div class="progress-bar bg-info" style="width: @sPercent%;">@sPercent%</div>
                         </div>
+                        <div class="text-center small text-muted">@sTotal 文中 @sMastered 文</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        @* --- 2. 今日の学習リスト --- *@
-        <div class="card shadow-sm border-primary mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-calendar-check"></i> 今日の学習履歴</h5>
-                <span class="badge bg-white text-primary">@DateTime.Now.ToString("MM/dd")</span>
+        @* --- 今日の文の学習履歴 --- *@
+        <div class="card shadow-sm border-info mb-4">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-journal-text"></i> 今日の文・復習履歴</h5>
+                <span class="badge bg-white text-info">@_todaySentenceStatuses.Count 件</span>
             </div>
             <div class="card-body p-0">
-                @if (!_todayStatuses.Any())
+                @if (!_todaySentenceStatuses.Any())
                 {
-                    <div class="p-5 text-center">
-                        <p class="text-muted">今日はまだ学習の記録がないよ。<br>まずは「トレーニング」から始めてみよう！</p>
+                    <div class="p-4 text-center text-muted small">
+                        今日はまだ文の復習をしていないよ。
                     </div>
                 }
                 else
                 {
-                    <div class="row text-center py-3 bg-primary bg-opacity-10 g-0">
-                        <div class="col">
-                            <div class="small text-muted">今日解いた数</div>
-                            <div class="h4 mb-0">@_todayStatuses.Count</div>
-                        </div>
-                        <div class="col border-start">
-                            <div class="small text-muted">正解（○）</div>
-                            <div class="h4 mb-0 text-success">@_todayCorrectTotal</div>
-                        </div>
-                    </div>
-                    <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
-                        <table class="table table-hover align-middle mb-0">
+                    <div class="table-responsive" style="max-height: 250px;">
+                        <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light sticky-top">
                                 <tr>
-                                    <th style="width: 50%;">単語 / 意味</th>
-                                    <th class="text-center">結果</th>
+                                    <th style="width: 70%;">英文 / 日本語</th>
                                     <th class="text-center">時刻</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var status in _todayStatuses)
+                                @foreach (var status in _todaySentenceStatuses)
                                 {
-                                    var word = _allWords.FirstOrDefault(w => w.Id == status.WordId);
+                                    var s = _allSentences?.FirstOrDefault(x => x.Id == status.Id);
                                     <tr>
-                                        <td>
-                                            <div class="fw-bold">@word?.Word</div>
-                                            <div class="small text-muted">@word?.Meaning</div>
-                                        </td>
-                                        <td class="text-center">
-                                            @if (status.Status >= 1)
-                                            {
-                                                <span class="badge rounded-pill bg-success">○ 正解</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge rounded-pill bg-danger">× ミス</span>
-                                            }
+                                        <td class="px-3">
+                                            <div class="fw-bold small">@s?.English</div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">@s?.Japanese</div>
                                         </td>
                                         <td class="text-center small text-muted">
                                             @status.LastReviewed.ToLocalTime().ToString("HH:mm")
@@ -135,7 +127,7 @@
                         }
                         @foreach (var status in weakWords)
                         {
-                            var word = _allWords.FirstOrDefault(w => w.Id == status.WordId);
+                            var word = _allWords!.FirstOrDefault(w => w.Id == status.WordId);
                             if (word == null) continue;
 
                             <tr class="@(status.IncorrectCount > status.CorrectCount ? "table-danger-subtle" : "")">
@@ -161,34 +153,95 @@
                 </table>
             </div>
         </div>
+        @* --- 4. 累計：にがてな文リスト（NEW） --- *@
+        <div class="card shadow-sm border-warning mb-4">
+            <div class="card-header bg-warning text-dark fw-bold">
+                <h5 class="mb-0"><i class="bi bi-chat-left-dots-fill"></i> 要注意！にがてな文リスト</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>文の内容 (Note)</th>
+                            <th class="text-center">ミス(×)</th>
+                            <th class="text-center">正解(○)</th>
+                            <th class="text-center">判定</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var weakSentences = _userProgress.SentenceStatuses.Values
+                                .Where(s => s.IncorrectCount > 0)
+                                .OrderByDescending(s => s.IncorrectCount)
+                                .Take(5); // 文は長いからまずは5件くらいがちょうどいい
+                        }
+                        @foreach (var status in weakSentences)
+                        {
+                            var sentence = _allSentences?.FirstOrDefault(s => s.Id == status.Id);
+                            if (sentence == null) continue;
+
+                            <tr class="@(status.IncorrectCount > status.CorrectCount ? "table-warning-subtle" : "")">
+                                <td>
+                                    @* ここは要望通り Note (日本語訳や解説) をメインに表示するぜ *@
+                                    <div class="fw-bold text-dark">@sentence.Japanese</div>
+                                    <div class="small text-muted font-monospace">@sentence.English</div>
+                                </td>
+                                <td class="text-center text-danger fw-bold">@status.IncorrectCount</td>
+                                <td class="text-center text-success">@status.CorrectCount</td>
+                                <td class="text-center">
+                                    @if (status.IncorrectCount > status.CorrectCount)
+                                    {
+                                        <span class="badge bg-danger">にがて！</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success">克服中</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     }
 </div>
 
 @code {
     private List<EnglishWord>? _allWords;
+    private List<SentenceItem>? _allSentences; 
     private UserProgress _userProgress = new();
-    private List<WordStatus> _todayStatuses = new();
-    private int _todayCorrectTotal;
+    private List<WordStatus> _todayWordStatuses = new();
+    private List<SentenceStatus> _todaySentenceStatuses = new(); 
+    private int _todayWordCorrect;
+    private int _todaySentenceCorrect; 
 
+    // ページ初期化時にデータをロード
     protected override async Task OnInitializedAsync()
     {
         _allWords = await WordRepo.GetWordsAsync();
-
-        // 最新の進捗をロード
+        _allSentences = await WordRepo.GetSentencesAsync(); // 文データ取得
+        
         var p = await Storage.LoadUserProgressAsync(Context.CurrentUserId);
 
         if (p != null)
         {
             _userProgress = p;
-
-            // 今日のデータ抽出
             var today = DateTime.Today;
-            _todayStatuses = _userProgress.WordStatuses
+
+            // --- 単語の集計 ---
+            _todayWordStatuses = _userProgress.WordStatuses
                 .Where(s => s.LastReviewed.ToLocalTime().Date == today)
                 .OrderByDescending(s => s.LastReviewed)
                 .ToList();
+            _todayWordCorrect = _todayWordStatuses.Count(s => s.Status >= 1);
 
-            _todayCorrectTotal = _todayStatuses.Count(s => s.Status >= 1);
+            // --- 文の集計 (追加) ---
+            _todaySentenceStatuses = _userProgress.SentenceStatuses.Values
+                .Where(s => s.LastReviewed.ToLocalTime().Date == today)
+                .OrderByDescending(s => s.LastReviewed)
+                .ToList();
+            _todaySentenceCorrect = _todaySentenceStatuses.Count(s => s.Status >= 1);
         }
     }
 }
