@@ -2736,14 +2736,6 @@
     "Note": "not so much A as B: AというよりはB"
   },
   {
-    "Id": "0928bc2f-5f95-493c-8315-048142cef7e1",
-    "Level": 2,
-    "English": "Knowledge is to the mind what food is to the body.",
-    "Japanese": "知識が精神に対する関係は、食べ物が肉体に対する関係と同じだ。",
-    "Target": "is to the mind what food is to the body",
-    "Note": "A is to B what C is to D"
-  },
-  {
     "Id": "1b1ec40e-b8fd-46a8-b22c-d0236d3dbf5b",
     "Level": 2,
     "English": "It is essential that every student be given an equal opportunity.",

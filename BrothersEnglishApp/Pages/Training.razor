@@ -5,6 +5,7 @@
 @inject UserContext Context
 @inject LocalStorageService Storage
 @inject NavigationManager Navigation
+@inject SpeechService Speech
 
 
 <PageTitle>今日の復習</PageTitle>
@@ -117,6 +118,16 @@
         await JS.InvokeVoidAsync("speechHandlers.blurActiveElement");
 
         bool isCorrect = (selected == _currentQuestion.CorrectAnswer);
+
+        // ★ ここで正誤音を鳴らすぜ！
+        if (isCorrect)
+        {
+            await Speech.PlayCorrectSoundAsync();
+        }
+        else
+        {
+            await Speech.PlayIncorrectSoundAsync();
+        }
 
         if (_userProgress != null)
         {

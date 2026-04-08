@@ -1,10 +1,10 @@
 ﻿@page "/sentence-training"
 @inherits StudyPageBase
 @inject WordRepository WordRepo
-@* ★エンジンを SentenceEngine に差し替えたぜ *@
 @inject SentenceEngine Engine
 @inject LocalStorageService Storage
 @inject NavigationManager Navigation
+@inject SpeechService Speech
 
 <PageTitle>文の復習</PageTitle>
 
@@ -28,7 +28,7 @@
     {
         <div class="text-center">
             <h2>トレーニング完了！</h2>
-            <p>今日の復習はバッチリだぜ。</p>
+            <p>今日の復習はバッチリ。</p>
             <div class="display-1 text-success mb-4"><i class="bi bi-check-circle-fill"></i></div>
             <button class="btn btn-primary btn-lg" @onclick="() => Navigation.NavigateTo(string.Empty)">ホームへ戻る</button>
         </div>
@@ -42,7 +42,7 @@
         <div class="card shadow-sm mx-auto" style="max-width: 600px;">
             <div class="card-body p-4 text-center @(_isPenaltyMode ? "is-typing" : "")">
                 <h5 class="text-muted mb-4">@_currentQuestion.Sentence.Japanese</h5>
-
+ 
                 <div class="mb-4">
                     <h2 class="display-6 lh-base">
                         @foreach (var segment in _sentenceSegments)
@@ -191,6 +191,16 @@
             isCorrect = Engine.CheckAnswer(userFullAnswer, _currentQuestion.CorrectAnswer);
         }
 
+        // ★効果音の再生！
+        if (isCorrect)
+        {
+            await Speech.PlayCorrectSoundAsync();
+        }
+        else
+        {
+            await Speech.PlayIncorrectSoundAsync();
+        }
+
         _isLastAnswerCorrect = isCorrect;
         _showOverlay = true;
         StateHasChanged();
@@ -220,6 +230,11 @@
         }
     
         StateHasChanged();
+    }
+
+    private async Task Speak(string text)
+    {
+        await Speech.SpeakAsync(text, rate: 1.0);
     }
 
     private void UndoLastSelection()

@@ -1,5 +1,153 @@
-﻿<h3>SentenceList</h3>
+﻿@page "/sentence-list"
+@using BrothersEnglishApp.Models
+@using BrothersEnglishApp.Services
+@inject WordRepository WordRepo
+@inject SentenceEngine Engine
+@inject IJSRuntime JS
+
+<PageTitle>文一覧</PageTitle>
+
+@* --- 1. 索引ボタン（Noteの頭文字でジャンプ） --- *@
+<div class="d-flex flex-wrap gap-1 my-3 px-3">
+    @foreach (var letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    {
+        <button class="btn btn-info btn-sm shadow-sm"
+                @onclick="@(() => ScrollToLetter(letter.ToString()))"
+                style="min-width: 35px; height: 35px; font-weight: bold;">
+            @letter
+        </button>
+    }
+    <button class="btn btn-secondary btn-sm shadow-sm"
+            @onclick="@(() => ScrollToLetter("#"))"
+            style="min-width: 35px; height: 35px; font-weight: bold;">
+        #
+    </button>
+</div>
+
+@* --- 2. 文リスト表示エリア --- *@
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+        <h3><i class="bi bi-journal-text text-primary"></i> 登録文リスト</h3>
+        <span class="badge bg-secondary">全 @(_sentences?.Count ?? 0) 文</span>
+    </div>
+
+    @if (_sentences == null)
+    {
+        <div class="text-center p-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">読み込み中だぜ...</p>
+        </div>
+    }
+    else if (!_sentences.Any())
+    {
+        <div class="alert alert-info">
+            まだ文が登録されていないみたいだぜ。
+        </div>
+    }
+    else
+    {
+        @* Noteの頭文字でグループ化してループ *@
+        @* A-Zを優先し、# を最後に持ってくる並び替え *@
+        @foreach (var group in _sentences.GroupBy(s => GetFirstLetter(s.Note))
+                                         .OrderBy(g => g.Key == "#") // false(0)が先、true(1)が後になる
+                                         .ThenBy(g => g.Key))
+        {
+            <h3 id="letter-@group.Key" class="bg-light p-2 mt-4 border-start border-4 border-primary shadow-sm">@group.Key</h3>
+            <div class="list-group shadow-sm mt-2">
+                @foreach (var item in group.OrderBy(x => x.Note))
+                {
+                    <div class="list-group-item p-3 border-bottom">
+                        @* 上段：Note と 星(Level) *@
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center">
+                                <strong class="h5 mb-0 text-danger">@item.Note</strong>
+                            </div>
+                            <div class="text-nowrap">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <i class="bi @(i < item.Level ? "bi-star-fill text-warning" : "bi-star text-muted opacity-25")"
+                                       style="font-size: 0.8rem;"></i>
+                                }
+                            </div>
+                        </div>
+
+                        @* 中段：英文（Targetを太字・下線） *@
+                        <div class="bg-body-tertiary border p-3 mb-2 shadow-sm font-monospace fs-5">
+                            @{
+                                var segments = Engine.SplitSentence(item.English, item.Target);
+                                foreach (var segment in segments)
+                                {
+                                    if (segment.IsTarget)
+                                    {
+                                        <strong class="text-primary border-bottom border-2 border-primary">@segment.Text</strong>
+                                    }
+                                    else
+                                    {
+                                        <span>@segment.Text</span>
+                                    }
+                                }
+                            }
+                            <button class="btn btn-sm btn-link p-0 ms-2" @onclick="() => Speak(item.English)">
+                                <i class="bi bi-volume-up-fill text-primary fs-4"></i>
+                            </button>
+                        </div>
+
+                        @* 下段：日本語訳 *@
+                        <div class="ps-2 text-secondary">
+                            <i class="bi bi-translate me-1"></i> @item.Japanese
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@* --- 3. トップへ戻るボタン --- *@
+<button class="btn btn-primary rounded-circle shadow"
+        style="position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; z-index: 1000;"
+        @onclick="ScrollToTop">
+    <i class="bi bi-arrow-up"></i>
+</button>
 
 @code {
+    private List<SentenceItem>? _sentences;
 
+    protected override async Task OnInitializedAsync()
+    {
+        _sentences = await WordRepo.GetSentencesAsync();
+    }
+
+    // 頭文字を取得する便利メソッド
+    private string GetFirstLetter(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return "#";
+        
+        // 先頭の1文字を取得して大文字にする
+        var first = text.Trim()[0].ToString().ToUpper();
+
+        // 半角アルファベット A-Z に該当するかチェック
+        if (System.Text.RegularExpressions.Regex.IsMatch(first, "[A-Z]"))
+        {
+            return first;
+        }
+
+        // それ以外（漢字、ひらがな、記号など）はすべて「#」にまとめる
+        return "#";
+    }
+
+    private async Task ScrollToLetter(string letter)
+    {
+        await JS.InvokeVoidAsync("appFunctions.scrollToElement", $"letter-{letter}");
+    }
+
+    private async Task ScrollToTop()
+    {
+        await JS.InvokeVoidAsync("appFunctions.scrollToTop");
+    }
+
+    private async Task Speak(string text)
+    {
+        await JS.InvokeVoidAsync("speechHandlers.speak", text);
+    }
 }

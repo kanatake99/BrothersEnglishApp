@@ -58,6 +58,49 @@
                 </div>
             </div>
         </div>
+        @* --- 2-1. 今日の単語学習履歴 (ここを復活させたぜ！) --- *@
+        <div class="card shadow-sm border-success mb-4">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-alphabet-uppercase"></i> 今日の単語・復習履歴</h5>
+                <span class="badge bg-white text-success">@_todayWordStatuses.Count 件</span>
+            </div>
+            <div class="card-body p-0">
+                @if (!_todayWordStatuses.Any())
+                {
+                    <div class="p-4 text-center text-muted small">
+                        今日はまだ単語の復習をしていないよ。
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive" style="max-height: 250px;">
+                        <table class="table table-sm table-hover align-middle mb-0">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th style="width: 70%;">単語 / 意味</th>
+                                    <th class="text-center">時刻</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var status in _todayWordStatuses)
+                                {
+                                    var w = _allWords?.FirstOrDefault(x => x.Id == status.WordId);
+                                    <tr>
+                                        <td class="px-3">
+                                            <div class="fw-bold small">@w?.Word</div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">@w?.Meaning</div>
+                                        </td>
+                                        <td class="text-center small text-muted">
+                                            @status.LastReviewed.ToLocalTime().ToString("HH:mm")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
 
         @* --- 今日の文の学習履歴 --- *@
         <div class="card shadow-sm border-info mb-4">

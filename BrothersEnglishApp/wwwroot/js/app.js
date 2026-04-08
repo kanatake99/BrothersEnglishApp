@@ -65,7 +65,16 @@ window.quizHandlers = {
         buttons.forEach(btn => btn.blur());
     }
 };
-
+/**
+ *  指定したパスの音声を再生する
+ */
+window.appFunctions = {
+    
+    playAudio: function (path) {
+        var audio = new Audio(path);
+        audio.play();
+    }
+};
 /**
  * 仮想キーボードの状態管理用グローバル変数
  */
