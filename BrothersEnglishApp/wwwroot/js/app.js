@@ -2,23 +2,16 @@
 
 /**
  * 汎用ヘルパー (speechHandlers)
- * Blazor側からは "speechHandlers.関数名" で呼び出す
  */
 window.speechHandlers = {
-    // 読み上げ
-    // rate 引数を追加（デフォルトは 1.0）
     speak: function (text, rate = 1.0) {
         if (!text) return;
-        // すべての読み上げをキャンセルしてから開始
         window.speechSynthesis.cancel();
-
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';
-        utterance.rate = rate; // ここで速度を設定！ (0.1 〜 10.0)
+        utterance.rate = rate;
         window.speechSynthesis.speak(utterance);
     },
-
-    // フォーカス・UI操作
     focusElement: function (element) {
         if (element && typeof element.focus === 'function') {
             element.focus();
@@ -29,14 +22,13 @@ window.speechHandlers = {
             document.activeElement.blur();
         }
     },
-
-    // 判定用（今回エラーになっていた場所）
     getUserAgent: () => navigator.userAgent || "",
     elementExists: (selector) => document.querySelector(selector) !== null
 };
 
 /**
- * スクロール操作 (appFunctions)
+ * アプリ共通操作 (appFunctions)
+ * ここにスクロールと音声再生
  */
 window.appFunctions = {
     scrollToElement: function (elementId) {
@@ -47,12 +39,16 @@ window.appFunctions = {
             const elementRect = element.getBoundingClientRect().top;
             const elementPosition = elementRect - bodyRect;
             const offsetPosition = elementPosition - offset;
-
             window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
     },
     scrollToTop: function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    playAudio: function (path) {
+        // パスの先頭にスラッシュがない場合などを考慮して調整
+        var audio = new Audio(path);
+        audio.play().catch(e => console.error("Audio play error:", e));
     }
 };
 
@@ -65,59 +61,27 @@ window.quizHandlers = {
         buttons.forEach(btn => btn.blur());
     }
 };
-/**
- *  指定したパスの音声を再生する
- */
-window.appFunctions = {
-    
-    playAudio: function (path) {
-        var audio = new Audio(path);
-        audio.play();
-    }
-};
-/**
- * 仮想キーボードの状態管理用グローバル変数
- */
+
+// --- 以下、キーボード関連のコード ---
 window.keyboardInputBuffer = "";
 window.currentKeyboard = null;
-
-/**
- * C#から呼び出し可能なクリア関数
- */
 window.clearKeyboard = () => {
     window.keyboardInputBuffer = "";
     if (window.currentKeyboard && typeof window.currentKeyboard.setInput === "function") {
         window.currentKeyboard.setInput("");
     }
 };
-
-/**
- * キーボードの初期化関数
- * 単語・文の両方に対応した「フルセット」レイアウト
- */
 window.setupKeyboard = (dotNetHelper) => {
-    // 既存のキーボードを破棄
     if (window.currentKeyboard) {
         window.currentKeyboard.destroy();
         window.currentKeyboard = null;
     }
-
     const el = document.querySelector(".simple-keyboard");
-    if (!el) {
-        console.error("Keyboard container (.simple-keyboard) not found!");
-        return;
-    }
-
-    // ライブラリが存在するか最終確認
-    if (!window.SimpleKeyboard) {
-        console.error("SimpleKeyboard library is not loaded!");
-        return;
-    }
-
+    if (!el) return;
+    if (!window.SimpleKeyboard) return;
     const Keyboard = window.SimpleKeyboard.default;
     window.currentKeyboard = new Keyboard({
         onKeyPress: button => {
-            // JS側で文字列を組み立てるのをやめ、押されたキーの名前(q, w, {space}など)を直接送る
             dotNetHelper.invokeMethodAsync('OnKeyboardInput', button);
         },
         layout: {
@@ -135,11 +99,9 @@ window.setupKeyboard = (dotNetHelper) => {
         }
     });
 };
-
 window.destroyKeyboard = () => {
     if (window.currentKeyboard) {
         window.currentKeyboard.destroy();
         window.currentKeyboard = null;
     }
-    window.keyboardInputBuffer = "";
 };
