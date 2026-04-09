@@ -2,14 +2,13 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @using BrothersEnglishApp.Shared
+@* 1. 基底クラスを継承。KeyboardServiceやIsMobile判定を共通化 *@
+@inherits StudyPageBase
 @inject WordRepository Repo
 @inject SentenceEngine Engine
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
 @inject SpeechService Speech
-@inherits StudyPageBase
-
-<PageTitle>文の学習 (Study)</PageTitle>
 
 <div class="container mt-3" style="max-width: 700px;">
     @if (_questions == null)
@@ -21,11 +20,9 @@
     }
     else if (_isFinished)
     {
-        @* --- 完了画面 --- *@
         <div class="card shadow border-0 text-center p-5 animate__animated animate__fadeIn">
             <h2 class="text-success mb-4">🌟 学習完了！</h2>
-            <p class="fs-5">今日の目標分をすべて終えたぜ！<br />💮カレンダーに印がついたぞ。</p>
-
+            <p class="fs-5">今日の目標分をすべて終えたよ！<br />💮カレンダーに印がついたぞ。</p>
             <button class="btn btn-success btn-lg py-3" @onclick='() => Nav.NavigateTo("sentence-training")'>
                 <i class="bi bi-play-circle-fill me-2"></i>復習をする
             </button>
@@ -34,11 +31,10 @@
     }
     else if (_currentQuestion != null)
     {
-        @* --- プログレス・問題表示 --- *@
-        <StudyProgressBar Title="Question" 
-             Current="@(_currentIndex + 1)" 
-             Total="@_questions.Count" 
-             MissCount="@_missCount" />
+        <StudyProgressBar Title="Question"
+                          Current="@(_currentIndex + 1)"
+                          Total="@_questions.Count"
+                          MissCount="@_missCount" />
 
         <div class="card shadow-sm border-0">
             <div class="card-body p-2 text-center">
@@ -46,12 +42,12 @@
                     <h4 class="mb-0 fs-4">@_currentQuestion.Japanese</h4>
                 </div>
 
-                @* --- 2. 穴埋め英文表示（修正後） --- *@
                 <div class="fs-3 mb-4 font-monospace border-bottom pb-3">
                     @Engine.GetQuestionText(_currentQuestion.English, _currentQuestion.Target)
                 </div>
 
                 <div class="mb-4">
+                    @* 2. IsMobile(基底クラス)を使用して入力制御 *@
                     <input type="text" class="form-control form-control-lg text-center fs-2 border-primary border-2"
                            placeholder="答えを入力..."
                            @bind="UserInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
@@ -64,7 +60,6 @@
                         <button class="btn btn-secondary btn-lg border-1" @onclick="PlayVoice">
                             <i class="bi bi-volume-up"></i> 音声を聴く
                         </button>
-                        @* --- モバイルじゃない（PC）の時だけ「判定」ボタンを表示 --- *@
                         @if (!IsMobile)
                         {
                             <button class="btn btn-primary btn-lg py-3 shadow" @onclick="CheckAnswer"
@@ -93,17 +88,15 @@
         </div>
     }
 
-    @* --- 【共通コンポーネント】 --- *@
+    @* 3. 基底クラスの Keyboard 変数と HandleVirtualKey を利用 *@
     <VirtualKeyboard @ref="Keyboard"
                      Visible="@(!_isCorrectState && !_showPopup)"
-                     OnInput="val => { UserInput = val; StateHasChanged(); }"
+                     OnInput="HandleVirtualKey"
                      OnEnter="CheckAnswer" />
 </div>
 
-@* --- 演出用ポップアップ（省略なし） --- *@
 @if (_showPopup)
 {
-    @* ...既存のポップアップコード... *@
     <div class="modal-backdrop fade show"></div>
     <div class="modal fade show d-block" style="top: 20%">
         <div class="modal-dialog modal-dialog-centered">
@@ -146,6 +139,7 @@
         else _currentQuestion = _questions[_currentIndex];
     }
 
+    // 4. 基底クラスの初期描画時コールバックをオーバーライド
     protected override async Task OnPageFirstRenderAsync()
     {
         await Task.Delay(500);
@@ -160,10 +154,7 @@
         {
             _isCorrectState = true;
             _missCount = 0;
-        
             await PlayVoice();
-        
-            // 第4引数に「true (正解)」を渡すぜ
             Engine.UpdateProgress(_progress!, _currentQuestion.Id, isStudy: true, isCorrect: true);
             await Storage.SaveProgressAsync(_progress!);
         }
@@ -171,22 +162,17 @@
         {
             _missCount++;
             _showPopup = true;
-
-            // --- ここが重要！ 間違えた瞬間にも進捗を更新して保存するぜ ---
-            // 第4引数に「false (不正解)」を渡す。これで IncorrectCount が増える！
             Engine.UpdateProgress(_progress!, _currentQuestion.Id, isStudy: true, isCorrect: false);
             await Storage.SaveProgressAsync(_progress!);
-            // ------------------------------------------------------
-
             if (_missCount >= 2 && _progress != null)
                 await Speech.SpeakAsync(_currentQuestion.Target, _progress.Settings.SentenceSpeechRate);
         }
     }
-
     
     private async Task ClosePopup()
     {
         _showPopup = false;
+        // 5. 基底クラスの ResetInputAsync を使用
         await ResetInputAsync();
     }
 
@@ -211,5 +197,4 @@
     }
 
     private async Task HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") await CheckAnswer(); }
-
 }

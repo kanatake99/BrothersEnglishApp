@@ -1,41 +1,37 @@
-﻿// StudyPageBase.cs
-// 学習ページの共通基底クラス。スマホ判定やキーボード管理など、全学習ページで共通の処理をここにまとめる。
-
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using BrothersEnglishApp.Shared;
+using BrothersEnglishApp.Services;
 
 namespace BrothersEnglishApp.Pages
 {
     public abstract class StudyPageBase : ComponentBase, IAsyncDisposable
     {
+        // 【注入】新設したキーボード専用サービス
+        [Inject] protected KeyboardService KeyboardService { get; set; } = default!;
+        // 【注入】UA取得や要素チェック用
         [Inject] protected IJSRuntime JS { get; set; } = default!;
 
         protected bool IsMobile { get; private set; }
         protected VirtualKeyboard? Keyboard;
         protected string UserInput = "";
 
-        // 最初の描画が終わった後に、スマホ判定と必要な初期処理を行う
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-                // 全学習ページ共通の「スマホ判定」をここで一括実行
+                // [連携] app.js: speechHandlers.getUserAgent を使用
                 var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
                 IsMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
 
-                // 判定が終わったら再描画して、UIをスマホ用に切り替える
                 StateHasChanged();
-
-                // 1問目の読み上げが必要な場合は、各ページでこのメソッドをオーバーライドする
                 await OnPageFirstRenderAsync();
             }
         }
 
-        // StudyPageBase.cs に以下を追加してくれ
         protected virtual Task OnInputChangedAsync() => Task.CompletedTask;
 
-        // キーボードからの入力を受け取る共通メソッド
+        // 【共通処理】キーボード入力の受け皿
         protected virtual async Task HandleVirtualKey(string key)
         {
             if (key == "{backspace}")
@@ -47,36 +43,37 @@ namespace BrothersEnglishApp.Pages
                 UserInput += key;
             }
 
-            // 入力が変わったことを子クラス（SentenceTrainingなど）に通知するぜ！
+            // [通知] 子クラス（SentenceTraining等）で入力監視が必要な場合に実行
             await OnInputChangedAsync();
             StateHasChanged();
         }
 
-        // ページごとの「最初の1回だけの処理（音声再生など）」
         protected virtual Task OnPageFirstRenderAsync() => Task.CompletedTask;
 
-        // ユーザーの入力をリセットする共通処理。キーボードもリセットして、UIを更新する。
+        // 【共通処理】入力リセット
         protected async Task ResetInputAsync()
         {
             UserInput = "";
-            if (Keyboard != null) await Keyboard.ClearAsync();
+            if (Keyboard != null)
+            {
+                // [連携] VirtualKeyboard.razor 経由で KeyboardService.ClearAsync を実行
+                await Keyboard.ClearAsync();
+            }
             StateHasChanged();
         }
 
-        // ページを離れるときの共通処理（キーボードのリセットなど）をここでまとめて行う
+        // 【終了処理】ページ離脱時のクリーンアップ
         public virtual async ValueTask DisposeAsync()
         {
-            // ページを離れるときに、キーボードのリセットなどを共通で行う
             if (Keyboard != null)
             {
-                await Keyboard.ClearAsync();
+                // [連携] KeyboardService.cs: keyboardHandlers.clear を実行
+                await KeyboardService.ClearAsync();
             }
 
-            // 子クラスで追加の片付けをしたい場合は、ここを override できるようにしておく
             await OnDisposeAsync();
         }
 
-        // 子クラスで追加の片付けをしたい場合は、ここを override できるようにしておく
         protected virtual ValueTask OnDisposeAsync() => ValueTask.CompletedTask;
     }
 }

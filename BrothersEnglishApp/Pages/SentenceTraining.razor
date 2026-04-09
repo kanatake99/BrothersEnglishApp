@@ -1,4 +1,8 @@
 ﻿@page "/sentence-training"
+@using BrothersEnglishApp.Models
+@using BrothersEnglishApp.Services
+@using BrothersEnglishApp.Shared
+@* 1. 基底クラスを継承。KeyboardServiceやIsMobile判定、UserInput管理を共通化 *@
 @inherits StudyPageBase
 @inject WordRepository WordRepo
 @inject SentenceEngine Engine
@@ -9,7 +13,6 @@
 <PageTitle>文の復習</PageTitle>
 
 <div class="container mt-4">
-    @* --- 判定用オーバーレイ --- *@
     @if (_showOverlay)
     {
         <div class="overlay-container">
@@ -77,6 +80,7 @@
 
                 @if (!_isPenaltyMode)
                 {
+                    @* --- チップ選択モード --- *@
                     <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
                         @foreach (var chip in _currentQuestion.Chips)
                         {
@@ -96,6 +100,7 @@
                 }
                 else
                 {
+                    @* --- ペナルティ（タイピング）モード --- *@
                     <div class="alert alert-danger mb-4 animate__animated animate__shakeX">
                         <i class="bi bi-exclamation-triangle-fill"></i> 違うぜ！正しく入力！
                     </div>
@@ -105,9 +110,11 @@
                            @bind="UserInput"
                            @bind:event="oninput"
                            autocomplete="off"
+                           readonly="@IsMobile"
                            placeholder="タイピングしてくれ！" />
                     
-                    <VirtualKeyboard OnInput="HandleVirtualKey" OnEnter="CheckAnswer" />
+                    @* 2. 基底クラスの Keyboard 変数と HandleVirtualKey を利用 *@
+                    <VirtualKeyboard @ref="Keyboard" OnInput="HandleVirtualKey" OnEnter="CheckAnswer" />
                     
                     <div class="mt-3">
                         <button class="btn btn-danger btn-lg px-5 shadow" @onclick="CheckAnswer">
@@ -141,8 +148,6 @@
         _allWords = await WordRepo.GetWordsAsync();
         _allSentences = await WordRepo.GetSentencesAsync();
         _userProgress = await Storage.LoadProgressAsync();
-        
-        // 設定から目標数を取得（なければデフォルト5）
         _totalGoal = _userProgress?.Settings.SentenceTrainingGoal ?? 5;
 
         await LoadNextQuestion();
@@ -151,19 +156,16 @@
     private async Task LoadNextQuestion()
     {
         if (_doneCount >= _totalGoal) { _isFinished = true; return; }
-
-        // ★SentenceEngine の共通ロジックを使って次の一問を取得
         var nextSentence = Engine.GetNextSentenceToTrain(_userProgress, _allSentences);
         if (nextSentence == null) { _isFinished = true; return; }
-
-        // 問題の生成と分割
+        
         _currentQuestion = Engine.GenerateSentenceTraining(nextSentence, _allWords, _allSentences);
         _sentenceSegments = Engine.SplitSentence(nextSentence.English, nextSentence.Target);
-
         _targetCount = nextSentence.Target.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
     
         _userSelections.Clear();
         _isPenaltyMode = false;
+        // 3. 基底クラスの ResetInputAsync を使用（UserInputとJSバッファを一括クリア）
         await ResetInputAsync();
     }
 
@@ -182,7 +184,6 @@
         bool isCorrect;
         if (_isPenaltyMode)
         {
-            // エンジンの正規化ロジックを使って厳密に判定だぜ
             isCorrect = Engine.CheckAnswer(UserInput, _currentQuestion.CorrectAnswer);
         }
         else
@@ -191,24 +192,15 @@
             isCorrect = Engine.CheckAnswer(userFullAnswer, _currentQuestion.CorrectAnswer);
         }
 
-        // ★効果音の再生！
-        if (isCorrect)
-        {
-            await Speech.PlayCorrectSoundAsync();
-        }
-        else
-        {
-            await Speech.PlayIncorrectSoundAsync();
-        }
+        if (isCorrect) await Speech.PlayCorrectSoundAsync();
+        else await Speech.PlayIncorrectSoundAsync();
 
         _isLastAnswerCorrect = isCorrect;
         _showOverlay = true;
         StateHasChanged();
 
-        // ★結果を保存（重要！）
         if (_userProgress != null)
         {
-            // isStudy: false (復習モード) で更新
             Engine.UpdateProgress(_userProgress, _currentQuestion.Sentence.Id, isStudy: false, isCorrect: isCorrect);
             await Storage.SaveProgressAsync(_userProgress);
         }
@@ -219,51 +211,42 @@
         if (isCorrect)
         {
             _doneCount++;
-            UserInput = "";
             await LoadNextQuestion();
         }
         else
         {
             _isPenaltyMode = true;
-            UserInput = "";
+            // 4. 不正解時にタイピングモードへ移行するため、入力をリセット
             await ResetInputAsync();
         }
-    
         StateHasChanged();
     }
 
-    private async Task Speak(string text)
+    // 5. 基底クラスの HandleVirtualKey をオーバーライド
+    // ペナルティモード以外（チップ選択中）はJSキーボードの入力を無視する設定
+    protected override async Task HandleVirtualKey(string key)
     {
-        await Speech.SpeakAsync(text, rate: 1.0);
+        if (!_isPenaltyMode) return;
+        
+        // 特殊なキー（スペース等）の処理のみ追加し、あとは基底の標準ロジックに任せる
+        if (key == "{space}")
+        {
+            UserInput += " ";
+            StateHasChanged();
+        }
+        else if (key == "{enter}")
+        {
+            await CheckAnswer();
+        }
+        else
+        {
+            // 標準的な一文字入力やBSは基底クラスのロジックを流用
+            await base.HandleVirtualKey(key);
+        }
     }
 
     private void UndoLastSelection()
     {
-        if (_userSelections.Any())
-        {
-            _userSelections.RemoveAt(_userSelections.Count - 1);
-        }
-    }
-
-    protected override async Task HandleVirtualKey(string key)
-    {
-        if (!_isPenaltyMode) return;
-
-        switch (key)
-        {
-            case "{enter}":
-                await CheckAnswer();
-                return;
-            case "{backspace}":
-                if (UserInput.Length > 0) UserInput = UserInput[..^1];
-                break;
-            case "{space}":
-                UserInput += " ";
-                break;
-            default:
-                if (!key.StartsWith("{")) UserInput += key;
-                break;
-        }
-        StateHasChanged();
+        if (_userSelections.Any()) _userSelections.RemoveAt(_userSelections.Count - 1);
     }
 }

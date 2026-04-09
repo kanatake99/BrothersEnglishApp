@@ -1,19 +1,21 @@
 ﻿@page "/study"
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
+@using BrothersEnglishApp.Shared
+
+@inherits StudyPageBase
 @inject LocalStorageService Storage
 @inject NavigationManager Nav
 @inject UserContext Context
 @inject SpeechService Speech
 @inject WordRepository WordRepo
 @inject TrainingEngine Engine
-@inherits StudyPageBase
 
 <PageTitle>学習ページ</PageTitle>
 
 @if (_currentWord == null)
 {
-    @* --- 目標達成画面（省略なし） --- *@
+    @* --- 目標達成画面 --- *@
     <div class="text-center mt-5">
         <span class="display-1">🎉</span>
         <h4 class="mt-3">今日の目標達成！</h4>
@@ -31,12 +33,10 @@
 else
 {
     <div class="container-fluid mt-2 text-center training-page">
-        @* --- ヘッダー・進捗 --- *@
-        <StudyProgressBar Title="Word" 
-             Current="@GetCurrentProgress()" 
-             Total="@((_userProgress?.Settings?.WordStudyGoal ?? 10) + _extraGoal)" />
+        <StudyProgressBar Title="Word"
+                          Current="@GetCurrentProgress()"
+                          Total="@((_userProgress?.Settings?.WordStudyGoal ?? 10) + _extraGoal)" />
 
-        @* --- 学習カード --- *@
         <div class="card shadow-sm p-3 mb-2">
             <div class="bg-light py-3 rounded mb-3" style="min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 @if (_isReviewing || !_isStep2)
@@ -64,6 +64,7 @@ else
             }
             else
             {
+                @* IsMobile は基底クラスのプロパティを参照 *@
                 <input class="form-control form-control-lg text-center fs-1 @(_isWrong ? "is-invalid" : "")"
                        @bind="UserInput" @bind:event="oninput" @onkeyup="HandleKeyUp"
                        readonly="@IsMobile" placeholder="@(IsMobile ? "下で打ってね" : "入力してね")" />
@@ -71,11 +72,11 @@ else
         </div>
     </div>
 
-    @* --- 共通コンポーネントを配置 --- *@
-    <VirtualKeyboard @ref="Keyboard" 
-                     Visible="!_isReviewing" 
-                     OnInput="val => { UserInput = val; StateHasChanged(); }" 
-                     OnEnter="CheckAnswer" />
+    @* 基底クラスの Keyboard 変数に紐付け *@
+    <VirtualKeyboard Visible="true"
+                     OnInput="HandleVirtualKey"
+                     OnEnter="CheckAnswer"
+                     @ref="Keyboard" />
 }
 
 @code {
@@ -93,6 +94,7 @@ else
         await SelectNextWord();
     }
 
+    // 基底クラスから呼ばれる「最初の描画後」の処理
     protected override async Task OnPageFirstRenderAsync()
     {
         await Task.Delay(500);
@@ -100,55 +102,76 @@ else
             await Speak(_currentWord.Word);
     }
 
-    // --- 答え合わせのロジックもエンジンに任せる --- //
     private async Task CheckAnswer()
     {
         if (_currentWord == null || _isReviewing) return;
+        
         var result = Engine.ProcessAnswer(UserInput, _currentWord, _userProgress!, _isStep2);
 
         if (result.IsCorrect)
         {
-            _isCorrect = true; StateHasChanged();
+            _isCorrect = true;
+            StateHasChanged();
             await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress!);
             await Task.Delay(600);
-            if (result.ShouldGoToStep2) { _isStep2 = true; await ResetInputAsync(); }
-            else if (result.IsFinished) { await SelectNextWord(); }
+
+            if (result.ShouldGoToStep2)
+            {
+                _isStep2 = true;
+                await ResetInputAsync(); // 基底クラスのメソッド
+            }
+            else if (result.IsFinished)
+            {
+                await SelectNextWord();
+            }
         }
         else
         {
-            if (result.ShouldStartReview) { _isReviewing = true; await ResetInputAsync(); }
-            else { _isWrong = true; StateHasChanged(); await Task.Delay(500); _isWrong = false; await ResetInputAsync(); }
+            if (result.ShouldStartReview)
+            {
+                _isReviewing = true;
+                await ResetInputAsync();
+            }
+            else
+            {
+                _isWrong = true;
+                StateHasChanged();
+                await Task.Delay(500);
+                _isWrong = false;
+                await ResetInputAsync();
+            }
         }
     }
 
-
-    // --- 次の単語を選ぶロジックもエンジンに任せる --- //
     private async Task SelectNextWord()
     {
         int effectiveGoal = (_userProgress?.Settings.WordStudyGoal ?? 10) + _extraGoal;
         _currentWord = Engine.GetNextWord(_allWords!, _userProgress!, effectiveGoal);
         _isStep2 = _isCorrect = _isReviewing = false;
+        
         await ResetInputAsync();
-        if (_currentWord != null && _userProgress!.Settings.IsAutoSpeechEnabled) await Speak(_currentWord.Word);
-        else if (_currentWord == null) 
+
+        if (_currentWord != null && _userProgress!.Settings.IsAutoSpeechEnabled)
+            await Speak(_currentWord.Word);
+        else if (_currentWord == null)
         {
             if (_userProgress != null)
             {
-               var todayKey = _userProgress.GetTodayKey();
-                if (!_userProgress.ActivityLog.ContainsKey(todayKey))
-                {
-                    _userProgress.ActivityLog[todayKey] = new DayActivity();
-                }
+                var todayKey = _userProgress.GetTodayKey();
+                _userProgress.ActivityLog.TryAdd(todayKey, new DayActivity());
                 _userProgress.ActivityLog[todayKey].StudyDone = true;
                 await Storage.SaveUserProgressAsync(Context.CurrentUserId, _userProgress);
             }
-
         }
     }
 
     private async Task EndReview() { _isReviewing = false; await ResetInputAsync(); }
-    private async Task HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") await CheckAnswer(); }
-    // --- 音声再生は専用メソッドにまとめる --- //
+    
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await CheckAnswer();
+    }
+
     private async Task Speak(string text)
     {
         if (_userProgress != null)
