@@ -15,5 +15,6 @@ builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<TrainingEngine>();
 builder.Services.AddScoped<SentenceEngine>();
 builder.Services.AddScoped<SpeechService>();
+builder.Services.AddScoped<KeyboardService>();
 
 await builder.Build().RunAsync();

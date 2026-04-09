@@ -1,8 +1,12 @@
 ﻿@implements IAsyncDisposable
+@* 1. [C#サービス] JSへの窓口となる自作サービスを注入 *@
+@inject KeyboardService KeyboardService
+@* 2. [共通JS] UA取得や要素チェックのためにIJSRuntimeも併用 *@
 @inject IJSRuntime JS
 
 @if (_isMobile)
 {
+    @* simple-keyboard クラス：JS側(app.js)がこのクラス名を探してキーボードを描画 *@
     <div class="simple-keyboard-container bg-light border-top py-2 @(Visible ? "" : "d-none")">
         <div class="simple-keyboard"></div>
     </div>
@@ -19,40 +23,69 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // --- A. 初回レンダリング時の処理 ---
         if (firstRender)
         {
+            // [JS連携] app.js 内の speechHandlers.getUserAgent を実行
             var ua = await JS.InvokeAsync<string>("speechHandlers.getUserAgent");
             _isMobile = ua.Contains("iPhone") || ua.Contains("Android") || ua.Contains("iPad");
+            
             if (_isMobile)
             {
+                // [C#連携] JS側からこのコンポーネント(this)を呼べるように参照を作成
                 _objRef = DotNetObjectReference.Create(this);
-                StateHasChanged(); // 再描画して .simple-keyboard を出現させる
+                // HTML側に .simple-keyboard を出現させるために再描画
+                StateHasChanged();
             }
         }
 
+        // --- B. モバイル環境かつ、まだキーボードが描画されていない場合 ---
         if (_isMobile && !_isRendered)
         {
-            // 要素が出現するのを待ってからセットアップ
+            // [JS連携] app.js 内の speechHandlers.elementExists で、HTML要素が準備できたか確認
             if (await JS.InvokeAsync<bool>("speechHandlers.elementExists", ".simple-keyboard"))
             {
-                await JS.InvokeVoidAsync("setupKeyboard", _objRef);
+                // [Service連携] KeyboardService 経由で JS の keyboardHandlers.setup を実行
+                // これで実際のキーボードが画面に出現するぜ！
+                await KeyboardService.SetupAsync(_objRef);
                 _isRendered = true;
             }
         }
     }
 
+    // --- C. JS側(app.js)からボタン入力があった時に呼ばれる窓口 ---
     [JSInvokable]
-    public async Task OnKeyboardInput(string input) => await OnInput.InvokeAsync(input);
+    public async Task OnKeyboardInput(string input)
+    {
+        if (input == "{enter}")
+        {
+            await OnEnter.InvokeAsync(); // [親へ通知] Enterが押されたぜ
+        }
+        else
+        {
+            await OnInput.InvokeAsync(input); // [親へ通知] 文字(q, w, aなど)が押されたぜ
+        }
+    }
 
+    // [JSInvokable] は app.js の dotNetHelper.invokeMethodAsync から呼ばれるキーワードだぜ
     [JSInvokable]
     public async Task OnKeyboardEnter() => await OnEnter.InvokeAsync();
 
-    // 外部からバッファを消したい時用
-    public async Task ClearAsync() => await JS.InvokeVoidAsync("clearKeyboard");
+    // --- D. 外部(親ページ)から入力を消したい時に呼ぶメソッド ---
+    public async Task ClearAsync()
+    {
+        // [Service連携] KeyboardService 経由で JS の keyboardHandlers.clear を実行
+        await KeyboardService.ClearAsync();
+    }
 
+    // --- E. コンポーネントが消える時の後処理 ---
     public async ValueTask DisposeAsync()
     {
+        // C#側の参照をメモリから解放
         _objRef?.Dispose();
-        try { await JS.InvokeVoidAsync("destroyKeyboard"); } catch { }
+        
+        // [Service連携] KeyboardService 経由で JS の keyboardHandlers.destroy を実行
+        // JS側のイベントリスナーやメモリを掃除するぜ
+        await KeyboardService.DestroyAsync();
     }
 }

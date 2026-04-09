@@ -1,9 +1,8 @@
-﻿// wwwroot/js/app.js
-
-/**
- * 汎用ヘルパー (speechHandlers)
+﻿/**
+ * 汎用・UIヘルパー (speechHandlers)
  */
 window.speechHandlers = {
+    // 読み上げ
     speak: function (text, rate = 1.0) {
         if (!text) return;
         window.speechSynthesis.cancel();
@@ -12,43 +11,91 @@ window.speechHandlers = {
         utterance.rate = rate;
         window.speechSynthesis.speak(utterance);
     },
+    // フォーカス操作
     focusElement: function (element) {
         if (element && typeof element.focus === 'function') {
             element.focus();
         }
     },
+    // フォーカス解除
     blurActiveElement: function () {
         if (document.activeElement && typeof document.activeElement.blur === 'function') {
             document.activeElement.blur();
         }
     },
+    // ブラウザ情報取得
     getUserAgent: () => navigator.userAgent || "",
+    // 要素の存在チェック
     elementExists: (selector) => document.querySelector(selector) !== null
 };
 
 /**
  * アプリ共通操作 (appFunctions)
- * ここにスクロールと音声再生
  */
 window.appFunctions = {
     scrollToElement: function (elementId) {
         const element = document.getElementById(elementId);
         if (element) {
             const offset = 70;
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = element.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
-            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
         }
     },
     scrollToTop: function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     playAudio: function (path) {
-        // パスの先頭にスラッシュがない場合などを考慮して調整
-        var audio = new Audio(path);
+        const audio = new Audio(path);
         audio.play().catch(e => console.error("Audio play error:", e));
+    }
+};
+
+/**
+ * キーボード操作 (keyboardHandlers)
+ */
+window.keyboardHandlers = {
+    current: null,
+
+    setup: function (dotNetHelper) {
+        if (this.current) {
+            this.current.destroy();
+        }
+
+        const el = document.querySelector(".simple-keyboard");
+        if (!el || !window.SimpleKeyboard) return;
+
+        const Keyboard = window.SimpleKeyboard.default;
+        this.current = new Keyboard({
+            onKeyPress: button => {
+                dotNetHelper.invokeMethodAsync('OnKeyboardInput', button);
+            },
+            layout: {
+                'default': [
+                    'q w e r t y u i o p',
+                    'a s d f g h j k l \'',
+                    'z x c v b n m {backspace}',
+                    '{space} {enter}'
+                ]
+            },
+            display: {
+                '{enter}': '決定',
+                '{backspace}': '⌫',
+                '{space}': 'Space'
+            }
+        });
+    },
+
+    destroy: function () {
+        if (this.current) {
+            this.current.destroy();
+            this.current = null;
+        }
+    },
+
+    clear: function () {
+        if (this.current) {
+            this.current.setInput("");
+        }
     }
 };
 
@@ -59,49 +106,5 @@ window.quizHandlers = {
     resetButtons: () => {
         const buttons = document.querySelectorAll('.quiz-button');
         buttons.forEach(btn => btn.blur());
-    }
-};
-
-// --- 以下、キーボード関連のコード ---
-window.keyboardInputBuffer = "";
-window.currentKeyboard = null;
-window.clearKeyboard = () => {
-    window.keyboardInputBuffer = "";
-    if (window.currentKeyboard && typeof window.currentKeyboard.setInput === "function") {
-        window.currentKeyboard.setInput("");
-    }
-};
-window.setupKeyboard = (dotNetHelper) => {
-    if (window.currentKeyboard) {
-        window.currentKeyboard.destroy();
-        window.currentKeyboard = null;
-    }
-    const el = document.querySelector(".simple-keyboard");
-    if (!el) return;
-    if (!window.SimpleKeyboard) return;
-    const Keyboard = window.SimpleKeyboard.default;
-    window.currentKeyboard = new Keyboard({
-        onKeyPress: button => {
-            dotNetHelper.invokeMethodAsync('OnKeyboardInput', button);
-        },
-        layout: {
-            'default': [
-                'q w e r t y u i o p',
-                'a s d f g h j k l \'',
-                'z x c v b n m {backspace}',
-                '{space} {enter}'
-            ]
-        },
-        display: {
-            '{enter}': '決定',
-            '{backspace}': '⌫',
-            '{space}': 'Space'
-        }
-    });
-};
-window.destroyKeyboard = () => {
-    if (window.currentKeyboard) {
-        window.currentKeyboard.destroy();
-        window.currentKeyboard = null;
     }
 };

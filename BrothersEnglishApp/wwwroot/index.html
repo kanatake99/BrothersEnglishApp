@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,14 +15,6 @@
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-    <script type="importmap"></script>
-    <script>
-        window.focusElement = (element) => {
-            if (element) {
-                element.focus();
-            }
-        };
-    </script>
 </head>
 
 <body>
@@ -40,27 +31,26 @@
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+
     <script src="js/app.js"></script>
-    <script src="js/keyboard.js"></script>
-    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+
+    <script src="_framework/blazor.webassembly.js"></script>
 
     <script>
-        // Blazorのインスタンスを保持する変数
         let blazorUpdateNotifier;
 
         window.registerUpdateNotifier = (dotnetHelper) => {
             blazorUpdateNotifier = dotnetHelper;
         };
 
-        navigator.serviceWorker.register('service-worker.js').then(registration => {
-            // 更新があるかチェック
+        // ★ register はここで1回だけにまとめるのが正解だぜ
+        navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' }).then(registration => {
             registration.onupdatefound = () => {
                 const installingWorker = registration.installing;
                 installingWorker.onstatechange = () => {
                     if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // 新しいSWがインストールされた（待機状態）らBlazorに通知
                         if (blazorUpdateNotifier) {
                             blazorUpdateNotifier.invokeMethodAsync('ShowUpdateBanner');
                         }
@@ -69,7 +59,6 @@
             };
         });
 
-        // C#から呼ばれる更新実行関数
         window.activateUpdate = () => {
             navigator.serviceWorker.getRegistration().then(registration => {
                 if (registration && registration.waiting) {
@@ -78,11 +67,9 @@
             });
         };
 
-        // SWが入れ替わったらページをリロード
         navigator.serviceWorker.addEventListener('controllerchange', () => {
             window.location.reload();
         });
     </script>
 </body>
-
 </html>
