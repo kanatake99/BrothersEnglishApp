@@ -23,6 +23,10 @@ window.speechHandlers = {
             document.activeElement.blur();
         }
     },
+    // app.js の speechHandlers 内に追加
+    cancel: function () {
+        window.speechSynthesis.cancel();
+    },
     // ブラウザ情報取得
     getUserAgent: () => navigator.userAgent || "",
     // 要素の存在チェック

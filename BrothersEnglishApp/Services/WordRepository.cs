@@ -13,7 +13,7 @@ public class WordRepository(HttpClient http)
     {
         if (_cachedWords != null) return _cachedWords;
         _cachedWords = await http.GetFromJsonAsync<List<EnglishWord>>("data/master_words.json");
-        return _cachedWords ?? [];
+        return _cachedWords ?? new List<EnglishWord>();
     }
 
     /// <summary>
@@ -28,6 +28,6 @@ public class WordRepository(HttpClient http)
         // 通信して JSON を取得（ファイル名はプロジェクトに合わせて調整してくれ）
         _cachedSentences = await http.GetFromJsonAsync<List<SentenceItem>>("data/master_sentences.json");
 
-        return _cachedSentences ?? [];
+        return _cachedSentences ?? new List<SentenceItem>();
     }
 }
