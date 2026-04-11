@@ -2,11 +2,8 @@
 @inherits StudyPageBase
 @inject WordRepository WordRepo
 @inject TrainingEngine Engine
-@inject UserContext Context
 @inject LocalStorageService Storage
 @inject NavigationManager Navigation
-@inject SpeechService Speech
-
 
 <PageTitle>今日の復習</PageTitle>
 
@@ -14,7 +11,6 @@
     @* --- 判定用オーバーレイ --- *@
     @if (_showOverlay)
     {
-        @* pointer-events: none; はそのまま。クリックを邪魔しないためだ *@
         <div class="overlay-container">
             @if (_isLastAnswerCorrect)
             {
@@ -22,10 +18,11 @@
             }
             else
             {
-                <div class="huge-symbol text-danger animate__animated animate__pudding">×</div>
+                <div class="huge-symbol text-danger animate__animated animate__shakeX">×</div>
             }
         </div>
     }
+
     @* --- メインコンテンツ --- *@
     @if (_isFinished)
     {
@@ -37,12 +34,9 @@
             </div>
 
             <div class="d-grid gap-3 col-md-6 mx-auto">
-                @* --- 文トレーニングへの誘導ボタン（メイン） --- *@
                 <button class="btn btn-primary btn-lg shadow" @onclick='() => Navigation.NavigateTo("sentence-study")'>
                     <i class="bi bi-pencil-square"></i> 文のトレーニングに進む
                 </button>
-
-                @* --- 成績確認（サブ） --- *@
                 <button class="btn btn-outline-secondary" @onclick="GoReport">
                     <i class="bi bi-graph-up"></i> 今日の成績を見る
                 </button>
@@ -51,7 +45,6 @@
     }
     else if (_currentQuestion != null)
     {
-        @* --- プログレスバー --- *@
         <StudyProgressBar Title="Training"
                           Current="@(_doneCount + 1)"
                           Total="@_studyGoal" />
@@ -71,7 +64,6 @@
                         </button>
                     }
                 </div>
-
             </div>
         </div>
     }
@@ -84,19 +76,14 @@
 </div>
 
 @code {
-    // --- フィールド変数（命名規則：プライベートなものには _ をつける） ---
-    private List<EnglishWord> _allWords = [];
+    private List<EnglishWord> _allWords = new();
     private UserProgress? _userProgress;
     private Question? _currentQuestion;
     private int _studyGoal = 10;
     private int _doneCount = 0;
     private bool _isFinished = false;
-
-    // 演出用のフラグ
     private bool _showOverlay = false;
     private bool _isLastAnswerCorrect = false;
-
-    // --- ライフサイクルメソッド ---
 
     protected override async Task OnInitializedAsync()
     {
@@ -110,53 +97,40 @@
         await GenerateNextQuestion();
     }
 
-    // --- ユーザー操作ハンドラー ---
-    // --- スマホ判定などが終わった直後に呼ばれる ---
+    // --- ライフサイクル（StudyPageBase でスマホ判定が終わった後に呼ばれる） ---
     protected override async Task OnPageFirstRenderAsync()
     {
-        // 学習済み単語がない場合のチェックをここで行う
         if (_userProgress != null && !_userProgress.WordStatuses.Any())
         {
-            await JS.InvokeVoidAsync("alert", "まだ覚えた単語がないみたいだぜ。まずは「覚える」から始めてみよう！");
+            // 1. AppService 経由でアラート表示
+            await AppService.AlertAsync("まだ覚えた単語がないみたいだぜ。まずは「覚える」から始めてみよう！");
             Navigation.NavigateTo("study");
         }
     }
 
-    /// <summary>回答を選択した時の処理</summary>
     private async Task HandleAnswer(string selected, MouseEventArgs e)
     {
         if (_showOverlay || _currentQuestion == null) return;
 
-        // ★ evalを避けてフォーカス解除（別途JS側に定義した関数を呼ぶのが理想）
-        await JS.InvokeVoidAsync("speechHandlers.blurActiveElement");
+        // 2. AppService 経由に統一（フォーカス解除）
+        await AppService.BlurActiveElementAsync();
 
         bool isCorrect = (selected == _currentQuestion.CorrectAnswer);
 
-        // ★ ここで正誤音を鳴らすぜ！
-        if (isCorrect)
-        {
-            await Speech.PlayCorrectSoundAsync();
-        }
-        else
-        {
-            await Speech.PlayIncorrectSoundAsync();
-        }
+        if (isCorrect) await AppService.PlayCorrectSoundAsync();
+        else await AppService.PlayIncorrectSoundAsync();
 
         if (_userProgress != null)
         {
-            // エンジンに結果を記録させる
             Engine.RecordStudyResult(_userProgress, _currentQuestion.WordId, isCorrect);
-
-            // ★ 保存メソッドを専用のものに差し替え
             await Storage.SaveProgressAsync(_userProgress);
         }
 
-        // 正誤演出
         _isLastAnswerCorrect = isCorrect;
         _showOverlay = true;
         StateHasChanged();
 
-        await Task.Delay(800); // 演出待機
+        await Task.Delay(800);
         _showOverlay = false;
 
         if (isCorrect)
@@ -164,34 +138,26 @@
             _doneCount++;
             await GenerateNextQuestion();
         }
-        // 不正解の場合は再表示されるので、そのまま
-
         StateHasChanged();
     }
 
-    // --- ロジック・ユーティリティ ---
-
-    /// <summary>次のクイズを生成する</summary>
     private async Task GenerateNextQuestion()
     {
         if (_doneCount >= _studyGoal)
         {
-            await FinishStudy(); // ここで await する！これで警告が消えるよ
+            await FinishStudy();
             return;
         }
 
         _currentQuestion = Engine.GenerateStudyQuestion(_allWords, _userProgress);
-
-        await JS.InvokeVoidAsync("quizHandlers.resetButtons");  // ボタン状態リセット
-
+        // スクロールも AppService から呼ぶ
+        await AppService.ScrollToTopAsync();
         StateHasChanged();
     }
 
-    /// <summary>学習完了時のフラグ更新と保存</summary>
     private async Task FinishStudy()
     {
         _isFinished = true;
-
         if (_userProgress != null)
         {
             var todayKey = _userProgress.GetTodayKey();
@@ -199,7 +165,6 @@
                 _userProgress.ActivityLog[todayKey] = new DayActivity();
 
             _userProgress.ActivityLog[todayKey].TrainingDone = true;
-
             await Storage.SaveProgressAsync(_userProgress);
         }
         StateHasChanged();

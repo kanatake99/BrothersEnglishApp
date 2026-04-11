@@ -8,7 +8,6 @@
 @inject SentenceEngine Engine
 @inject LocalStorageService Storage
 @inject NavigationManager Navigation
-@inject SpeechService Speech
 
 <PageTitle>文の復習</PageTitle>
 
@@ -192,8 +191,8 @@
             isCorrect = Engine.CheckAnswer(userFullAnswer, _currentQuestion.CorrectAnswer);
         }
 
-        if (isCorrect) await Speech.PlayCorrectSoundAsync();
-        else await Speech.PlayIncorrectSoundAsync();
+        if (isCorrect) await AppService.PlayCorrectSoundAsync();
+        else await AppService.PlayIncorrectSoundAsync();
 
         _isLastAnswerCorrect = isCorrect;
         _showOverlay = true;

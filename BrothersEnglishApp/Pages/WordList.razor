@@ -2,24 +2,23 @@
 @using BrothersEnglishApp.Models
 @using BrothersEnglishApp.Services
 @inject LocalStorageService Storage
-@inject WordRepository WordRepo // 単語リポジトリサービス
-@inject IJSRuntime JS
+@inject WordRepository WordRepo
+@inject SpeechService SpeechService
+@inject AppFunctionsService AppFunctions
 
 <PageTitle>単語一覧</PageTitle>
-@* --- 1. 索引ボタン（スマホで押しやすいよう横スクロール or 折り返し） --- *@
+
 <div class="d-flex flex-wrap gap-1 my-3">
     @foreach (var letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-        {
-            <button class="btn btn-info btn-sm"
-                    @onclick="@(() => ScrollToLetter(letter.ToString()))"
-                    style="min-width: 35px; height: 35px;">
-                @letter
-            </button>
-        }
+    {
+        <button class="btn btn-info btn-sm"
+                @onclick="@(() => ScrollToLetter(letter.ToString()))"
+                style="min-width: 35px; height: 35px;">
+            @letter
+        </button>
+    }
 </div>
 
-
-@* --- 2. 単語リスト表示エリア --- *@
 <div class="container mb-3">
     <div class="d-flex justify-content-between align-items-center mt-5">
         <h3>📖 登録単語リスト</h3>
@@ -48,9 +47,7 @@
 
                 @foreach (var w in group)
                 {
-                    @* 単語ごとに個別のカード *@
                     <div class="list-group-item p-3">
-                        @* 上段:単語、品詞、頻出度 *@
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <strong class="h5 text-primary mb-0 fs-3">@w.Word</strong>
@@ -69,7 +66,6 @@
                                 }
                             </div>
                         </div>
-                        @* 下段:意味 *@
                         <div class="bg-light p-2 rounded">
                             <span class="text-dark">@w.Meaning</span>
                         </div>
@@ -80,7 +76,6 @@
     }
 </div>
 
-@* --- 3. トップへ戻るボタン（右下に固定） --- *@
 <button class="btn btn-primary rounded-circle shadow"
         style="position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; z-index: 1000;"
         @onclick="ScrollToTop">
@@ -90,68 +85,47 @@
 @code {
     private List<EnglishWord>? words;
 
-    // コンポーネント初期化時に単語リストを読み込む
     protected override async Task OnInitializedAsync()
     {
         await LoadWords();
     }
- 
 
-    // 特定のアルファベットまでジャンプ
     private async Task ScrollToLetter(string letter)
     {
-        await JS.InvokeVoidAsync("appFunctions.scrollToElement", $"letter-{letter}");
+        await AppFunctions.ScrollToElementAsync($"letter-{letter}");
     }
 
-    // 一番上まで戻る
     private async Task ScrollToTop()
     {
-        await JS.InvokeVoidAsync("appFunctions.scrollToTop");
+        await AppFunctions.ScrollToTopAsync();
     }
 
-    // 単語リストをサーバーから読み込むメソッド
     private async Task LoadWords()
     {
         try
         {
-            // 1. サーバーのJSONファイルを読み込む（wwwroot/data/master_words.json）
             var savedWords = await WordRepo.GetWordsAsync();
-
-            // 2. A-Z順に並び替えて表示用リストに入れる
             words = savedWords.OrderBy(w => w.Word).ToList();
         }
         catch (Exception ex)
         {
-            // 通信エラーなどで読み込めなかった時のための安全策
             Console.WriteLine($"エラーが起きたよ: {ex.Message}");
             words = new List<EnglishWord>();
         }
     }
 
-    // 品詞に応じてバッジの色を変えるルール
     private string GetBadgeClass(string? pos)
     {
         if (string.IsNullOrEmpty(pos)) return "bg-secondary";
-
-        // 「動詞」という文字が含まれていたら青（最優先）
         if (pos.Contains("動詞")) return "bg-primary";
-
-        // 「名詞」という文字が含まれていたら緑
         if (pos.Contains("名詞")) return "bg-success";
-
-        // 「形容詞」という文字が含まれていたら黄色
         if (pos.Contains("形容詞")) return "bg-warning text-dark";
-
-        // 「副詞」という文字が含まれていたら水色
         if (pos.Contains("副詞")) return "bg-info text-dark";
-
-        // どれにも当てはまらない場合はグレー
         return "bg-secondary";
     }
 
     private async Task Speak(string text)
     {
-        await JS.InvokeVoidAsync("speechHandlers.speak", text);
+        await SpeechService.SpeakAsync(text);
     }
-
 }

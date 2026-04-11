@@ -47,7 +47,10 @@
             {
                 // [Service連携] KeyboardService 経由で JS の keyboardHandlers.setup を実行
                 // これで実際のキーボードが画面に出現するぜ！
-                await KeyboardService.SetupAsync(_objRef);
+                if (_objRef != null)
+                {
+                    await KeyboardService.SetupAsync(_objRef);
+                }
                 _isRendered = true;
             }
         }

@@ -16,5 +16,6 @@ builder.Services.AddScoped<TrainingEngine>();
 builder.Services.AddScoped<SentenceEngine>();
 builder.Services.AddScoped<SpeechService>();
 builder.Services.AddScoped<KeyboardService>();
+builder.Services.AddScoped<BrothersEnglishApp.Services.AppFunctionsService>();
 
 await builder.Build().RunAsync();

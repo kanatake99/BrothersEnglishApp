@@ -22,12 +22,8 @@ public class WordRepository(HttpClient http)
     /// </summary>
     public async Task<List<SentenceItem>> GetSentencesAsync()
     {
-        // すでに読み込み済みなら、それを返す
         if (_cachedSentences != null) return _cachedSentences;
-
-        // 通信して JSON を取得（ファイル名はプロジェクトに合わせて調整してくれ）
         _cachedSentences = await http.GetFromJsonAsync<List<SentenceItem>>("data/master_sentences.json");
-
         return _cachedSentences ?? new List<SentenceItem>();
     }
 }
