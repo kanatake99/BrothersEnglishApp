@@ -24,7 +24,7 @@ jobs:
       # 4. GitHub Pages 用のベースパス設定と 404 対策
       - name: Change base-tag and copy index.html to 404.html
         run: |
-          sed -i 's/<base href="\/" \/>/<base href="\/BrothersEnglishApp\/" \/>/g' release/wwwroot/index.html
+          sed -i 's/<base href=".*" \/>/<base href="\/BrothersEnglishApp\/" \/>/g' release/wwwroot/index.html
           cp release/wwwroot/index.html release/wwwroot/404.html
 
       # 5. Jekyll を無効化（Blazorを正しく動かすため）
