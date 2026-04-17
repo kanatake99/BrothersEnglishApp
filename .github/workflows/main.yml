@@ -1,35 +1,37 @@
-name: Deploy to GitHub Pages
+name: github pages
 
 on:
   push:
-    branches: [master, main]
+    branches:
+      - master
 
 jobs:
-  deploy-to-github-pages:
+  deploy:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code
       - uses: actions/checkout@v4
 
-      - name: Setup .NET
+      # Install .NET SDK
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
+      - name: Install .NET WebAssembly Tools
+        run: dotnet workload install wasm-tools
 
-      - name: Publish .NET Project
-        run: dotnet publish BrothersEnglishApp/BrothersEnglishApp.csproj -c Release -o release --nologo
+      # Publish the site
+      - name: Publish
+        run: dotnet publish BrothersEnglishApp/BrothersEnglishApp.csproj -p:GHPages=true -c:Release -o:public
 
-      - name: Fix base href
-        run: sed -i 's|<base href="/" />|<base href="/リポジトリ名/" />|g' release/wwwroot/index.html
-
-      - name: Copy index.html to 404.html
-        run: cp release/wwwroot/index.html release/wwwroot/404.html
-
-      - name: Add .nojekyll file
-        run: touch release/wwwroot/.nojekyll
-
+      # Deploy the site
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v4
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: public/wwwroot
+          force_orphan: true
+
           folder: release/wwwroot
           branch: gh-pages
           clean: true
