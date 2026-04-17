@@ -48,9 +48,15 @@ window.appFunctions = {
     scrollToTop: function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    playAudio: function (path) {
+    playAudio: function (path, volume = 0.3) { // デフォルト値を設定しておくと安全だぜ
         const audio = new Audio(path);
-        audio.play().catch(e => console.error("Audio play error:", e));
+        audio.volume = volume;
+        audio.play().catch(e => console.error("Audio play failed:", e));
+    },
+
+    scrollToElement: function (id) {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 };
 
@@ -111,4 +117,11 @@ window.quizHandlers = {
         const buttons = document.querySelectorAll('.quiz-button');
         buttons.forEach(btn => btn.blur());
     }
+};
+
+// 音声再生（音量指定）
+window.playAudioWithVolume = (src, volume) => {
+    const audio = new Audio(src);
+    audio.volume = volume; // 0.0 から 1.0 で指定
+    audio.play();
 };

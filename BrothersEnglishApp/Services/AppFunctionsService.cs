@@ -10,16 +10,19 @@ namespace BrothersEnglishApp.Services
         // 【復活】効果音のパス定数
         public const string SoundCorrect = "data/quiz-dingdong.mp3";
         public const string SoundIncorrect = "data/quiz-buzzer.mp3";
+        public const double QuizVolume = 0.2;
 
         public ValueTask<string> GetUserAgentAsync() =>
             _js.InvokeAsync<string>("speechHandlers.getUserAgent");
 
-        public ValueTask PlaySoundAsync(string path) =>
-            _js.InvokeVoidAsync("appFunctions.playAudio", path);
+        public ValueTask PlaySoundAsync(string path, double volume) =>
+                    _js.InvokeVoidAsync("appFunctions.playAudio", path, volume);
 
-        // 【復活】ショートカットメソッド
-        public async Task PlayCorrectSoundAsync() => await PlaySoundAsync(SoundCorrect);
-        public async Task PlayIncorrectSoundAsync() => await PlaySoundAsync(SoundIncorrect);
+        // 正解・不正解の効果音再生用メソッド
+        public async Task PlayCorrectSoundAsync() =>
+                   await PlaySoundAsync(SoundCorrect, QuizVolume);
+        public async Task PlayIncorrectSoundAsync() =>
+            await PlaySoundAsync(SoundIncorrect, QuizVolume);
 
         public ValueTask ScrollToElementAsync(string id) =>
             _js.InvokeVoidAsync("appFunctions.scrollToElement", id);
