@@ -5,11 +5,24 @@ window.speechHandlers = {
     // 読み上げ
     speak: function (text, rate = 1.0) {
         if (!text) return;
+
+        // 1. 既存の読み上げを強制終了
         window.speechSynthesis.cancel();
+
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';
-        utterance.rate = rate;
-        window.speechSynthesis.speak(utterance);
+        utterance.rate = rate; // ★ rateをしっかり反映
+
+        // 2. Android対策：ボイスリストの読み込みを促す
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            utterance.voice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+        }
+
+        // 3. 少しだけ（50msほど）遅延させるとAndroidでの成功率が跳ね上がるぜ
+        setTimeout(() => {
+            window.speechSynthesis.speak(utterance);
+        }, 50);
     },
     // フォーカス操作
     focusElement: function (element) {
