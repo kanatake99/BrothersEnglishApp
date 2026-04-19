@@ -2,7 +2,17 @@
 @inject UserContext UserContext
 @inject NavigationManager Nav
 @inject IJSRuntime JS
-
+@* アップデート実行中のオーバーレイ *@
+@if (_isUpdating)
+{
+    <div class="update-overlay">
+        <div class="text-center text-white">
+            <div class="spinner-border mb-3" style="width: 3rem; height: 3rem;"></div>
+            <h4>アップデートを適用中...</h4>
+            <p>最新の単語データを準備しています。少々お待ちください。</p>
+        </div>
+    </div>
+}
 @if (_isInitialized)
 {
     @if (UserContext.IsLoggedIn)
@@ -29,13 +39,14 @@
 {
     <div class="alert alert-info d-flex justify-content-between align-items-center m-3 shadow" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;">
         <span>✨ 新しいアップデートがあります！</span>
-        <button class="btn btn-primary btn-sm" @onclick="UpdateApp">今すぐ更新</button>
+        <button class="btn btn-primary btn-sm" @onclick="UpdateAppWithOverlay">今すぐ更新</button>
     </div>
 }
 
 @code {
     private bool _isInitialized;
     private bool _newVersionAvailable = false;
+    private bool _isUpdating = false; // 更新中フラグ
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -61,6 +72,17 @@
 
     private async Task UpdateApp()
     {
+        await JS.InvokeVoidAsync("activateUpdate");
+    }
+
+    private async Task UpdateAppWithOverlay()
+    {
+        _isUpdating = true; // ここでローディング表示を開始
+        StateHasChanged();  // UIを即時更新
+
+        // 少しだけウェイトを入れると「処理してる感」が出てUXが向上する
+        await Task.Delay(500);
+
         await JS.InvokeVoidAsync("activateUpdate");
     }
 }

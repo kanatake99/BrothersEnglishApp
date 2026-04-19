@@ -36,5 +36,8 @@ namespace BrothersEnglishApp.Services
 
         public ValueTask BlurActiveElementAsync() =>
             _js.InvokeVoidAsync("speechHandlers.blurActiveElement");
+
+        public ValueTask DownloadFileAsync(string fileName, string content) =>
+            _js.InvokeVoidAsync("appFunctions.downloadFile", fileName, content);
     }
 }

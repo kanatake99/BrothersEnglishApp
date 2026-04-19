@@ -70,6 +70,20 @@ window.appFunctions = {
     scrollToElement: function (id) {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
+    },
+    downloadFile: function (fileName, content) {
+        // 文字列をBlob（バイナリラージオブジェクト）に変換
+        const blob = new Blob([content], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        // 擬似的に <a> タグを作ってクリック
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = fileName;
+        anchor.click();
+
+        // メモリ解放
+        URL.revokeObjectURL(url);
     }
 };
 

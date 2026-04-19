@@ -226,7 +226,7 @@
                             <tr class="@(status.IncorrectCount > status.CorrectCount ? "table-warning-subtle" : "")">
                                 <td>
                                     @* ここは要望通り Note (日本語訳や解説) をメインに表示するぜ *@
-                                    <div class="fw-bold text-dark">@sentence.Japanese</div>
+                                    <div class="fw-bold text-dark">@sentence.Note</div>
                                     <div class="small text-muted font-monospace">@sentence.English</div>
                                 </td>
                                 <td class="text-center text-danger fw-bold">@status.IncorrectCount</td>

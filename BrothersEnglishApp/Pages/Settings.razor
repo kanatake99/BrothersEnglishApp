@@ -2,8 +2,22 @@
 @inject LocalStorageService Storage
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
+@inject AppFunctionsService AppService
+@using System.Text.Json
 
 <PageTitle>設定 </PageTitle>
+
+@* --- アップデート実行中のオーバーレイ --- *@
+@if (_isUpdating)
+{
+    <div class="update-overlay">
+        <div class="text-center text-white">
+            <div class="spinner-border mb-3" style="width: 3rem; height: 3rem;"></div>
+            <h4>アップデートを適用中...</h4>
+            <p>最新の構成を確認しています。少々お待ちください。</p>
+        </div>
+    </div>
+}
 
 <div class="container mt-4" style="max-width: 600px;">
     <h2 class="mb-4"><i class="bi bi-gear-fill me-2"></i>学習設定</h2>
@@ -78,31 +92,63 @@
                 <i class="bi bi-save2 me-2"></i>設定を保存して戻る
             </button>
         </div>
-    }
-</div>
-<div class="container mt-4 mb-4" style="max-width: 600px;">
-    <div class="card shadow-sm mt-4 border-warning">
-        <div class="card-header bg-warning text-dark fw-bold">
-            🚀 システム
-        </div>
-        <div class="card-body">
-            <p class="small text-muted">
-                アプリがうまく動かない時や、最新の単語データが届かない時は、下のボタンを押して更新を確認してください。
-            </p>
-            <button class="btn btn-outline-danger w-100" @onclick="ForceUpdate">
-                <i class="bi bi-arrow-clockwise me-2"></i>アプリを強制的に更新する
-            </button>
-            <div class="text-center mt-2">
-                <small class="text-muted">現在のバージョン:2026.04.11</small> @* 手動で日付などを入れると管理しやすい *@
+
+        <hr class="text-muted my-3">
+
+        <div class="container mt-5 mb-4" style="max-width: 600px;">
+            <div class="card shadow-sm mt-4 border-warning">
+                <div class="card-header bg-warning text-dark fw-bold">
+                    🚀 システム
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">
+                        アプリがうまく動かない時や、最新の単語データが届かない時は、下のボタンを押して更新を確認してください。
+                    </p>
+                    <button class="btn btn-outline-danger w-100" @onclick="ForceUpdate">
+                        <i class="bi bi-arrow-clockwise me-2"></i>アプリを強制的に更新する
+                    </button>
+                    <div class="text-center mt-2">
+                        <small class="text-muted">現在のバージョン:2026.04.19</small> @* 手動で日付などを入れると管理しやすい *@
+                    </div>
+                </div>
+            </div>
+            @* --- データ管理 --- *@
+            <div class="card shadow-sm my-4 border-info">
+                <div class="card-header bg-info text-white fw-bold">
+                    <i class="bi bi-sd-card-fill me-2"></i>データ管理
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">
+                        現在の学習進捗をファイルとして保存します。機種変更時のデータ移行などに利用してください。
+                    </p>
+                    <button class="btn btn-outline-info w-100" @onclick="ExportBackup">
+                        <i class="bi bi-download me-2"></i>バックアップをダウンロード
+                    </button>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">
+                        バックアップファイル（.json）を選択して、進捗を復元します。
+                        <span class="text-danger">※現在の進捗は上書きされるので注意してください。</span>
+                    </p>
+
+                    @* 実際のファイル入力（非表示） *@
+                    <InputFile id="fileInput" OnChange="ImportBackup" accept=".json" style="display:none;" />
+
+                    @* 見た目用のボタン *@
+                    <button class="btn btn-outline-warning w-100" onclick="document.getElementById('fileInput').click()">
+                        <i class="bi bi-upload me-2"></i>バックアップから復元
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>
 
 
 
 @code {
     private UserProgress? _progress;
+    private bool _isUpdating = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,11 +170,109 @@
 
     private async Task ForceUpdate()
     {
-        // 確認ダイアログ
+        // 1. 確認ダイアログ
         var confirm = await JS.InvokeAsync<bool>("confirm", "アプリを再起動して最新版に更新しますか？");
-        if (confirm)
+        if (!confirm) return;
+
+        // 2. 演出開始
+        _isUpdating = true;
+        StateHasChanged();
+
+        // 3. ユーザーが「何かが始まった」と認識する時間を少しだけ作る
+        await Task.Delay(600);
+
+        try
         {
+            // 4. JS側の更新処理を実行
             await JS.InvokeVoidAsync("activateUpdate");
+        }
+        catch (Exception ex)
+        {
+            // 万が一失敗した場合はフラグを下ろしてユーザーに知らせる
+            _isUpdating = false;
+            StateHasChanged();
+            Console.WriteLine(ex.Message);
+            await AppService.AlertAsync("更新処理中にエラーが発生しました。");
+        }
+    }
+
+    private async Task ExportBackup()
+    {
+        if (_progress == null) return;
+
+        // 最新のセッション情報も取得（あれば）
+        var session = await Storage.GetSessionAsync();
+
+        // バックアップ用パッケージの作成
+        var backupWrapper = new
+        {
+            Version = "1.0",
+            ExportedAt = DateTime.UtcNow,
+            Progress = _progress,
+            Session = session
+        };
+
+        // シリアライズ設定（インデントを付けて人間が読みやすくする）
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string json = JsonSerializer.Serialize(backupWrapper, options);
+
+        // ファイル名（BrothersEnglish_20260418.json 的な感じ）
+        string fileName = $"BrothersEnglish_Backup_{DateTime.Now:yyyyMMdd}.json";
+
+        // AppFunctionsService経由でJSを叩く
+        await AppService.DownloadFileAsync(fileName, json);
+    }
+
+    private async Task ImportBackup(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var file = e.File;
+            if (file == null) return;
+
+            // 1. 上書き確認（不用意な操作を防止）
+            var confirm = await JS.InvokeAsync<bool>("confirm", "バックアップを読み込みます。現在の学習進捗が上書きされますがよろしいですか？");
+            if (!confirm) return;
+
+            // 2. ファイルを読み込む（サイズ制限は1MBもあれば十分）
+            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024);
+            using var reader = new System.IO.StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+
+            // 3. デシリアライズ（まずはJsonDocumentで中身を確認するのが安全）
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+
+            // バージョンチェックなどのバリデーション（簡易版）
+            if (!root.TryGetProperty("Progress", out var progressElement))
+            {
+                await AppService.AlertAsync("不正なファイル形式です。");
+                return;
+            }
+
+            // 4. 型に復元
+            var importedProgress = JsonSerializer.Deserialize<UserProgress>(progressElement.GetRawText());
+            var importedSession = root.TryGetProperty("Session", out var sessionElement)
+                ? JsonSerializer.Deserialize<UserSession>(sessionElement.GetRawText())
+                : null;
+
+            if (importedProgress != null)
+            {
+                // 5. ローカルストレージへ保存
+                await Storage.SaveProgressAsync(importedProgress);
+                if (importedSession != null)
+                {
+                    await Storage.SaveSessionAsync(importedSession);
+                }
+
+                await AppService.AlertAsync("復元が完了しました！アプリを再起動します。");
+                Navigation.NavigateTo("/", forceLoad: true); // 状態を確実に入れ替えるためにリロード
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            await AppService.AlertAsync("エラーが発生しました。ファイルが壊れている可能性があります。");
         }
     }
 }
