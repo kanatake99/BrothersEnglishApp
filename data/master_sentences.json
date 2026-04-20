@@ -1,0 +1,4178 @@
+[
+  {
+    "Id": "ff81f9dd-f1fd-465a-9989-78d3485ce95c",
+    "Level": 5,
+    "English": "Could you let me know your opinion with regard to the new project?",
+    "Japanese": "新しいプロジェクトに関して、君の意見を聞かせてくれないか？",
+    "Target": "with regard to",
+    "Note": "with regard to: 〜に関して"
+  },
+  {
+    "Id": "c28ab589-9f1d-4815-ab75-69991e7ab186",
+    "Level": 5,
+    "English": "We carried out the event in spite of the rain.",
+    "Japanese": "雨が降っていたにもかかわらず、私たちはイベントを決行した。",
+    "Target": "carried out",
+    "Note": "carry out: 〜を実行する"
+  },
+  {
+    "Id": "33975d0c-0981-4fa6-82f0-f718086f3d80",
+    "Level": 5,
+    "English": "He seems to have difficulty in solving the problem.",
+    "Japanese": "彼はその問題を解決するのに苦労しているようだ。",
+    "Target": "have difficulty in",
+    "Note": "have difficulty (in) -ing: 〜するのに苦労する"
+  },
+  {
+    "Id": "98240389-c073-46a5-a4b4-f18045361b1c",
+    "Level": 5,
+    "English": "I took it for granted that he would come on time.",
+    "Japanese": "私は彼が時間通りに来るのを当然だと思っていた。",
+    "Target": "took it for granted that",
+    "Note": "take it for granted that: 〜を当然と思う"
+  },
+  {
+    "Id": "c4e8c136-30b1-4269-bb81-78552e750dc0",
+    "Level": 5,
+    "English": "Thanks to the Internet, we can keep in touch with people all over the world.",
+    "Japanese": "インターネットのおかげで、私たちは世界中の人々と連絡を取り合える。",
+    "Target": "keep in touch with",
+    "Note": "keep in touch with: 〜と連絡を取り合う"
+  },
+  {
+    "Id": "de0eeb02-63e8-4ec1-bfd3-f48d79cd0078",
+    "Level": 5,
+    "English": "The noise prevented me from concentrating on my studies.",
+    "Japanese": "騒音のせいで勉強に集中できなかった。",
+    "Target": "prevented me from",
+    "Note": "prevent A from -ing: Aが〜するのを妨げる"
+  },
+  {
+    "Id": "c607d8c7-a59b-4e89-9349-ad85a3d2712d",
+    "Level": 5,
+    "English": "We must cut down on natural resources for the future.",
+    "Japanese": "私たちは将来のために、天然資源の消費を削減しなければならない。",
+    "Target": "cut down on",
+    "Note": "cut down on: 〜を減らす"
+  },
+  {
+    "Id": "5aee4f2c-7dd5-420e-a8fc-7e0ff6612b56",
+    "Level": 5,
+    "English": "This decision will have a great effect on our daily lives.",
+    "Japanese": "この決定は、私たちの日常生活に大きな影響を与えるだろう。",
+    "Target": "have a great effect on",
+    "Note": "have an effect on: 〜に影響を与える"
+  },
+  {
+    "Id": "bb57655c-8adb-465f-9f26-22353d0d20e7",
+    "Level": 5,
+    "English": "If you find a word you don't know, look it up in a dictionary.",
+    "Japanese": "もし分からない単語があれば、辞書で調べてね。",
+    "Target": "look it up",
+    "Note": "look up: 〜を調べる"
+  },
+  {
+    "Id": "0074ffa8-b81c-463c-8591-3e3004a9a2e0",
+    "Level": 5,
+    "English": "Up to now, there have been no problems with the plan.",
+    "Japanese": "今のところ、その計画に問題はない。",
+    "Target": "Up to now",
+    "Note": "up to now: 今までのところ"
+  },
+  {
+    "Id": "8c7c5769-166d-4e15-8ca1-7ba323faec34",
+    "Level": 5,
+    "English": "I am looking forward to seeing you soon.",
+    "Japanese": "あなたにすぐ会えるのを楽しみにしています。",
+    "Target": "looking forward to",
+    "Note": "look forward to -ing: 〜を楽しみに待つ"
+  },
+  {
+    "Id": "979229ed-0492-4d45-9d1d-535ffb9674e9",
+    "Level": 5,
+    "English": "He is not only intelligent but also very kind.",
+    "Japanese": "彼は賢いだけでなく、とても親切だ。",
+    "Target": "not only intelligent but also",
+    "Note": "not only A but also B: AだけでなくBも"
+  },
+  {
+    "Id": "2a569078-2ee9-4685-9428-7460708cb6ab",
+    "Level": 5,
+    "English": "You should make the most of this opportunity.",
+    "Japanese": "この機会を最大限に活用すべきだ。",
+    "Target": "make the most of",
+    "Note": "make the most of: 〜を最大限に活用する"
+  },
+  {
+    "Id": "1cbba82e-e454-469d-a60e-4a11145d6b32",
+    "Level": 5,
+    "English": "In terms of safety, this car is the best choice.",
+    "Japanese": "安全性の点では、この車が最善の選択だ。",
+    "Target": "In terms of",
+    "Note": "in terms of: 〜の点では"
+  },
+  {
+    "Id": "7b360149-d5d9-4c8a-99f9-62fd33e3c217",
+    "Level": 5,
+    "English": "I cannot afford to buy such an expensive car.",
+    "Japanese": "そんなに高い車を買う余裕はない。",
+    "Target": "cannot afford to",
+    "Note": "cannot afford to: 〜する余裕がない"
+  },
+  {
+    "Id": "44267639-7134-46b3-83d7-5c2325644ea1",
+    "Level": 5,
+    "English": "He showed up an hour late for the meeting.",
+    "Japanese": "彼は会議に1時間遅れて現れた。",
+    "Target": "showed up",
+    "Note": "show up: 現れる"
+  },
+  {
+    "Id": "3b39bedd-1460-44a0-bf15-3748f5e58906",
+    "Level": 5,
+    "English": "It is no use crying over spilt milk.",
+    "Japanese": "済んだことを悔やんでも無駄だ。",
+    "Target": "It is no use",
+    "Note": "It is no use -ing: 〜しても無駄だ"
+  },
+  {
+    "Id": "fecd277b-ef6c-4e48-8b2f-d4e177001957",
+    "Level": 5,
+    "English": "Generally speaking, Japanese food is healthy.",
+    "Japanese": "一般的に言って、日本食は健康に良い。",
+    "Target": "Generally speaking",
+    "Note": "generally speaking: 一般的に言って"
+  },
+  {
+    "Id": "3654762d-b0e6-4fef-8d8c-c3f76c509ccc",
+    "Level": 5,
+    "English": "The project failed due to a lack of money.",
+    "Japanese": "そのプロジェクトは資金不足のために失敗した。",
+    "Target": "due to",
+    "Note": "due to: 〜のために（理由）"
+  },
+  {
+    "Id": "44dcac30-3c74-4098-af47-19d8dfa740d8",
+    "Level": 5,
+    "English": "Make sure that the door is locked before you go to bed.",
+    "Japanese": "寝る前にドアが閉まっているか必ず確認してください。",
+    "Target": "Make sure that",
+    "Note": "make sure that: 〜を確かめる"
+  },
+  {
+    "Id": "673f2e44-155f-4cb1-b30b-0ba3e444dc80",
+    "Level": 5,
+    "English": "As far as I know, he is an honest man.",
+    "Japanese": "私の知る限り、彼は正直な男だ。",
+    "Target": "As far as I know",
+    "Note": "as far as I know: 私の知る限り"
+  },
+  {
+    "Id": "c671c69c-d1e9-47b9-a396-d6f8e52ec2cf",
+    "Level": 5,
+    "English": "Instead of tea, I'll have coffee this morning.",
+    "Japanese": "紅茶の代わりに、今朝はコーヒーをいただきます。",
+    "Target": "Instead of",
+    "Note": "instead of: 〜の代わりに"
+  },
+  {
+    "Id": "6008e636-b957-494e-a7d2-ffd2e778c856",
+    "Level": 5,
+    "English": "She is capable of speaking three languages.",
+    "Japanese": "彼女は3ヶ国語を話すことができる。",
+    "Target": "capable of",
+    "Note": "be capable of: 〜する能力がある"
+  },
+  {
+    "Id": "4a380952-3c51-48a9-afb7-a9c46b59cc5c",
+    "Level": 5,
+    "English": "It took me two hours to finish my homework.",
+    "Japanese": "宿題を終えるのに2時間かかった。",
+    "Target": "It took me two hours to",
+    "Note": "It takes (person) time to do: 〜するのに時間がかかる"
+  },
+  {
+    "Id": "8b518360-d6df-47ff-b342-da83387bda70",
+    "Level": 5,
+    "English": "I happened to see her at the station yesterday.",
+    "Japanese": "昨日、駅でたまたま彼女を見かけた。",
+    "Target": "happened to",
+    "Note": "happen to do: たまたま〜する"
+  },
+  {
+    "Id": "71ead624-e3b2-45c5-8644-6c9e9aa7125e",
+    "Level": 5,
+    "English": "You ought to listen to your parents' advice.",
+    "Japanese": "親のアドバイスを聞くべきだ。",
+    "Target": "ought to",
+    "Note": "ought to: 〜すべきである"
+  },
+  {
+    "Id": "a5908d0e-784b-4a48-bc57-04673b7aba81",
+    "Level": 5,
+    "English": "According to the weather report, it will rain tomorrow.",
+    "Japanese": "天気予報によれば、明日は雨が降るそうだ。",
+    "Target": "According to",
+    "Note": "according to: 〜によれば"
+  },
+  {
+    "Id": "2bce497c-5a96-4dc2-ba03-e60029341087",
+    "Level": 5,
+    "English": "I am used to living alone now.",
+    "Japanese": "私は今は一人暮らしに慣れている。",
+    "Target": "am used to",
+    "Note": "be used to -ing: 〜することに慣れている"
+  },
+  {
+    "Id": "9fa241f5-07d8-4ecb-a4aa-2ff1b84c8657",
+    "Level": 5,
+    "English": "We have to put off the game because of the rain.",
+    "Japanese": "雨のために試合を延期しなければならない。",
+    "Target": "put off",
+    "Note": "put off: 〜を延期する"
+  },
+  {
+    "Id": "ad67414c-b859-4d1f-8053-d1252856fea7",
+    "Level": 5,
+    "English": "He takes after his mother in character.",
+    "Japanese": "彼は性格が母親に似ている。",
+    "Target": "takes after",
+    "Note": "take after: 〜に似ている"
+  },
+  {
+    "Id": "a1e5ed79-6676-431d-8da2-31366a7fca81",
+    "Level": 5,
+    "English": "The meeting was cancelled on account of the heavy snow.",
+    "Japanese": "大雪のために会議は中止された。",
+    "Target": "on account of",
+    "Note": "on account of: 〜のために（理由）"
+  },
+  {
+    "Id": "0452c195-e744-4c24-883d-98357c14a11c",
+    "Level": 5,
+    "English": "I want to take part in the volunteer activity.",
+    "Japanese": "私はボランティア活動に参加したい。",
+    "Target": "take part in",
+    "Note": "take part in: 〜に参加する"
+  },
+  {
+    "Id": "4034d2b1-0bd5-4c89-824a-68083e70267e",
+    "Level": 5,
+    "English": "You should refrain from talking on the phone here.",
+    "Japanese": "ここでは電話での通話を控えるべきだ。",
+    "Target": "refrain from",
+    "Note": "refrain from: 〜を控える"
+  },
+  {
+    "Id": "6df4314a-32c2-4156-8905-cb441605c797",
+    "Level": 5,
+    "English": "As a matter of fact, I don't like coffee.",
+    "Japanese": "実を言うと、私はコーヒーが好きではない。",
+    "Target": "As a matter of fact",
+    "Note": "as a matter of fact: 実を言うと"
+  },
+  {
+    "Id": "31e6608e-7ca9-420e-90ff-74f60659126d",
+    "Level": 5,
+    "English": "This bag is different from what I ordered.",
+    "Japanese": "このバッグは私が注文したものとは違う。",
+    "Target": "different from",
+    "Note": "be different from: 〜と異なっている"
+  },
+  {
+    "Id": "4cf760ff-b849-4c50-8fc1-a0f2e3c1a01b",
+    "Level": 5,
+    "English": "I was about to leave home when the phone rang.",
+    "Japanese": "電話が鳴った時、私はちょうど家を出ようとしていた。",
+    "Target": "was about to",
+    "Note": "be about to do: まさに〜しようとしている"
+  },
+  {
+    "Id": "eab22343-47c5-466e-8f84-84c2330d31b5",
+    "Level": 5,
+    "English": "Keep in mind that safety comes first.",
+    "Japanese": "安全第一であることを忘れないで。",
+    "Target": "Keep in mind that",
+    "Note": "keep in mind that: 〜を心に留めておく"
+  },
+  {
+    "Id": "bd2cda79-a8d5-4e49-b27c-fae3aef65b55",
+    "Level": 5,
+    "English": "It goes without saying that health is wealth.",
+    "Japanese": "健康が富であることは言うまでもない。",
+    "Target": "It goes without saying that",
+    "Note": "It goes without saying that: 〜は言うまでもない"
+  },
+  {
+    "Id": "1f1318bc-91e8-4f90-b684-0587ec2507d4",
+    "Level": 5,
+    "English": "The town is famous for its old castle.",
+    "Japanese": "その町は古い城で有名だ。",
+    "Target": "famous for",
+    "Note": "be famous for: 〜で有名だ"
+  },
+  {
+    "Id": "0f5d06c5-9750-4512-89cd-4f0d3316681f",
+    "Level": 5,
+    "English": "No matter what he says, don't believe him.",
+    "Japanese": "彼が何と言おうとも、信じてはいけない。",
+    "Target": "No matter what",
+    "Note": "no matter what: たとえ何が〜でも"
+  },
+  {
+    "Id": "3d64a4a6-0ee6-413d-82b3-fbe9525bfa44",
+    "Level": 5,
+    "English": "We need to come up with a solution to this problem.",
+    "Japanese": "私たちはこの問題の解決策を思いつく必要がある。",
+    "Target": "come up with",
+    "Note": "come up with: 〜を思いつく"
+  },
+  {
+    "Id": "91b9f059-484f-44ad-982f-e4a9fa1aaced",
+    "Level": 5,
+    "English": "Smoking is closely related to lung cancer.",
+    "Japanese": "喫煙は肺がんと密接に関連している。",
+    "Target": "closely related to",
+    "Note": "be related to: 〜に関連している"
+  },
+  {
+    "Id": "3dc42902-5436-48d9-8909-b02f83bf7ced",
+    "Level": 5,
+    "English": "It is likely to snow tonight.",
+    "Japanese": "今夜は雪が降りそうだ。",
+    "Target": "likely to",
+    "Note": "be likely to do: 〜しそうだ"
+  },
+  {
+    "Id": "8af0f8be-d1b4-49fa-b8c8-f49dca691f79",
+    "Level": 5,
+    "English": "In contrast to his brother, he is very shy.",
+    "Japanese": "兄とは対照的に、彼はとても内気だ。",
+    "Target": "In contrast to",
+    "Note": "in contrast to: 〜とは対照的に"
+  },
+  {
+    "Id": "49d77467-39a8-47a8-8433-5bfe81aa5809",
+    "Level": 5,
+    "English": "I can't make out what she is thinking.",
+    "Japanese": "彼女が何を考えているのか理解できない。",
+    "Target": "make out",
+    "Note": "make out: 〜を理解する"
+  },
+  {
+    "Id": "23dfdb27-af37-48c2-bf4e-0e7538763749",
+    "Level": 5,
+    "English": "We must deal with the climate change issue.",
+    "Japanese": "私たちは気候変動問題に対処しなければならない。",
+    "Target": "deal with",
+    "Note": "deal with: 〜に対処する"
+  },
+  {
+    "Id": "50c72908-e442-4f5a-8c4b-742cefff249c",
+    "Level": 5,
+    "English": "The plane arrived on time despite the strong wind.",
+    "Japanese": "強風にもかかわらず、飛行機は定刻に到着した。",
+    "Target": "despite the strong wind",
+    "Note": "despite: 〜にもかかわらず"
+  },
+  {
+    "Id": "2c22aecd-30b5-4c78-9fe2-709d24af7164",
+    "Level": 5,
+    "English": "Sooner or later, you will understand the reason.",
+    "Japanese": "遅かれ早かれ、君はその理由を理解するだろう。",
+    "Target": "Sooner or later",
+    "Note": "sooner or later: 遅かれ早かれ"
+  },
+  {
+    "Id": "8321d85f-5018-4db7-9609-2d4dd3085abf",
+    "Level": 5,
+    "English": "Be careful not to make the same mistake again.",
+    "Japanese": "二度と同じ間違いをしないように気をつけなさい。",
+    "Target": "Be careful not to",
+    "Note": "be careful not to do: 〜しないように気をつける"
+  },
+  {
+    "Id": "3d88c941-12be-4275-a195-152dd1715748",
+    "Level": 5,
+    "English": "Whether it rains or not, the festival will be held.",
+    "Japanese": "雨が降ろうと降るまいと、祭りは開催される。",
+    "Target": "Whether it rains or not",
+    "Note": "whether A or not: Aであろうとなかろうと"
+  },
+  {
+    "Id": "3fb83888-94af-4437-b453-32ab3c67673b",
+    "Level": 5,
+    "English": "I had my bicycle repaired at the shop.",
+    "Japanese": "私は店で自転車を修理してもらった。",
+    "Target": "had my bicycle repaired",
+    "Note": "have A p.p.: Aを〜してもらう（使役）"
+  },
+  {
+    "Id": "897b08d8-1089-43d4-b1fa-07be4f1fa4a8",
+    "Level": 5,
+    "English": "You should get used to using this software.",
+    "Japanese": "このソフトウェアを使うことに慣れるべきだ。",
+    "Target": "get used to using",
+    "Note": "get used to -ing: 〜することに慣れる"
+  },
+  {
+    "Id": "24858f27-8fe0-43dd-ac4b-7668ce3832d5",
+    "Level": 5,
+    "English": "The meeting will be held regardless of the weather.",
+    "Japanese": "天気に関係なく、会議は開催される。",
+    "Target": "regardless of",
+    "Note": "regardless of: 〜に関係なく"
+  },
+  {
+    "Id": "d24039a3-da59-4cc8-aaab-0c786fe011d1",
+    "Level": 5,
+    "English": "It's high time you went to bed.",
+    "Japanese": "もう寝る時間だよ。",
+    "Target": "It's high time you went",
+    "Note": "It's high time + 過去形: もうとっくに〜すべき時間だ（強い催促）"
+  },
+  {
+    "Id": "bc67663c-be85-44d8-aea9-0d9cc0895a76",
+    "Level": 5,
+    "English": "As long as you stay calm, you will be fine.",
+    "Japanese": "冷静でいる限り、大丈夫だよ。",
+    "Target": "As long as",
+    "Note": "as long as: 〜する限り（条件）"
+  },
+  {
+    "Id": "3fca1827-2833-4054-bdde-5c347b438b84",
+    "Level": 5,
+    "English": "He is the very person I have been looking for.",
+    "Japanese": "彼こそまさに私が探していた人だ。",
+    "Target": "the very",
+    "Note": "the very + 名詞: まさにその〜"
+  },
+  {
+    "Id": "79322922-6b39-4bd5-af34-48049b81ee69",
+    "Level": 5,
+    "English": "I found it easy to solve the puzzle.",
+    "Japanese": "そのパズルを解くのは簡単だとわかった。",
+    "Target": "found it easy to solve",
+    "Note": "find it easy to do: 〜するのは簡単だとわかる"
+  },
+  {
+    "Id": "6cddeb7a-1c21-4efb-8edf-1511c715e0be",
+    "Level": 5,
+    "English": "The problem is how we can reduce the cost.",
+    "Japanese": "問題はどうやってコストを削減するかだ。",
+    "Target": "The problem is how",
+    "Note": "The problem is how...: 問題は〜かということだ"
+  },
+  {
+    "Id": "27dda4a2-db33-423f-96f5-33ae7308ed36",
+    "Level": 5,
+    "English": "You are supposed to finish this by tomorrow.",
+    "Japanese": "君はこれを明日までに終えることになっている。",
+    "Target": "are supposed to finish",
+    "Note": "be supposed to do: 〜することになっている"
+  },
+  {
+    "Id": "9fb8cf70-f225-476c-9238-d13edad3d38d",
+    "Level": 5,
+    "English": "She was so tired that she fell asleep on the bus.",
+    "Japanese": "彼女はとても疲れていたのでバスで寝てしまった。",
+    "Target": "so tired that",
+    "Note": "so ... that 〜: とても…なので〜"
+  },
+  {
+    "Id": "bf1fb18b-6261-434f-98d4-67b9f0bdd0a9",
+    "Level": 5,
+    "English": "In addition to English, he can speak French.",
+    "Japanese": "英語に加えて、彼はフランス語も話せる。",
+    "Target": "In addition to",
+    "Note": "in addition to: 〜に加えて"
+  },
+  {
+    "Id": "2d434eac-5fcf-4c72-a1aa-c54ee3c5df66",
+    "Level": 5,
+    "English": "I can't help laughing at his joke.",
+    "Japanese": "彼のジョークには笑わずにはいられない。",
+    "Target": "can't help laughing",
+    "Note": "cannot help -ing: 〜せずにはいられない"
+  },
+  {
+    "Id": "c505c1a2-3fa0-4bdd-bd09-5643b7629408",
+    "Level": 5,
+    "English": "The decision depends on what you think.",
+    "Japanese": "決定は君がどう考えるか次第だ。",
+    "Target": "depends on",
+    "Note": "depend on: 〜次第である・〜に頼る"
+  },
+  {
+    "Id": "b1fd353d-5204-41db-aa53-828889fdb33c",
+    "Level": 5,
+    "English": "We are running out of time and energy.",
+    "Japanese": "私たちは時間とエネルギーを使い果たしつつある。",
+    "Target": "running out of",
+    "Note": "run out of: 〜を使い果たす"
+  },
+  {
+    "Id": "62df8b60-aa75-4944-9099-4b78070a9182",
+    "Level": 5,
+    "English": "He made a speech on behalf of the students.",
+    "Japanese": "彼は生徒を代表してスピーチをした。",
+    "Target": "on behalf of",
+    "Note": "on behalf of: 〜を代表して"
+  },
+  {
+    "Id": "9c3e2f04-5a90-4e99-93a7-bab0a790bf75",
+    "Level": 5,
+    "English": "To tell the truth, I forgot about our appointment.",
+    "Japanese": "実を言うと、約束を忘れていました。",
+    "Target": "To tell the truth",
+    "Note": "to tell the truth: 実を言うと"
+  },
+  {
+    "Id": "22a86e5a-e607-4ace-afc4-24e3c22aaa14",
+    "Level": 5,
+    "English": "It's up to you to decide which one to buy.",
+    "Japanese": "どちらを買うかは君次第だ。",
+    "Target": "It's up to you",
+    "Note": "It's up to you: 君次第だ"
+  },
+  {
+    "Id": "f7755db3-2c56-42fc-8eac-9d091ba86ba8",
+    "Level": 5,
+    "English": "I am not familiar with the history of this city.",
+    "Japanese": "私はこの街の歴史に詳しくない。",
+    "Target": "not familiar with",
+    "Note": "be familiar with: 〜に詳しい"
+  },
+  {
+    "Id": "297d5717-1804-43e4-a127-204b4d1403a2",
+    "Level": 5,
+    "English": "Please fill out this form and give it to me.",
+    "Japanese": "この用紙に記入して私に渡してください。",
+    "Target": "fill out",
+    "Note": "fill out: （書類などに）記入する"
+  },
+  {
+    "Id": "d9c94623-0b53-42db-980b-f0a81e239788",
+    "Level": 5,
+    "English": "He is hard to please, but he is a good man.",
+    "Japanese": "彼は気難しい（喜ばせるのが難しい）が、良い人だ。",
+    "Target": "hard to please",
+    "Note": "be hard to do: 〜するのが難しい"
+  },
+  {
+    "Id": "199812c9-87ec-4090-b270-c09056ef2ed0",
+    "Level": 5,
+    "English": "Every time I see this picture, I remember my childhood.",
+    "Japanese": "この写真を見るたびに、子供時代を思い出す。",
+    "Target": "Every time",
+    "Note": "every time ...: 〜するたびに"
+  },
+  {
+    "Id": "9b87fef5-8420-49e8-8cb3-7d54174c2452",
+    "Level": 5,
+    "English": "They provide us with useful information.",
+    "Japanese": "彼らは私たちに役立つ情報を提供してくれる。",
+    "Target": "provide us with",
+    "Note": "provide A with B: AにBを提供する"
+  },
+  {
+    "Id": "009615ed-3529-4953-9e2f-0af8749911d4",
+    "Level": 5,
+    "English": "I'll take a message in case he is out.",
+    "Japanese": "彼が外出しているといけないので、伝言を預かります。",
+    "Target": "in case",
+    "Note": "in case ...: 〜の場合に備えて"
+  },
+  {
+    "Id": "9728ec21-9e6d-4cf1-8cce-d57927a85974",
+    "Level": 5,
+    "English": "The population of the city is twice as large as it was.",
+    "Japanese": "その都市の人口は以前の2倍だ。",
+    "Target": "twice as large as",
+    "Note": "twice as ... as 〜: 〜の2倍の…"
+  },
+  {
+    "Id": "bcff200a-c12a-4b34-8f2c-a1e2855d9253",
+    "Level": 5,
+    "English": "He succeeded in winning the championship.",
+    "Japanese": "彼は優勝することに成功した。",
+    "Target": "succeeded in winning",
+    "Note": "succeed in -ing: 〜することに成功する"
+  },
+  {
+    "Id": "4522847d-1607-4b38-b469-0d2e24fe2cd3",
+    "Level": 5,
+    "English": "You don't have to worry about the result.",
+    "Japanese": "結果について心配する必要はない。",
+    "Target": "don't have to",
+    "Note": "don't have to: 〜する必要はない"
+  },
+  {
+    "Id": "98ddf312-e00b-4fe8-ad34-294f71cfe1d4",
+    "Level": 5,
+    "English": "We should focus on the quality rather than the quantity.",
+    "Japanese": "量より質に焦点を当てるべきだ。",
+    "Target": "focus on",
+    "Note": "focus on: 〜に焦点を当てる"
+  },
+  {
+    "Id": "14ad6ce4-6680-4966-a615-9d53fd96d183",
+    "Level": 5,
+    "English": "By the way, have you heard the news yet?",
+    "Japanese": "ところで、もうそのニュースを聞きましたか？",
+    "Target": "By the way",
+    "Note": "by the way: ところで"
+  },
+  {
+    "Id": "26c9f3c4-4c21-4321-8518-c43dfc56b5a4",
+    "Level": 5,
+    "English": "I prefer staying at home to going out.",
+    "Japanese": "私は外出するより家にいる方が好きだ。",
+    "Target": "prefer staying at home to going out",
+    "Note": "prefer A to B: BよりAを好む"
+  },
+  {
+    "Id": "f12295b2-db5e-4c04-801e-c67256cf0290",
+    "Level": 5,
+    "English": "They are looking for a place to stay.",
+    "Japanese": "彼らは滞在する場所を探している。",
+    "Target": "looking for",
+    "Note": "look for: 〜を探す"
+  },
+  {
+    "Id": "50129de1-2607-4cb1-b187-d02580703c00",
+    "Level": 5,
+    "English": "He is old enough to drive a car.",
+    "Japanese": "彼は車を運転できる年齢だ。",
+    "Target": "old enough to drive",
+    "Note": "enough to do: 〜するのに十分な…"
+  },
+  {
+    "Id": "d1b8fc5e-37d8-48a4-9376-31074f93db29",
+    "Level": 5,
+    "English": "Instead of complaining, you should do something.",
+    "Japanese": "文句を言う代わりに、何かすべきだ。",
+    "Target": "Instead of complaining",
+    "Note": "instead of -ing: 〜する代わりに"
+  },
+  {
+    "Id": "52fed31b-de24-4dca-ba5d-1e26685fc414",
+    "Level": 5,
+    "English": "I have no idea why she is so angry.",
+    "Japanese": "なぜ彼女があんなに怒っているのか全くわからない。",
+    "Target": "have no idea",
+    "Note": "have no idea: 全くわからない"
+  },
+  {
+    "Id": "8d315cf5-3d41-4595-87c7-f9ac82f68e84",
+    "Level": 5,
+    "English": "Please keep the room as clean as possible.",
+    "Japanese": "部屋をできるだけ綺麗に保ってください。",
+    "Target": "as clean as possible",
+    "Note": "as ... as possible: できるだけ…"
+  },
+  {
+    "Id": "a3846d00-e68b-4bec-80ff-91ce80014b66",
+    "Level": 5,
+    "English": "He went to London for the purpose of studying art.",
+    "Japanese": "彼は芸術を学ぶ目的でロンドンへ行った。",
+    "Target": "for the purpose of",
+    "Note": "for the purpose of: 〜の目的で"
+  },
+  {
+    "Id": "d003f48a-2513-455f-944d-35d3147f4d4f",
+    "Level": 5,
+    "English": "She didn't show up until the end of the party.",
+    "Japanese": "彼女はパーティーの終わりまで現れなかった。",
+    "Target": "didn't show up until",
+    "Note": "not ... until 〜: 〜まで…しない"
+  },
+  {
+    "Id": "678a4588-3f6c-48ce-949b-55bdf91ef389",
+    "Level": 5,
+    "English": "In short, we need to change our plan.",
+    "Japanese": "要するに、私たちは計画を変える必要がある。",
+    "Target": "In short",
+    "Note": "in short: 要するに"
+  },
+  {
+    "Id": "61e4fb54-82a7-4141-b86e-1a96334add35",
+    "Level": 5,
+    "English": "I was surprised to hear the unexpected news.",
+    "Japanese": "その予期せぬニュースを聞いて驚いた。",
+    "Target": "surprised to hear",
+    "Note": "be surprised to do: 〜して驚く"
+  },
+  {
+    "Id": "c0bf9df2-1352-4831-addb-b0c3392c001f",
+    "Level": 5,
+    "English": "Could you help me with my luggage?",
+    "Japanese": "荷物を運ぶのを手伝っていただけませんか？",
+    "Target": "help me with",
+    "Note": "help A with B: AのBを手伝う"
+  },
+  {
+    "Id": "f6449059-5fbb-4f18-9f3b-1776894f3e27",
+    "Level": 5,
+    "English": "He apologized for being late for the class.",
+    "Japanese": "彼は授業に遅れたことを謝罪した。",
+    "Target": "apologized for",
+    "Note": "apologize for: 〜について謝罪する"
+  },
+  {
+    "Id": "21ff0cd8-f6b1-4596-b7dd-407d06761bff",
+    "Level": 5,
+    "English": "The train was delayed because of an accident.",
+    "Japanese": "事故のために電車が遅れた。",
+    "Target": "because of",
+    "Note": "because of: 〜のために（理由）"
+  },
+  {
+    "Id": "ea564737-0f51-4466-a531-f366282ee99a",
+    "Level": 5,
+    "English": "It is important to pay attention to details.",
+    "Japanese": "細部に注意を払うことが重要だ。",
+    "Target": "pay attention to",
+    "Note": "pay attention to: 〜に注意を払う"
+  },
+  {
+    "Id": "aa5b8076-f4db-4f4d-a137-03b714d02e30",
+    "Level": 5,
+    "English": "I'm not sure if he can come to the party.",
+    "Japanese": "彼がパーティーに来られるかどうかわからない。",
+    "Target": "not sure if",
+    "Note": "be not sure if: 〜かどうか確信がない"
+  },
+  {
+    "Id": "438af4c4-a360-4da3-95b1-8acc4693fce0",
+    "Level": 5,
+    "English": "The medicine will prevent you from getting worse.",
+    "Japanese": "その薬は悪化するのを防いでくれるだろう。",
+    "Target": "prevent you from",
+    "Note": "prevent A from -ing: Aが〜するのを防ぐ"
+  },
+  {
+    "Id": "025a3005-5dfb-44ad-ae6a-2a18dee0b17c",
+    "Level": 5,
+    "English": "You must take care of yourself.",
+    "Japanese": "自分の体に気をつけなさい。",
+    "Target": "take care of",
+    "Note": "take care of: 〜の世話をする・に気をつける"
+  },
+  {
+    "Id": "d96f1d57-5edc-402b-a89d-ef703ab68d73",
+    "Level": 5,
+    "English": "She has been absent from school for three days.",
+    "Japanese": "彼女は3日間学校を欠席している。",
+    "Target": "absent from",
+    "Note": "be absent from: 〜を欠席している"
+  },
+  {
+    "Id": "97c53e0d-2875-4e2a-8bf8-aef20937fe99",
+    "Level": 5,
+    "English": "The more you practice, the better you will be.",
+    "Japanese": "練習すればするほど、上手くなるよ。",
+    "Target": "The more you practice, the better",
+    "Note": "the more ... the more 〜: …すればするほど〜"
+  },
+  {
+    "Id": "723199da-dab2-462a-b130-1c2012f9cfdc",
+    "Level": 5,
+    "English": "In my opinion, this is the best way.",
+    "Japanese": "私の意見では、これが最善の方法だ。",
+    "Target": "In my opinion",
+    "Note": "in my opinion: 私の意見では"
+  },
+  {
+    "Id": "044b1a50-5343-4b58-a99c-3bae1d7b2a2b",
+    "Level": 5,
+    "English": "Don't forget to turn off the light.",
+    "Japanese": "電気を消すのを忘れないで。",
+    "Target": "forget to turn off",
+    "Note": "forget to do: 〜するのを忘れる"
+  },
+  {
+    "Id": "59bf4781-c04b-448e-a164-a9e4dc453be1",
+    "Level": 4,
+    "English": "The chart illustrates how the number of tourists has changed over time.",
+    "Japanese": "その図は観光客の数が時間の経過とともにどのように変化したかを示している。",
+    "Target": "illustrates how",
+    "Note": "illustrate how: 〜かを示す・説明する"
+  },
+  {
+    "Id": "b93d816b-ff17-4693-8f46-95c1f1e048ea",
+    "Level": 4,
+    "English": "It is necessary to adjust the schedule to meet the deadline.",
+    "Japanese": "締め切りに間に合わせるためにスケジュールを調整する必要がある。",
+    "Target": "adjust the schedule",
+    "Note": "adjust: 〜を調整する"
+  },
+  {
+    "Id": "751d310b-9a85-4b30-b3de-591599bbf0f8",
+    "Level": 4,
+    "English": "We should analyze the data before making a final decision.",
+    "Japanese": "最終決定を下す前にデータを分析すべきだ。",
+    "Target": "analyze the data",
+    "Note": "analyze: 〜を分析する"
+  },
+  {
+    "Id": "76aa02a4-b490-4b08-9fe2-9a7c4e0be825",
+    "Level": 4,
+    "English": "The government is trying to promote the use of renewable energy.",
+    "Japanese": "政府は再生可能エネルギーの利用を促進しようとしている。",
+    "Target": "trying to promote",
+    "Note": "promote: 〜を促進する"
+  },
+  {
+    "Id": "97e03ebe-0d93-40b6-b7fa-6a01b1b9c307",
+    "Level": 4,
+    "English": "This research aims to evaluate the impact of social media on teenagers.",
+    "Japanese": "この研究は、10代に対するソーシャルメディアの影響を評価することを目的としている。",
+    "Target": "aims to evaluate",
+    "Note": "aim to do: 〜することを目指す / evaluate: 〜を評価する"
+  },
+  {
+    "Id": "1dfe1c3d-6e81-4491-8812-74532393b2fc",
+    "Level": 4,
+    "English": "I'm writing to inform you of the change in our appointment.",
+    "Japanese": "予約の変更をお知らせするためにご連絡しています。",
+    "Target": "inform you of",
+    "Note": "inform A of B: AにBを知らせる"
+  },
+  {
+    "Id": "3328d975-2975-4daa-9d89-da336a6ca755",
+    "Level": 4,
+    "English": "There are several aspects to consider when choosing a career.",
+    "Japanese": "職業を選ぶ際には、考慮すべきいくつかの側面がある。",
+    "Target": "aspects to consider",
+    "Note": "aspect: 側面 / aspects to consider: 考慮すべき側面"
+  },
+  {
+    "Id": "660e3094-eafd-4dba-938b-452b34447745",
+    "Level": 4,
+    "English": "He is unlikely to agree with our proposal at this stage.",
+    "Japanese": "現段階では、彼が我々の提案に同意する可能性は低い。",
+    "Target": "is unlikely to agree",
+    "Note": "be unlikely to do: 〜しそうにない"
+  },
+  {
+    "Id": "03a25c5b-3501-4203-9e23-979536fa15d2",
+    "Level": 4,
+    "English": "Technology has transformed the way we communicate with each other.",
+    "Japanese": "テクノロジーは、私たちが互いにコミュニケーションをとる方法を変えた。",
+    "Target": "has transformed",
+    "Note": "transform: 〜を変える（has transformed: 変えてきた）"
+  },
+  {
+    "Id": "31f5e1b8-7fec-4068-926a-06657308dc4e",
+    "Level": 4,
+    "English": "In conclusion, we need to focus more on environmental conservation.",
+    "Japanese": "結論として、私たちは環境保護にもっと焦点を当てる必要がある。",
+    "Target": "In conclusion",
+    "Note": "in conclusion: 結論として"
+  },
+  {
+    "Id": "1bab9b80-4555-4781-a0c9-d5bac6cd36ac",
+    "Level": 4,
+    "English": "The results of the survey are consistent with previous studies.",
+    "Japanese": "調査の結果は、以前の研究と一致している。",
+    "Target": "consistent with",
+    "Note": "be consistent with: 〜と一致している"
+  },
+  {
+    "Id": "de60f08f-3ad6-4b27-b546-d2ee477cb0e7",
+    "Level": 4,
+    "English": "It is vital to distinguish between fact and opinion.",
+    "Japanese": "事実と意見を区別することが極めて重要だ。",
+    "Target": "distinguish between",
+    "Note": "distinguish: 〜を区別する"
+  },
+  {
+    "Id": "c5db8f2b-927e-4529-aa08-1142a17d5bbb",
+    "Level": 4,
+    "English": "The factory utilizes advanced technology to improve efficiency.",
+    "Japanese": "その工場は、効率を向上させるために高度な技術を利用している。",
+    "Target": "utilizes advanced technology",
+    "Note": "utilize: 〜を利用する"
+  },
+  {
+    "Id": "c22e3998-ea8b-482b-b3c3-6b7c9c1385a4",
+    "Level": 4,
+    "English": "I was confused by the complicated instructions on the website.",
+    "Japanese": "ウェブサイトの複雑な指示に混乱してしまった。",
+    "Target": "was confused by",
+    "Note": "be confused by: 〜に混乱する"
+  },
+  {
+    "Id": "0895ba22-7b1f-4b19-b04d-325247014a5c",
+    "Level": 4,
+    "English": "We need to find a way to cope with the increasing stress.",
+    "Japanese": "増え続けるストレスに対処する方法を見つける必要がある。",
+    "Target": "cope with",
+    "Note": "cope with: 〜に対処する"
+  },
+  {
+    "Id": "038bcff8-7395-457e-8e89-d9dfcebdf05c",
+    "Level": 4,
+    "English": "The new policy will be implemented starting from next month.",
+    "Japanese": "新しい政策は来月から実施される。",
+    "Target": "be implemented",
+    "Note": "implement: 〜を実施する"
+  },
+  {
+    "Id": "a3fe6151-61da-4413-849b-a978b5776fb2",
+    "Level": 4,
+    "English": "Surprisingly, few people were aware of the potential risks.",
+    "Japanese": "驚いたことに、潜在的なリスクに気づいている人はほとんどいなかった。",
+    "Target": "aware of",
+    "Note": "be aware of: 〜に気づいている"
+  },
+  {
+    "Id": "1290169c-5b27-40ee-a957-b3b6a8280b2c",
+    "Level": 4,
+    "English": "The lecture was so boring that many students fell asleep.",
+    "Japanese": "講義があまりにも退屈だったので、多くの学生が寝てしまった。",
+    "Target": "so boring that",
+    "Note": "so ... that 〜: とても…なので〜"
+  },
+  {
+    "Id": "5480a7ed-156e-482f-a29e-e02e4251fe6b",
+    "Level": 4,
+    "English": "Generally, elderly people tend to be more conservative.",
+    "Japanese": "一般的に、高齢者はより保守的になる傾向がある。",
+    "Target": "tend to be",
+    "Note": "tend to do: 〜する傾向がある"
+  },
+  {
+    "Id": "1f15b6e6-36bb-4676-9f04-39825c68455a",
+    "Level": 4,
+    "English": "The city has experienced rapid urban development in recent years.",
+    "Japanese": "その都市は近年、急速な都市開発を経験している。",
+    "Target": "urban development",
+    "Note": "urban development: 都市開発"
+  },
+  {
+    "Id": "d85df5d7-5e5e-47ac-83e7-25cde0b0c5d1",
+    "Level": 4,
+    "English": "I would appreciate it if you could send me more information.",
+    "Japanese": "詳細な情報を送っていただけると幸いです。",
+    "Target": "would appreciate it if",
+    "Note": "I would appreciate it if...: 〜していただけると幸いです"
+  },
+  {
+    "Id": "a624ae35-6b56-4281-8845-e408bc4f0d36",
+    "Level": 4,
+    "English": "The museum is undergoing major renovations this summer.",
+    "Japanese": "その博物館はこの夏、大規模な改修を行っている。",
+    "Target": "is undergoing",
+    "Note": "undergo: 〜を経験する・受ける"
+  },
+  {
+    "Id": "94351932-ec66-4d01-851b-2bc5487c18e3",
+    "Level": 4,
+    "English": "It's a pity that we missed the last train.",
+    "Japanese": "終電を逃してしまったのは残念だ。",
+    "Target": "It's a pity that",
+    "Note": "It's a pity that...: 〜なのは残念だ"
+  },
+  {
+    "Id": "9222ac79-d9f3-4958-969e-299722350cc2",
+    "Level": 4,
+    "English": "You are required to submit your assignment by the end of the week.",
+    "Japanese": "週の終わりまでに課題を提出することが求められている。",
+    "Target": "are required to submit",
+    "Note": "be required to do: 〜することが求められる"
+  },
+  {
+    "Id": "5678b54c-3032-444f-bd1d-b0920f964b3c",
+    "Level": 4,
+    "English": "The price of vegetables fluctuates depending on the weather.",
+    "Japanese": "野菜の価格は天候によって変動する。",
+    "Target": "fluctuates depending on",
+    "Note": "fluctuate: 変動する / depending on: 〜によって"
+  },
+  {
+    "Id": "27bfb026-3d62-46ae-a5e2-775fe8d46d9d",
+    "Level": 4,
+    "English": "He finally managed to overcome his fear of heights.",
+    "Japanese": "彼はついに高所恐怖症を克服することができた。",
+    "Target": "managed to overcome",
+    "Note": "manage to do: 何とか〜する"
+  },
+  {
+    "Id": "5b69e621-e670-451f-aabf-50d068e10e76",
+    "Level": 4,
+    "English": "There is no doubt that exercise is beneficial for your health.",
+    "Japanese": "運動が健康に有益であることに疑いの余地はない。",
+    "Target": "There is no doubt that",
+    "Note": "There is no doubt that...: 〜に疑いはない"
+  },
+  {
+    "Id": "2535e93d-1417-422f-b9b0-dd1fc004757d",
+    "Level": 4,
+    "English": "The researchers identified several factors that lead to success.",
+    "Japanese": "研究者たちは、成功につながるいくつかの要因を特定した。",
+    "Target": "identified several factors",
+    "Note": "identify: 〜を特定する"
+  },
+  {
+    "Id": "5836240c-ac15-4188-9a86-0a2aef67544f",
+    "Level": 4,
+    "English": "Compared to last year, the number of applicants has increased significantly.",
+    "Japanese": "昨年と比較して、志願者の数は大幅に増加した。",
+    "Target": "Compared to",
+    "Note": "compared to: 〜と比較して"
+  },
+  {
+    "Id": "9142d624-f43a-44ed-8a89-8b047ce539db",
+    "Level": 4,
+    "English": "I'm afraid I cannot attend the meeting due to a prior engagement.",
+    "Japanese": "あいにく、先約があるため会議に出席できません。",
+    "Target": "prior engagement",
+    "Note": "prior engagement: 先約"
+  },
+  {
+    "Id": "a6e570ce-01fd-491e-afec-b09e37e0a8a3",
+    "Level": 4,
+    "English": "We must ensure that all students have equal opportunities.",
+    "Japanese": "すべての学生に平等な機会があることを確実にしなければならない。",
+    "Target": "ensure that",
+    "Note": "ensure that: 〜であることを確実にする"
+  },
+  {
+    "Id": "6762034f-d4b7-4941-9441-04dc56fb5cb4",
+    "Level": 4,
+    "English": "The novel is based on a true story that happened in the 19th century.",
+    "Japanese": "その小説は19世紀に起こった実話に基づいている。",
+    "Target": "based on",
+    "Note": "be based on: 〜に基づいている"
+  },
+  {
+    "Id": "51b4f7e0-9f3f-4da5-af6d-70dc025b355d",
+    "Level": 4,
+    "English": "It took quite a while for him to recover from the shock.",
+    "Japanese": "彼がショックから立ち直るのに、かなりの時間がかかった。",
+    "Target": "quite a while",
+    "Note": "quite a while: かなりの時間"
+  },
+  {
+    "Id": "e937a93b-e60b-4ea9-83d0-0964d20e4852",
+    "Level": 4,
+    "English": "The purpose of this meeting is to exchange ideas about the project.",
+    "Japanese": "この会議の目的は、プロジェクトについてのアイデアを交換することだ。",
+    "Target": "exchange ideas",
+    "Note": "exchange ideas: アイデアを交換する"
+  },
+  {
+    "Id": "aa45c739-b13f-4727-b000-b7b48699ab0b",
+    "Level": 4,
+    "English": "She is widely regarded as one of the best scientists in the world.",
+    "Japanese": "彼女は世界で最も優れた科学者の一人として広くみなされている。",
+    "Target": "is widely regarded as",
+    "Note": "be regarded as: 〜とみなされる"
+  },
+  {
+    "Id": "a6125e12-8cbd-4aa5-8962-26dae7a64ccc",
+    "Level": 4,
+    "English": "Don't hesitate to ask if you have any questions.",
+    "Japanese": "質問があれば遠慮なく聞いてください。",
+    "Target": "Don't hesitate to ask",
+    "Note": "hesitate to do: 〜するのをためらう"
+  },
+  {
+    "Id": "d58e0845-05b2-408c-a4cd-d49737ad3f95",
+    "Level": 4,
+    "English": "The economy is showing signs of recovery after the recession.",
+    "Japanese": "不況の後、経済は回復の兆しを見せている。",
+    "Target": "showing signs of",
+    "Note": "show signs of: 〜の兆しを見せる"
+  },
+  {
+    "Id": "5bc7e841-39f1-40e8-b5cf-3634234b1456",
+    "Level": 4,
+    "English": "In spite of several obstacles, they eventually reached the summit.",
+    "Japanese": "いくつかの障害にもかかわらず、彼らはついに山頂に到達した。",
+    "Target": "In spite of",
+    "Note": "in spite of: 〜にもかかわらず"
+  },
+  {
+    "Id": "5b4ff33f-e1b0-4d8a-b1a1-3e579e614593",
+    "Level": 4,
+    "English": "It is estimated that the world population will reach 9 billion by 2050.",
+    "Japanese": "2050年までに世界人口は90億人に達すると推定されている。",
+    "Target": "It is estimated that",
+    "Note": "It is estimated that...: 〜と推定される"
+  },
+  {
+    "Id": "b3289219-f9c3-43a3-b4c7-2ed98f94ed02",
+    "Level": 4,
+    "English": "The doctor advised him to avoid eating too much salt.",
+    "Japanese": "医者は彼に、塩分を摂りすぎないようにアドバイスした。",
+    "Target": "advised him to avoid",
+    "Note": "advise A to do: Aに〜するよう助言する"
+  },
+  {
+    "Id": "7a91a26a-5407-4a8f-ac50-eb1aca06da0d",
+    "Level": 4,
+    "English": "He was reluctant to admit his mistake at first.",
+    "Japanese": "彼は最初、自分の間違いを認めるのを嫌がっていた。",
+    "Target": "reluctant to admit",
+    "Note": "be reluctant to do: 〜するのを嫌がる"
+  },
+  {
+    "Id": "ea13ff0f-436c-49e8-96b8-633db56195e6",
+    "Level": 4,
+    "English": "The security guard noticed someone suspicious entering the building.",
+    "Japanese": "警備員は、誰か怪しい人物が建物に入るのに気づいた。",
+    "Target": "noticed someone suspicious entering",
+    "Note": "notice A doing: Aが〜しているのに気づく"
+  },
+  {
+    "Id": "3d063f1d-bd26-4b5b-a5f1-a4623b299d49",
+    "Level": 4,
+    "English": "Artificial intelligence is playing an increasingly important role in our lives.",
+    "Japanese": "人工知能は私たちの生活の中でますます重要な役割を果たしている。",
+    "Target": "playing an increasingly important role",
+    "Note": "play an important role: 重要な役割を果たす"
+  },
+  {
+    "Id": "80d1aff5-886f-4685-9ce5-cdc018baaaa5",
+    "Level": 4,
+    "English": "I am writing in response to your advertisement in the newspaper.",
+    "Japanese": "新聞に掲載されていたあなたの広告に応えて（応募して）書いています。",
+    "Target": "in response to",
+    "Note": "in response to: 〜に応えて"
+  },
+  {
+    "Id": "195b3011-2807-47ac-9784-7bf6a512782f",
+    "Level": 4,
+    "English": "You should take into account the cultural differences between the two countries.",
+    "Japanese": "2国間の文化的な違いを考慮に入れるべきだ。",
+    "Target": "take into account",
+    "Note": "take into account: 〜を考慮に入れる"
+  },
+  {
+    "Id": "4c269983-02c8-469f-8a68-8506697256be",
+    "Level": 4,
+    "English": "The instructions were so vague that I didn't know what to do.",
+    "Japanese": "指示が非常に漠然としていたので、何をすべきかわからなかった。",
+    "Target": "so vague that",
+    "Note": "so ... that 〜: とても…なので〜"
+  },
+  {
+    "Id": "cf1f5c05-503e-4994-bb24-6a9ec0434813",
+    "Level": 4,
+    "English": "We are looking for a permanent solution rather than a temporary one.",
+    "Japanese": "私たちは一時的な解決策ではなく、恒久的な解決策を探している。",
+    "Target": "permanent",
+    "Note": "permanent: 恒久的な"
+  },
+  {
+    "Id": "c4fb9381-585d-404c-b49c-4b7e5f5f4b82",
+    "Level": 4,
+    "English": "Smoking is prohibited in all public transportation.",
+    "Japanese": "すべての公共交通機関において喫煙は禁止されている。",
+    "Target": "is prohibited in",
+    "Note": "be prohibited in: 〜において禁止されている"
+  },
+  {
+    "Id": "e9abe3d6-0497-4fa4-9d74-0eb1cd0757a9",
+    "Level": 4,
+    "English": "The invention of the smartphone has had a profound impact on society.",
+    "Japanese": "スマートフォンの発明は社会に深い影響を与えた。",
+    "Target": "profound impact",
+    "Note": "profound: 深い・重大な"
+  },
+  {
+    "Id": "7e48b1c3-ec75-4bad-a372-0d82d15d04cf",
+    "Level": 4,
+    "English": "It is essential to maintain a healthy balance between work and life.",
+    "Japanese": "仕事と生活の健全なバランスを保つことが不可欠だ。",
+    "Target": "is essential to",
+    "Note": "be essential to: 〜に不可欠だ"
+  },
+  {
+    "Id": "cace0174-a59d-40b9-a5fa-664bc78c0638",
+    "Level": 4,
+    "English": "I'm not in the mood to go out for dinner tonight.",
+    "Japanese": "今夜は外食する気分じゃないんだ。",
+    "Target": "in the mood to",
+    "Note": "be in the mood to do: 〜したい気分だ"
+  },
+  {
+    "Id": "32322470-5223-484f-8f13-3f2f930ba375",
+    "Level": 4,
+    "English": "The committee consists of experts from various fields.",
+    "Japanese": "委員会は様々な分野の専門家で構成されている。",
+    "Target": "consists of",
+    "Note": "consist of: 〜で構成されている"
+  },
+  {
+    "Id": "60ded704-4381-4619-bc8d-d217c85c1034",
+    "Level": 4,
+    "English": "It is likely that the government will raise taxes next year.",
+    "Japanese": "政府は来年、増税する可能性が高い。",
+    "Target": "It is likely that",
+    "Note": "It is likely that...: 〜という可能性が高い"
+  },
+  {
+    "Id": "83d76a64-b260-4441-82b6-c082be4876e6",
+    "Level": 4,
+    "English": "We need to find an alternative energy source to replace coal.",
+    "Japanese": "石炭に代わる代替エネルギー源を見つける必要がある。",
+    "Target": "alternative energy source",
+    "Note": "alternative: 代替の"
+  },
+  {
+    "Id": "f1939326-2c2d-48a1-8803-af2f0fce6f39",
+    "Level": 4,
+    "English": "The manager emphasized the importance of teamwork.",
+    "Japanese": "部長はチームワークの重要性を強調した。",
+    "Target": "emphasized the importance of",
+    "Note": "emphasize the importance of: 〜の重要性を強調する"
+  },
+  {
+    "Id": "2a0c253e-b98d-4279-9e46-cfdbb13209a6",
+    "Level": 4,
+    "English": "I have a lot in common with my new roommate.",
+    "Japanese": "新しいルームメイトとは共通点が多い。",
+    "Target": "have a lot in common",
+    "Note": "have something in common: 共通点がある"
+  },
+  {
+    "Id": "043090a7-3e4d-40cf-827b-b26c64d4319c",
+    "Level": 4,
+    "English": "The exhibition features works by contemporary artists.",
+    "Japanese": "その展覧会は現代アーティストによる作品を特集している。",
+    "Target": "contemporary artists",
+    "Note": "contemporary: 現代の"
+  },
+  {
+    "Id": "885e158f-ecdb-4cde-8acc-02d0a40b76b0",
+    "Level": 4,
+    "English": "The bus was delayed, so I couldn't help being late.",
+    "Japanese": "バスが遅れたので、遅刻するのは仕方がなかった。",
+    "Target": "couldn't help being",
+    "Note": "cannot help -ing: 〜するのは避けられない"
+  },
+  {
+    "Id": "6dbba8a3-8ca1-4e2c-b312-33e5146a889e",
+    "Level": 4,
+    "English": "He made a major contribution to the development of the city.",
+    "Japanese": "彼はその都市の発展に大きな貢献をした。",
+    "Target": "made a major contribution",
+    "Note": "make a contribution: 貢献する"
+  },
+  {
+    "Id": "ff5e0495-999b-48a9-abd6-e3c1007a919e",
+    "Level": 4,
+    "English": "The instructions are far from clear.",
+    "Japanese": "その指示は決して明確ではない。",
+    "Target": "far from clear",
+    "Note": "far from: 決して〜ではない"
+  },
+  {
+    "Id": "37cd16d5-7ede-4bf1-b7c0-815cf29c03cb",
+    "Level": 4,
+    "English": "I'm looking forward to participating in the upcoming workshop.",
+    "Japanese": "今度のワークショップに参加するのを楽しみにしています。",
+    "Target": "looking forward to participating",
+    "Note": "look forward to -ing: 〜するのを楽しみにする"
+  },
+  {
+    "Id": "d12dde27-b0f1-40d4-b24c-558144d7d86b",
+    "Level": 4,
+    "English": "It occurred to me that I had left my keys inside.",
+    "Japanese": "鍵を中に置き忘れたことに（ふと）気づいた。",
+    "Target": "It occurred to me that",
+    "Note": "It occurs to someone that...: （考えなどが）〜に浮かぶ"
+  },
+  {
+    "Id": "f38bf14d-93a2-4c1d-a036-835e91d6e066",
+    "Level": 4,
+    "English": "Success depends largely on how much effort you put in.",
+    "Japanese": "成功は、どれだけ努力するかに大きく依存する。",
+    "Target": "depends largely on",
+    "Note": "depend largely on: 〜に大きく依存する"
+  },
+  {
+    "Id": "e37c2a57-0e67-4e3b-8881-eb0c2a5be95b",
+    "Level": 4,
+    "English": "The price of gasoline has risen by ten percent this month.",
+    "Japanese": "ガソリン価格は今月10パーセント上昇した。",
+    "Target": "risen by ten percent",
+    "Note": "rise by (percent): （パーセント）だけ上昇する"
+  },
+  {
+    "Id": "479a4793-7f83-45fb-b14e-fa9bca193ec8",
+    "Level": 4,
+    "English": "Generally speaking, the climate here is mild throughout the year.",
+    "Japanese": "一般的に言って、ここの気候は一年中温暖だ。",
+    "Target": "throughout the year",
+    "Note": "throughout the year: 一年中"
+  },
+  {
+    "Id": "dc0674c7-d335-476b-b4e5-4bad9282183a",
+    "Level": 4,
+    "English": "She find it difficult to keep up with the fast-paced lecture.",
+    "Japanese": "彼女はテンポの速い講義についていくのが難しいと感じた。",
+    "Target": "keep up with",
+    "Note": "keep up with: 〜についていく"
+  },
+  {
+    "Id": "8c9e6fc6-46f5-417c-baa1-49d349ff9d93",
+    "Level": 4,
+    "English": "You should avoid making hasty decisions without enough information.",
+    "Japanese": "十分な情報なしに急いで決断を下すのは避けるべきだ。",
+    "Target": "hasty decisions",
+    "Note": "hasty: 急ぎの・早まった"
+  },
+  {
+    "Id": "14b291c0-c0a4-4dba-93f8-6eab579ddad8",
+    "Level": 4,
+    "English": "The data suggests that there is a strong link between diet and health.",
+    "Japanese": "データは食生活と健康の間に強い結びつきがあることを示唆している。",
+    "Target": "suggests that",
+    "Note": "suggest that: 〜であることを示唆する"
+  },
+  {
+    "Id": "70a874d4-44d7-42bd-9921-360a873e8f2f",
+    "Level": 4,
+    "English": "I'll let you know as soon as the results are available.",
+    "Japanese": "結果が分かり次第、すぐにお知らせします。",
+    "Target": "as soon as the results are available",
+    "Note": "as soon as: 〜するとすぐに / available: 利用可能な"
+  },
+  {
+    "Id": "80b19dd0-6eca-421e-86f7-dcc8585f61d8",
+    "Level": 4,
+    "English": "The library offers a wide variety of books and resources.",
+    "Japanese": "その図書館は多種多様な本や資料を提供している。",
+    "Target": "a wide variety of",
+    "Note": "a wide variety of: 多種多様な"
+  },
+  {
+    "Id": "85ea43ca-1e43-4937-93d3-6666c598d95b",
+    "Level": 4,
+    "English": "We are facing a serious shortage of skilled workers.",
+    "Japanese": "私たちは深刻な熟練労働者不足に直面している。",
+    "Target": "facing a serious shortage",
+    "Note": "face a shortage: 不足に直面する"
+  },
+  {
+    "Id": "bb007757-0728-4205-a921-2d79baa216b7",
+    "Level": 4,
+    "English": "It is worth mentioning that the project was completed ahead of schedule.",
+    "Japanese": "プロジェクトが予定より早く完了したことは言及する価値がある。",
+    "Target": "ahead of schedule",
+    "Note": "ahead of schedule: 予定より早く"
+  },
+  {
+    "Id": "0cf37577-31ab-410c-b1ef-bec36483bd9b",
+    "Level": 4,
+    "English": "The doctor advised her to take a rest for the sake of her health.",
+    "Japanese": "医者は彼女に、健康のために休養をとるよう助言した。",
+    "Target": "for the sake of",
+    "Note": "for the sake of: 〜のために"
+  },
+  {
+    "Id": "c1636278-fa36-489c-9652-6a64f5f94319",
+    "Level": 4,
+    "English": "He is capable of solving complex mathematical problems.",
+    "Japanese": "彼は複雑な数学の問題を解く能力がある。",
+    "Target": "is capable of solving",
+    "Note": "be capable of -ing: 〜する能力がある"
+  },
+  {
+    "Id": "d7482b5c-8bf5-4563-a3f5-f50ebfc14176",
+    "Level": 4,
+    "English": "I'm sorry, but I can't think of his name right now.",
+    "Japanese": "ごめん、今すぐには彼の名前が思い出せないんだ。",
+    "Target": "think of",
+    "Note": "think of: 〜を思いつく・思い出す"
+  },
+  {
+    "Id": "b460841d-9989-41d7-b7cb-ea4e8a3251f8",
+    "Level": 4,
+    "English": "The invention has made it possible for us to travel long distances easily.",
+    "Japanese": "その発明により、私たちは長距離を簡単に移動できるようになった。",
+    "Target": "made it possible",
+    "Note": "make it possible to do: 〜するのを可能にする"
+  },
+  {
+    "Id": "a3f482bf-2e94-4084-8563-93beace57c45",
+    "Level": 4,
+    "English": "The quality of the product is superior to that of our competitors.",
+    "Japanese": "その製品の質は、競合他社のものより優れている。",
+    "Target": "superior to",
+    "Note": "be superior to: 〜より優れている"
+  },
+  {
+    "Id": "f58c8d5d-37f6-400f-9bb7-dcd9bd88beb6",
+    "Level": 4,
+    "English": "He was about to say something when she interrupted him.",
+    "Japanese": "彼女が話を遮った時、彼は何かを言おうとしていた。",
+    "Target": "was about to",
+    "Note": "be about to do: まさに〜しようとしている"
+  },
+  {
+    "Id": "1b22d368-d5d7-4274-8654-eb50818200cd",
+    "Level": 4,
+    "English": "You must abide by the rules of the dormitory.",
+    "Japanese": "寮の規則に従わなければならない。",
+    "Target": "abide by",
+    "Note": "abide by: （規則などに）従う"
+  },
+  {
+    "Id": "7afac087-4268-4e78-a595-e65f5697681e",
+    "Level": 4,
+    "English": "I would like to express my gratitude for your kind assistance.",
+    "Japanese": "あなたの親切な援助に感謝の意を表したいと思います。",
+    "Target": "gratitude",
+    "Note": "gratitude: 感謝"
+  },
+  {
+    "Id": "59719832-b31f-410b-b2a8-cf1a8f167d2e",
+    "Level": 4,
+    "English": "It is hard to believe that he won the lottery.",
+    "Japanese": "彼が宝くじに当たったなんて信じがたい。",
+    "Target": "won the lottery",
+    "Note": "win the lottery: 宝くじに当たる"
+  },
+  {
+    "Id": "6c9e76b1-0b83-4ad3-9e75-ed612635fda3",
+    "Level": 4,
+    "English": "The new system will be beneficial to both teachers and students.",
+    "Japanese": "新しいシステムは教師と生徒の両方にとって有益だろう。",
+    "Target": "beneficial to",
+    "Note": "be beneficial to: 〜にとって有益だ"
+  },
+  {
+    "Id": "41c4e577-a59f-4ccb-9433-e9c247695b27",
+    "Level": 4,
+    "English": "She had no choice but to accept the offer.",
+    "Japanese": "彼女はその申し出を受け入れるしかなかった。",
+    "Target": "had no choice but to accept",
+    "Note": "have no choice but to do: 〜するほかない"
+  },
+  {
+    "Id": "e903df88-0a0d-495d-8430-cbaf576882af",
+    "Level": 4,
+    "English": "The city center is crowded with tourists during the holiday season.",
+    "Japanese": "休暇シーズン中、市街地は観光客で混雑している。",
+    "Target": "crowded with",
+    "Note": "be crowded with: 〜で混雑している"
+  },
+  {
+    "Id": "d02aa460-3cf2-406d-9fa7-ece4a09fd3b1",
+    "Level": 4,
+    "English": "The survey aims to find out the preferences of young consumers.",
+    "Japanese": "その調査は、若い消費者の好みを明らかにすることを目的としている。",
+    "Target": "find out the preferences",
+    "Note": "find out: 〜を明らかにする / preference: 好み"
+  },
+  {
+    "Id": "02ed712b-96f0-4e57-8de5-7c28bc6c4e5c",
+    "Level": 4,
+    "English": "There are many advantages to living in a big city.",
+    "Japanese": "大都市に住むことには多くの利点がある。",
+    "Target": "advantages to living",
+    "Note": "advantage: 利点・メリット"
+  },
+  {
+    "Id": "5ab58efa-a6c3-4545-a976-7423fc6b3c44",
+    "Level": 4,
+    "English": "The company is struggling to maintain its market share.",
+    "Japanese": "その会社は市場シェアを維持するのに苦労している。",
+    "Target": "struggling to maintain",
+    "Note": "struggle to do: 〜するのに苦労する"
+  },
+  {
+    "Id": "c7e9e887-e8a9-4e17-a65d-461f1e7e8736",
+    "Level": 4,
+    "English": "He is not only a great athlete but also a dedicated student.",
+    "Japanese": "彼は素晴らしいアスリートであるだけでなく、熱心な学生でもある。",
+    "Target": "not only a great athlete but also",
+    "Note": "not only A but also B: AだけでなくBも"
+  },
+  {
+    "Id": "508e0b66-70bb-4be0-a44b-234c65545095",
+    "Level": 4,
+    "English": "The weather forecast says it is going to be cloudy tomorrow.",
+    "Japanese": "天気予報によると、明日は曇りになるそうだ。",
+    "Target": "weather forecast",
+    "Note": "weather forecast: 天気予報"
+  },
+  {
+    "Id": "28cf5c1e-de00-450d-9dbd-4c2b665fcb54",
+    "Level": 4,
+    "English": "I am familiar with the basic principles of economics.",
+    "Japanese": "私は経済学の基本原則をよく知っている。",
+    "Target": "familiar with",
+    "Note": "be familiar with: 〜をよく知っている"
+  },
+  {
+    "Id": "e0ec7b6b-cd23-4421-8734-0c9fb006701b",
+    "Level": 4,
+    "English": "The project was a success owing to his leadership.",
+    "Japanese": "彼のリーダーシップのおかげで、プロジェクトは成功した。",
+    "Target": "owing to",
+    "Note": "owing to: 〜のおかげで（理由）"
+  },
+  {
+    "Id": "b5e4789b-8713-4b5b-9da4-7ad293f5d7e4",
+    "Level": 4,
+    "English": "It is necessary to take safety measures against earthquakes.",
+    "Japanese": "地震に対する安全対策を講じる必要がある。",
+    "Target": "take measures",
+    "Note": "take measures: 対策を講じる"
+  },
+  {
+    "Id": "389212a1-5bdf-4429-a60d-a94d832e54b9",
+    "Level": 4,
+    "English": "He finally made up his mind to study abroad.",
+    "Japanese": "彼はついに留学することを決心した。",
+    "Target": "made up his mind",
+    "Note": "make up one's mind: 決心する"
+  },
+  {
+    "Id": "0ad27c97-4570-44c3-adc6-43a1d01c05e7",
+    "Level": 4,
+    "English": "She tends to be optimistic even in difficult situations.",
+    "Japanese": "彼女は困難な状況でも楽観的になる傾向がある。",
+    "Target": "tends to be optimistic",
+    "Note": "optimistic: 楽観的な"
+  },
+  {
+    "Id": "1545f73a-4ace-4014-8bc7-9a0a70f793b4",
+    "Level": 4,
+    "English": "The building was destroyed by the fire last night.",
+    "Japanese": "その建物は昨夜の火事で破壊された。",
+    "Target": "was destroyed by",
+    "Note": "be destroyed by: 〜によって破壊される"
+  },
+  {
+    "Id": "89214855-c5f4-421f-abd6-aaeae3d5a529",
+    "Level": 4,
+    "English": "We should make effective use of our limited resources.",
+    "Japanese": "限られた資源を有効に活用すべきだ。",
+    "Target": "make effective use of",
+    "Note": "make use of: 〜を活用する"
+  },
+  {
+    "Id": "0ea585e1-d508-4e7a-89fd-f1779379aaeb",
+    "Level": 4,
+    "English": "The new tax law will go into effect from next April.",
+    "Japanese": "新しい税法は来年4月から施行される。",
+    "Target": "go into effect",
+    "Note": "go into effect: 施行される"
+  },
+  {
+    "Id": "d30a57e9-3151-469b-871e-a3657ba00b79",
+    "Level": 4,
+    "English": "I'm afraid I cannot agree with your opinion on this matter.",
+    "Japanese": "あいにく、この件に関するあなたの意見には同意できません。",
+    "Target": "on this matter",
+    "Note": "on this matter: この件に関して"
+  },
+  {
+    "Id": "550981a1-e24d-4801-b2c7-46a0ea015349",
+    "Level": 4,
+    "English": "Generally, high-quality products are expensive to produce.",
+    "Japanese": "一般的に、高品質の製品は製造コストが高い。",
+    "Target": "Generally",
+    "Note": "generally: 一般的に"
+  },
+  {
+    "Id": "4cc97602-32d8-46da-b4aa-2ad13ff792c3",
+    "Level": 4,
+    "English": "The expansion of the city led to the loss of natural habitats.",
+    "Japanese": "都市の拡大が自然の生息地の喪失につながった。",
+    "Target": "expansion of the city",
+    "Note": "expansion: 拡大"
+  },
+  {
+    "Id": "4f42625c-8d26-498c-b355-0e08de8f4b5b",
+    "Level": 4,
+    "English": "It is assumed that the problem will be resolved by the end of the month.",
+    "Japanese": "その問題は月末までに解決されると想定されている。",
+    "Target": "is assumed that",
+    "Note": "assume: 〜と想定する・仮定する"
+  },
+  {
+    "Id": "f465a092-a38e-4abc-969b-72d80b2dbe30",
+    "Level": 4,
+    "English": "The government has imposed a new tax on luxury goods.",
+    "Japanese": "政府は贅沢品に新しい税を課した。",
+    "Target": "imposed a new tax on",
+    "Note": "impose A on B: BにAを課す"
+  },
+  {
+    "Id": "a5cf167e-8ed1-4433-a902-d0a14a3f21ee",
+    "Level": 4,
+    "English": "Her success is largely attributed to her constant efforts.",
+    "Japanese": "彼女の成功は、主に絶え間ない努力によるものだと考えられている。",
+    "Target": "largely attributed to",
+    "Note": "attribute A to B: AをBのせい（おかげ）とする"
+  },
+  {
+    "Id": "4de4cc92-6267-4549-8f96-f0c6243d665d",
+    "Level": 4,
+    "English": "The scientists are exploring new ways to reduce carbon emissions.",
+    "Japanese": "科学者たちは二酸化炭素排出量を削減する新しい方法を探索している。",
+    "Target": "are exploring new ways",
+    "Note": "explore new ways: 新しい方法を探索する"
+  },
+  {
+    "Id": "5a5b49b0-67a4-4ba2-9a55-4f05803b513f",
+    "Level": 4,
+    "English": "We need to implement more flexible working hours for employees.",
+    "Japanese": "従業員のためにより柔軟な勤務時間を導入する必要がある。",
+    "Target": "flexible working hours",
+    "Note": "flexible: 柔軟な"
+  },
+  {
+    "Id": "969b39d7-8fd8-4214-bef8-6d6a7cc460a5",
+    "Level": 4,
+    "English": "The experiment yielded unexpected results that surprised everyone.",
+    "Japanese": "その実験は全員を驚かせる予期せぬ結果をもたらした。",
+    "Target": "yielded unexpected results",
+    "Note": "yield: 〜を産出する・もたらす"
+  },
+  {
+    "Id": "65aa72cb-6d2d-434d-b567-c27730df018e",
+    "Level": 4,
+    "English": "I cannot emphasize enough how important this meeting is.",
+    "Japanese": "この会議がいかに重要か、いくら強調してもしすぎることはない。",
+    "Target": "cannot emphasize enough",
+    "Note": "cannot ... enough: いくら〜してもしすぎることはない"
+  },
+  {
+    "Id": "eb131418-612a-440a-ad92-dee49e7de5e2",
+    "Level": 4,
+    "English": "The population density is much higher in urban areas than in rural areas.",
+    "Japanese": "人口密度は田舎よりも都市部の方がはるかに高い。",
+    "Target": "urban areas than in rural",
+    "Note": "urban / rural: 都会の / 田舎の"
+  },
+  {
+    "Id": "d18d009f-5416-4add-8d1e-5c4df8ba6f88",
+    "Level": 4,
+    "English": "He was reluctant to participate in the project at first.",
+    "Japanese": "彼は最初、そのプロジェクトに参加するのを嫌がっていた。",
+    "Target": "reluctant to participate",
+    "Note": "be reluctant to do: 〜するのを嫌がる"
+  },
+  {
+    "Id": "9a7ed568-0ab4-415a-a41e-06e413a8710d",
+    "Level": 4,
+    "English": "The instructions were so sophisticated that I couldn't understand them.",
+    "Japanese": "その指示は非常に精巧（複雑）だったので、理解できなかった。",
+    "Target": "so sophisticated that",
+    "Note": "so ... that 〜: とても…なので〜"
+  },
+  {
+    "Id": "344ba041-c4fc-403b-b581-07caf2f5945f",
+    "Level": 4,
+    "English": "The heavy rain caused a significant delay in the train schedule.",
+    "Japanese": "大雨が列車のスケジュールに大幅な遅れを引き起こした。",
+    "Target": "significant delay",
+    "Note": "significant: 大幅な・重要な"
+  },
+  {
+    "Id": "dfb01f62-f10f-45a6-be3b-09acc7a93f25",
+    "Level": 4,
+    "English": "We are looking for a candidate who has excellent communication skills.",
+    "Japanese": "優れたコミュニケーション能力を持つ候補者を探している。",
+    "Target": "looking for a candidate",
+    "Note": "look for: 〜を探す / candidate: 候補者"
+  },
+  {
+    "Id": "c0d066d4-23b9-4386-a08f-1c5cb7f2cb07",
+    "Level": 4,
+    "English": "The novel provides deep insights into the history of the region.",
+    "Japanese": "その小説はその地域の歴史に対する深い洞察を与えてくれる。",
+    "Target": "deep insights into",
+    "Note": "insight: 洞察・見識"
+  },
+  {
+    "Id": "f018d448-e809-464c-a3ee-45421477250d",
+    "Level": 4,
+    "English": "It is predicted that temperatures will continue to rise over the next decade.",
+    "Japanese": "今後10年間、気温は上昇し続けると予測されている。",
+    "Target": "over the next decade",
+    "Note": "decade: 10年間"
+  },
+  {
+    "Id": "4e8fa9cd-ea1c-4d0b-812f-6bef37403c5b",
+    "Level": 4,
+    "English": "The findings of the study suggest that more research is needed.",
+    "Japanese": "その研究の結果は、さらなる調査が必要であることを示唆している。",
+    "Target": "suggest that",
+    "Note": "suggest that: 〜であることを示唆する"
+  },
+  {
+    "Id": "80fa7ded-3ea2-483f-b4a4-c60b5d086cc7",
+    "Level": 4,
+    "English": "Technology enables us to access information from anywhere in the world.",
+    "Japanese": "テクノロジーのおかげで、世界中どこからでも情報にアクセスできる。",
+    "Target": "enables us to access",
+    "Note": "enable A to do: Aが〜するのを可能にする"
+  },
+  {
+    "Id": "e83a340f-2805-48f1-804c-eeea083eaf4f",
+    "Level": 4,
+    "English": "The manager took full responsibility for the failure of the project.",
+    "Japanese": "マネージャーはそのプロジェクトの失敗の全責任を負った。",
+    "Target": "took full responsibility for",
+    "Note": "take responsibility for: 〜に責任を負う"
+  },
+  {
+    "Id": "d4a99652-2fd3-497d-9cad-1d9776cfe6f4",
+    "Level": 4,
+    "English": "The new law aims to protect the rights of minority groups.",
+    "Japanese": "新しい法律は少数派グループの権利を保護することを目的としている。",
+    "Target": "minority groups",
+    "Note": "minority: 少数派"
+  },
+  {
+    "Id": "98664584-a1a7-48b5-ba09-660ecf208662",
+    "Level": 4,
+    "English": "It is worth noting that the results were better than expected.",
+    "Japanese": "結果が予想より良かったことは注目に値する。",
+    "Target": "It is worth noting that",
+    "Note": "It is worth noting that: 〜は注目に値する"
+  },
+  {
+    "Id": "c529b33e-ef3e-40eb-a9c8-a0b13558c6a6",
+    "Level": 4,
+    "English": "The medicine should be used with caution due to potential side effects.",
+    "Japanese": "その薬は潜在的な副作用のため、注意して使用されるべきだ。",
+    "Target": "with caution",
+    "Note": "with caution: 注意して"
+  },
+  {
+    "Id": "6997c770-54d8-4152-9608-6bde074990b7",
+    "Level": 4,
+    "English": "The university offers a diverse range of courses for students.",
+    "Japanese": "その大学は学生向けに多様なコースを提供している。",
+    "Target": "diverse range of",
+    "Note": "diverse range of: 多様な〜"
+  },
+  {
+    "Id": "129f7617-f13f-47f5-8bf8-142eab73383d",
+    "Level": 4,
+    "English": "The error was discovered by chance during a routine inspection.",
+    "Japanese": "そのエラーは定期検査中にたまたま発見された。",
+    "Target": "by chance",
+    "Note": "by chance: たまたま・偶然"
+  },
+  {
+    "Id": "1e53c321-29c7-4e48-b8ae-57db25fcffb1",
+    "Level": 4,
+    "English": "The building was reinforced to withstand strong earthquakes.",
+    "Japanese": "その建物は強い地震に耐えられるように補強された。",
+    "Target": "reinforced to withstand",
+    "Note": "reinforce: 〜を補強する / withstand: 〜に耐える"
+  },
+  {
+    "Id": "caebdc05-9384-4682-8410-9dfdc84bc033",
+    "Level": 4,
+    "English": "The price includes taxes, so you don't need to pay extra.",
+    "Japanese": "価格には税金が含まれているので、追加で支払う必要はない。",
+    "Target": "don't need to pay extra",
+    "Note": "extra: 追加の"
+  },
+  {
+    "Id": "d642fb95-8791-4df0-a18e-721d41c0b7ae",
+    "Level": 4,
+    "English": "I'm not familiar with the technical details of this equipment.",
+    "Japanese": "私はこの装置の技術的な詳細については詳しくない。",
+    "Target": "familiar with",
+    "Note": "be familiar with: 〜に詳しい"
+  },
+  {
+    "Id": "4553cfbb-d48b-4ca2-bb8b-c232af34abb5",
+    "Level": 4,
+    "English": "The primary goal of the organization is to help children in need.",
+    "Japanese": "その組織の主な目標は、困っている子供たちを助けることだ。",
+    "Target": "primary goal",
+    "Note": "primary: 主要な"
+  },
+  {
+    "Id": "713edd40-41c1-4612-9041-e1e68cd334f8",
+    "Level": 4,
+    "English": "He was frustrated by his inability to communicate effectively.",
+    "Japanese": "彼は効果的に意思疎通ができないことにフラストレーションを感じた。",
+    "Target": "was frustrated by",
+    "Note": "be frustrated by: 〜にいらだつ"
+  },
+  {
+    "Id": "bbcc6f28-bdb9-411a-9e2a-99bbebe3f42a",
+    "Level": 4,
+    "English": "We should take advantage of the latest technological developments.",
+    "Japanese": "最新の技術開発を利用すべきだ。",
+    "Target": "take advantage of",
+    "Note": "take advantage of: 〜を利用する"
+  },
+  {
+    "Id": "87e6545e-fa93-4b3c-b64a-d1a0db22d902",
+    "Level": 4,
+    "English": "The lecture covered a wide range of topics related to psychology.",
+    "Japanese": "その講義は心理学に関連する幅広いトピックを扱った。",
+    "Target": "covered a wide range of",
+    "Note": "cover a wide range of: 幅広い〜を扱う"
+  },
+  {
+    "Id": "6d69d712-1bb3-40c0-9e4f-09bb209bef91",
+    "Level": 4,
+    "English": "The survey revealed that most people prefer working from home.",
+    "Japanese": "調査の結果、ほとんどの人が在宅勤務を好むことが明らかになった。",
+    "Target": "revealed that",
+    "Note": "reveal that: 〜であることを明らかにする"
+  },
+  {
+    "Id": "20f25996-f694-416e-b091-4695dfeb77de",
+    "Level": 4,
+    "English": "We must ensure that the waste is disposed of properly.",
+    "Japanese": "廃棄物が適切に処分されることを確実にしなければならない。",
+    "Target": "disposed of",
+    "Note": "dispose of: 〜を処分する"
+  },
+  {
+    "Id": "ec0604e9-0f18-469e-bff1-de6d6a4bf3d2",
+    "Level": 4,
+    "English": "His argument is based on the assumption that humans are rational.",
+    "Japanese": "彼の主張は、人間は合理的であるという仮定に基づいている。",
+    "Target": "based on the assumption",
+    "Note": "be based on the assumption: 〜という仮定に基づく"
+  },
+  {
+    "Id": "6c5d0db6-0150-4422-aade-1e1af77e54f5",
+    "Level": 4,
+    "English": "The situation is becoming increasingly difficult for local businesses.",
+    "Japanese": "地元の企業にとって状況はますます困難になっている。",
+    "Target": "becoming increasingly",
+    "Note": "become increasingly: ますます〜になる"
+  },
+  {
+    "Id": "c548e96c-d59b-44f8-9ce3-6188009d2d4a",
+    "Level": 4,
+    "English": "The museum is famous for its collection of ancient artifacts.",
+    "Japanese": "その博物館は古代の工芸品のコレクションで有名だ。",
+    "Target": "collection of ancient artifacts",
+    "Note": "artifact: 工芸品・遺物"
+  },
+  {
+    "Id": "2266f724-d8c1-4549-a8d0-9a962047dd22",
+    "Level": 4,
+    "English": "It is crucial to maintain a balance between economic growth and environmental protection.",
+    "Japanese": "経済成長と環境保護のバランスを維持することが極めて重要だ。",
+    "Target": "is crucial to",
+    "Note": "be crucial to: 〜にとって極めて重要だ"
+  },
+  {
+    "Id": "8d1348b2-34e0-4ad7-b100-2da7bb0c6cbb",
+    "Level": 4,
+    "English": "I have no doubt that she will be successful in her future career.",
+    "Japanese": "彼女が将来のキャリアで成功することに疑いはない。",
+    "Target": "have no doubt that",
+    "Note": "have no doubt that: 〜に疑いはない"
+  },
+  {
+    "Id": "2d690b41-229c-4f92-abba-398505034790",
+    "Level": 4,
+    "English": "The company is dedicated to providing high-quality service to its customers.",
+    "Japanese": "その会社は顧客に高品質なサービスを提供することに専念している。",
+    "Target": "dedicated to",
+    "Note": "dedicated to: 〜に専念している"
+  },
+  {
+    "Id": "724938cb-bd5a-4a1a-a2de-bd5e1408a0b9",
+    "Level": 4,
+    "English": "Generally speaking, people tend to fear what they do not understand.",
+    "Japanese": "一般的に言って、人は理解できないものを恐れる傾向がある。",
+    "Target": "tend to fear",
+    "Note": "tend to do: 〜する傾向がある"
+  },
+  {
+    "Id": "cc450fbd-17b1-4c2f-b1a9-c2025fea06c2",
+    "Level": 4,
+    "English": "The city has undergone significant changes since I last visited.",
+    "Japanese": "その都市は私が最後に訪れてから大きな変化を遂げた。",
+    "Target": "has undergone",
+    "Note": "undergo: 〜を経験する（has undergone: 経験してきた）"
+  },
+  {
+    "Id": "b7c985fe-76bd-4ec4-9a4a-3502f50db459",
+    "Level": 3,
+    "English": "Not only did he arrive late, but he also forgot his presentation materials.",
+    "Japanese": "彼は遅刻しただけでなく、プレゼン資料も忘れてきた。",
+    "Target": "Not only did he arrive",
+    "Note": "Not only + 疑問文の語順（倒置）"
+  },
+  {
+    "Id": "264a891c-80d6-44fa-8172-574b8d3e62d5",
+    "Level": 3,
+    "English": "Had I known the truth, I would have made a different decision.",
+    "Japanese": "もし真実を知っていたら、別の決断を下していただろう。",
+    "Target": "Had I known",
+    "Note": "Ifの省略に伴う倒置（仮定法過去完了）"
+  },
+  {
+    "Id": "c4d642e0-b07e-4522-8eb5-3767dc250dfb",
+    "Level": 3,
+    "English": "It was not until I went abroad that I realized the beauty of my own culture.",
+    "Japanese": "外国に行ってはじめて、自国文化の素晴らしさに気づいた。",
+    "Target": "not until I went abroad that",
+    "Note": "It is not until ... that 〜: 〜してはじめて…する"
+  },
+  {
+    "Id": "8f3bf8c3-a689-443a-8780-218a6f4d25a1",
+    "Level": 3,
+    "English": "Rarely do we see such a magnificent sunrise in this part of the country.",
+    "Japanese": "この地域でこれほど見事な日の出を見ることはめったにない。",
+    "Target": "Rarely do we see",
+    "Note": "否定語(Rarely)が文頭に出たことによる倒置"
+  },
+  {
+    "Id": "ad26e79b-dc34-4f4b-a298-8f1698dd1208",
+    "Level": 3,
+    "English": "The more we learn about the universe, the more we realize how little we know.",
+    "Japanese": "宇宙について学べば学ぶほど、いかに自分が何も知らないかに気づく。",
+    "Target": "The more we learn, the more we realize",
+    "Note": "The + 比較級, the + 比較級"
+  },
+  {
+    "Id": "c56a18fa-284a-4590-be18-dafe4deac2f2",
+    "Level": 3,
+    "English": "No sooner had he sat down than the phone started ringing again.",
+    "Japanese": "彼が座るか座らないうちに、電話がまた鳴り出しだ。",
+    "Target": "No sooner had he sat down than",
+    "Note": "No sooner ... than 〜: 〜するとすぐに"
+  },
+  {
+    "Id": "1f1e2413-8f68-4265-b4f4-1b28a6663129",
+    "Level": 3,
+    "English": "Hardly had I entered the house when the lights went out.",
+    "Japanese": "家に入るか入らないかのうちに、電気が消えた。",
+    "Target": "Hardly had I entered",
+    "Note": "Hardly ... when 〜: 〜するとすぐに"
+  },
+  {
+    "Id": "a1682ad8-90ab-48b1-9ab7-733b7ed0e373",
+    "Level": 3,
+    "English": "Should you have any further questions, please do not hesitate to contact us.",
+    "Japanese": "万が一さらに質問がございましたら、遠慮なくご連絡ください。",
+    "Target": "Should you have",
+    "Note": "Ifの省略に伴うShouldの倒置（仮定法）"
+  },
+  {
+    "Id": "0d1dd585-2ada-41f5-aef7-116a2d0e8e9e",
+    "Level": 3,
+    "English": "It is high time that we took concrete measures to solve the climate crisis.",
+    "Japanese": "気候危機を解決するために具体的な策を講じてもよい時期だ。",
+    "Target": "high time that we took",
+    "Note": "It's high time + 過去形: もうとっくに〜すべき頃だ（遅いくらいだ）"
+  },
+  {
+    "Id": "f188faa0-db3b-420e-bbfe-a20fced3d7e3",
+    "Level": 3,
+    "English": "I would rather stay at home than go out in such a heavy rain.",
+    "Japanese": "こんな大雨の中を外出するより、むしろ家にいたい。",
+    "Target": "would rather stay at home than go out",
+    "Note": "would rather A than B: BよりむしろAしたい"
+  },
+  {
+    "Id": "81c8430d-bb75-4e81-86ae-c9f8128610cd",
+    "Level": 3,
+    "English": "He talks as if he were an expert on the subject, which he is not.",
+    "Japanese": "彼はその件の専門家であるかのように話すが、実際は違う。",
+    "Target": "as if he were",
+    "Note": "as if + 過去形: まるで〜であるかのように"
+  },
+  {
+    "Id": "28f86408-0e32-40df-b944-2cc3892d1ba1",
+    "Level": 3,
+    "English": "The doctor suggested that she take a few days off from work.",
+    "Japanese": "医者は彼女に、仕事を数日休むよう提案した。",
+    "Target": "suggested that she take",
+    "Note": "suggest that + 原形（仮定法現在）"
+  },
+  {
+    "Id": "81f2b7fc-df3b-454f-8005-8457ab8a28d2",
+    "Level": 3,
+    "English": "Whatever the result may be, I am proud of the effort you've put in.",
+    "Japanese": "結果がどうあれ、君の努力を誇りに思う。",
+    "Target": "Whatever the result may be",
+    "Note": "Whatever ... may be: たとえ何が〜でも"
+  },
+  {
+    "Id": "5f4a801c-0ede-46c2-a5e5-2eb902623814",
+    "Level": 3,
+    "English": "However hard he tried, he couldn't solve the complex puzzle.",
+    "Japanese": "どんなに一生懸命試みても、彼はその複雑なパズルを解けなかった。",
+    "Target": "However hard he tried",
+    "Note": "However + 形容詞/副詞: どんなに〜でも"
+  },
+  {
+    "Id": "daf31ff9-027f-4103-a8e4-af29a23a1634",
+    "Level": 3,
+    "English": "Such was the force of the wind that many trees were blown down.",
+    "Japanese": "風の力があまりに強かったので、多くの木がなぎ倒された。",
+    "Target": "Such was the force of the wind that",
+    "Note": "Such is ... that 〜: 〜は大変なものなので…"
+  },
+  {
+    "Id": "06a2134f-1adb-43a6-9d9e-0d996883c207",
+    "Level": 3,
+    "English": "Scarcely had the movie started when I realized I had seen it before.",
+    "Japanese": "映画が始まるか始まらないうちに、以前見たことがあると気づいた。",
+    "Target": "Scarcely had the movie started when",
+    "Note": "Scarcely ... when 〜: 〜するとすぐに"
+  },
+  {
+    "Id": "328ea552-ca67-4128-890e-941613108fd4",
+    "Level": 3,
+    "English": "On no account should you disclose your password to anyone.",
+    "Japanese": "どんな理由があっても、パスワードを誰にも教えてはいけない。",
+    "Target": "On no account should you",
+    "Note": "On no account: 決して〜ない（倒置を伴う）"
+  },
+  {
+    "Id": "7e50aa61-3a3d-4901-9699-9da1cbe33435",
+    "Level": 3,
+    "English": "Little did I dream that I would meet her again in such a place.",
+    "Japanese": "そんな場所で彼女に再会するとは夢にも思わなかった。",
+    "Target": "Little did I dream",
+    "Note": "Little did one dream: 〜とは夢にも思わなかった"
+  },
+  {
+    "Id": "fb775a7f-0b90-4af9-b7d7-dfecd764c6df",
+    "Level": 3,
+    "English": "Only after a long discussion did they reach a final agreement.",
+    "Japanese": "長い議論の後ではじめて、彼らは最終合意に達した。",
+    "Target": "Only after a long discussion did they reach",
+    "Note": "Only after ... + 倒置: 〜してはじめて"
+  },
+  {
+    "Id": "de09bcf7-3830-482a-9170-bed3f3317187",
+    "Level": 3,
+    "English": "He is as talented a musician as ever lived in this country.",
+    "Japanese": "彼は、この国のかつてないほど才能豊かな音楽家だ。",
+    "Target": "as talented a musician as ever lived",
+    "Note": "as + 形容詞 + a + 名詞 + as ever: （歴史上）まれに見る〜"
+  },
+  {
+    "Id": "537fcc4a-6c69-4ef6-b510-9d35e25a9585",
+    "Level": 3,
+    "English": "It is no exaggeration to say that computers have changed our lives.",
+    "Japanese": "コンピュータが私たちの生活を変えたと言っても過言ではない。",
+    "Target": "no exaggeration to say",
+    "Note": "It is no exaggeration to say that: 〜と言っても過言ではない"
+  },
+  {
+    "Id": "64c13fe0-58c2-44e5-8bfe-18b85cc85b2e",
+    "Level": 3,
+    "English": "There is no denying that the world is becoming more interconnected.",
+    "Japanese": "世界がより相互に関連し合っていることは否定できない。",
+    "Target": "no denying",
+    "Note": "There is no -ing: 〜できない"
+  },
+  {
+    "Id": "7a051c22-7930-4fa0-a769-e97dd13ce71e",
+    "Level": 3,
+    "English": "A man of his intelligence should be able to solve this problem easily.",
+    "Japanese": "彼ほどの知性がある人なら、この問題を簡単に解決できるはずだ。",
+    "Target": "A man of",
+    "Note": "A man of + 抽象名詞: 〜な人"
+  },
+  {
+    "Id": "e6bc6b2e-2bb2-4bd2-a53f-57071739554a",
+    "Level": 3,
+    "English": "To make matters worse, it started to snow heavily while we were lost.",
+    "Japanese": "さらに悪いことに、道に迷っている間に雪が激しく降り始めた。",
+    "Target": "To make matters worse",
+    "Note": "To make matters worse: さらに悪いことに"
+  },
+  {
+    "Id": "891c0274-92f4-4190-806e-d91a220df511",
+    "Level": 3,
+    "English": "Strictly speaking, his theory is not based on scientific evidence.",
+    "Japanese": "厳密に言えば、彼の理論は科学的根拠に基づいたものではない。",
+    "Target": "Strictly speaking",
+    "Note": "strictly speaking: 厳密に言えば"
+  },
+  {
+    "Id": "e6f8f608-d01e-46e0-ad43-336bff0a3df2",
+    "Level": 3,
+    "English": "Taking everything into consideration, the plan seems to be reasonable.",
+    "Japanese": "すべてを考慮に入れると、その計画は妥当なようだ。",
+    "Target": "Taking everything into consideration",
+    "Note": "Taking everything into consideration: すべてを考慮すると"
+  },
+  {
+    "Id": "056b1d9f-7bc2-47d2-8b8b-ffb0be3649de",
+    "Level": 3,
+    "English": "Judging from the look of the sky, it is likely to rain in the afternoon.",
+    "Japanese": "空模様から判断すると、午後は雨が降りそうだ。",
+    "Target": "Judging from",
+    "Note": "Judging from: 〜から判断すると"
+  },
+  {
+    "Id": "1ad5c8eb-b62b-404c-8c2b-5a798d66e9b8",
+    "Level": 3,
+    "English": "The problem is not so much what he said as the way he said it.",
+    "Japanese": "問題は、彼が何を言ったかというよりは、その言い方にある。",
+    "Target": "not so much what he said as",
+    "Note": "not so much A as B: AというよりはB"
+  },
+  {
+    "Id": "6e08033f-50fe-43ec-8178-01b7e2e81969",
+    "Level": 3,
+    "English": "He has more money than he knows what to do with.",
+    "Japanese": "彼は使いきれないほどのお金を持っている。",
+    "Target": "more money than he knows what to do with",
+    "Note": "more ... than one knows what to do with"
+  },
+  {
+    "Id": "26256fa7-406e-4b63-ac48-a670d8f7d5a0",
+    "Level": 3,
+    "English": "No other city in Japan is as crowded as Tokyo.",
+    "Japanese": "日本で東京ほど混雑している都市は他にない。",
+    "Target": "No other city in Japan is as crowded as",
+    "Note": "No other ... is as 〜 as ...: 他のどれも…ほど〜ではない"
+  },
+  {
+    "Id": "c2879eff-ff6a-479f-bdbe-a945db227c2b",
+    "Level": 3,
+    "English": "The invention of the steam engine brought about a social revolution.",
+    "Japanese": "蒸気機関の発明は社会革命をもたらした。",
+    "Target": "brought about",
+    "Note": "bring about: 〜をもたらす"
+  },
+  {
+    "Id": "89b3d13c-b52f-492d-8f26-0cff26f87997",
+    "Level": 3,
+    "English": "She went through a lot of hardships before achieving success.",
+    "Japanese": "彼女は成功を収める前に、多くの苦難を経験した。",
+    "Target": "went through",
+    "Note": "go through: 〜を経験する"
+  },
+  {
+    "Id": "82651ada-20f3-4cb0-b4fc-12fa50a364bc",
+    "Level": 3,
+    "English": "We must keep pace with the rapid changes in technology.",
+    "Japanese": "私たちはテクノロジーの急速な変化に遅れずについていかなければならない。",
+    "Target": "keep pace with",
+    "Note": "keep pace with: 〜に遅れずについていく"
+  },
+  {
+    "Id": "4bb2b0a3-deef-48ee-9950-3245d2c1ff3a",
+    "Level": 3,
+    "English": "The results of the experiment fell short of our expectations.",
+    "Japanese": "実験の結果は、私たちの期待に及ばなかった。",
+    "Target": "fell short of",
+    "Note": "fall short of: 〜に及ばない・不足する"
+  },
+  {
+    "Id": "87d15543-bfa2-441b-a886-d03352b33fe4",
+    "Level": 3,
+    "English": "He is independent of his parents and lives on his own.",
+    "Japanese": "彼は両親から独立しており、自力で生活している。",
+    "Target": "independent of",
+    "Note": "independent of: 〜から独立している"
+  },
+  {
+    "Id": "8785aafb-dca7-4b63-a52c-68bb0b534578",
+    "Level": 3,
+    "English": "In the light of recent events, we have decided to change our policy.",
+    "Japanese": "最近の出来事を考慮して、私たちは方針を変更することに決めた。",
+    "Target": "In the light of",
+    "Note": "in the light of: 〜を考慮して"
+  },
+  {
+    "Id": "86cae9dc-381e-4f4c-a648-153b506a6cf8",
+    "Level": 3,
+    "English": "I will help you on condition that you keep it a secret.",
+    "Japanese": "秘密を守るという条件で、あなたを助けましょう。",
+    "Target": "on condition that",
+    "Note": "on condition that: 〜という条件で"
+  },
+  {
+    "Id": "0e5b6d26-923f-47c2-b88d-ffc0881c2e68",
+    "Level": 3,
+    "English": "The supply of fresh water is not sufficient to meet the demand.",
+    "Japanese": "淡水の供給は需要を満たすのに十分ではない。",
+    "Target": "sufficient to",
+    "Note": "be sufficient to: 〜するのに十分だ"
+  },
+  {
+    "Id": "d8676365-0ae8-40e8-a29f-f60486bdbf72",
+    "Level": 3,
+    "English": "The project was carried out by means of advanced technology.",
+    "Japanese": "プロジェクトは高度な技術を用いて遂行された。",
+    "Target": "by means of",
+    "Note": "by means of: 〜を用いて"
+  },
+  {
+    "Id": "4636221d-9399-40a2-b982-d3f7a1d14700",
+    "Level": 3,
+    "English": "With a view to expanding the business, they opened a new branch in Asia.",
+    "Japanese": "事業拡大を視野に入れて、彼らはアジアに新支店を開設した。",
+    "Target": "With a view to expanding",
+    "Note": "with a view to -ing: 〜する目的で"
+  },
+  {
+    "Id": "7009ca41-380d-48c4-8d32-1c733e7d6385",
+    "Level": 3,
+    "English": "He is second to none when it comes to playing the piano.",
+    "Japanese": "ピアノを弾くことに関しては、彼は誰にも引けをとらない。",
+    "Target": "second to none",
+    "Note": "be second to none: 誰にも引けをとらない"
+  },
+  {
+    "Id": "f5b93868-9da1-4264-858b-d7e9b2f5f2a4",
+    "Level": 3,
+    "English": "Success consists in doing your best in everything you do.",
+    "Japanese": "成功とは、なすことすべてに最善を尽くすことにある。",
+    "Target": "consists in",
+    "Note": "consist in: 〜にある（本質）"
+  },
+  {
+    "Id": "df6cb1c1-8772-486e-b413-afd21bb316e1",
+    "Level": 4,
+    "English": "The new law is intended to prevent discrimination against minorities.",
+    "Japanese": "新法は少数派に対する差別を防止することを意図している。",
+    "Target": "is intended to",
+    "Note": "be intended to: 〜することを意図している"
+  },
+  {
+    "Id": "3bdec262-44dd-4e06-8483-babdeee771a0",
+    "Level": 3,
+    "English": "I'm sorry to have kept you waiting for such a long time.",
+    "Japanese": "こんなに長い間お待たせして申し訳ありません。",
+    "Target": "to have kept you waiting",
+    "Note": "to have + 過去分詞（完了不定詞）"
+  },
+  {
+    "Id": "c15462c3-a51b-4542-bba2-1129f2cf6cc1",
+    "Level": 3,
+    "English": "He is the last person who would tell a lie to his friends.",
+    "Japanese": "彼は友人に嘘をつくような人では決してない。",
+    "Target": "the last person who would tell a lie",
+    "Note": "the last person who ...: 決して〜しない人"
+  },
+  {
+    "Id": "919f52c8-db91-4bd7-b621-b6da3575f4af",
+    "Level": 3,
+    "English": "The city is worth visiting at least once in your life.",
+    "Japanese": "その都市は人生で少なくとも一度は訪れる価値がある。",
+    "Target": "worth visiting",
+    "Note": "be worth -ing: 〜する価値がある"
+  },
+  {
+    "Id": "f54106a3-8399-4bbc-8b55-5a6ad4bccc73",
+    "Level": 3,
+    "English": "I found it impossible to persuade him to change his mind.",
+    "Japanese": "彼を説得して考えを変えさせるのは不可能だとわかった。",
+    "Target": "found it impossible to persuade",
+    "Note": "find it ... to do: 〜するのが…だとわかる"
+  },
+  {
+    "Id": "c29f4090-fe49-4775-8864-c745eeb22bf2",
+    "Level": 3,
+    "English": "The heavy snow prevented us from arriving at the airport on time.",
+    "Japanese": "大雪のせいで、私たちは空港に定刻通り到着できなかった。",
+    "Target": "prevented us from arriving",
+    "Note": "prevent A from -ing: Aが〜するのを妨げる"
+  },
+  {
+    "Id": "1d249edd-66eb-4239-8a8e-09e072f805d8",
+    "Level": 3,
+    "English": "You should refrain from making personal comments during the meeting.",
+    "Japanese": "会議中は個人的な発言を控えるべきだ。",
+    "Target": "refrain from making",
+    "Note": "refrain from -ing: 〜するのを控える"
+  },
+  {
+    "Id": "bf4cd250-8f5e-4064-b7d7-fc00471220f0",
+    "Level": 3,
+    "English": "The atmosphere of the earth protects us from harmful radiation.",
+    "Japanese": "地球の大気は有害な放射線から私たちを守ってくれている。",
+    "Target": "protects us from",
+    "Note": "protect A from B: AをBから守る"
+  },
+  {
+    "Id": "87c658e4-eedd-48d7-94b3-e557acb33929",
+    "Level": 3,
+    "English": "He has a tendency to exaggerate his achievements.",
+    "Japanese": "彼は自分の業績を誇張する傾向がある。",
+    "Target": "tendency to exaggerate",
+    "Note": "tendency to do: 〜する傾向"
+  },
+  {
+    "Id": "52a51bc5-3eb5-4d58-ac6b-aaa55cfc3148",
+    "Level": 3,
+    "English": "It is typical of him to forget his umbrella on a rainy day.",
+    "Japanese": "雨の日に傘を忘れるとは、いかにも彼らしい。",
+    "Target": "typical of him to forget",
+    "Note": "It is typical of A to do: 〜とはいかにもAらしい"
+  },
+  {
+    "Id": "2bdf6a55-e872-453a-969d-4bd06491cde4",
+    "Level": 3,
+    "English": "We are in favor of the proposal to build a new library.",
+    "Japanese": "私たちは新しい図書館を建てる提案に賛成している。",
+    "Target": "in favor of",
+    "Note": "be in favor of: 〜に賛成している"
+  },
+  {
+    "Id": "efadccc1-533b-4388-9b17-367fbe49a28f",
+    "Level": 3,
+    "English": "The price of the house is beyond my reach at the moment.",
+    "Japanese": "その家の価格は、今の私には手が出ない（手が届かない）。",
+    "Target": "beyond my reach",
+    "Note": "beyond one's reach: 手の届かない"
+  },
+  {
+    "Id": "0b95260e-52cc-401c-9296-2bb49d29cda2",
+    "Level": 3,
+    "English": "Contrary to my expectations, the movie was quite boring.",
+    "Japanese": "私の期待に反して、その映画はかなり退屈だった。",
+    "Target": "Contrary to",
+    "Note": "Contrary to: 〜に反して"
+  },
+  {
+    "Id": "91721e45-913f-47c9-b9f7-e56c991b78b3",
+    "Level": 3,
+    "English": "By virtue of his hard work, he was promoted to manager.",
+    "Japanese": "努力のおかげで、彼は部長に昇進した。",
+    "Target": "By virtue of",
+    "Note": "By virtue of: 〜のおかげで・の力で"
+  },
+  {
+    "Id": "9ae10e85-9625-4d91-a011-cd15cb538e20",
+    "Level": 3,
+    "English": "For the purpose of saving money, she decided to cook at home.",
+    "Japanese": "節約するために、彼女は家で料理をすることに決めた。",
+    "Target": "For the purpose of",
+    "Note": "for the purpose of: 〜の目的で"
+  },
+  {
+    "Id": "44d9b0a9-b8bb-41ed-9879-3b0178a0931e",
+    "Level": 3,
+    "English": "He is so diligent that he is respected by all his colleagues.",
+    "Japanese": "彼はとても勤勉なので、同僚全員から尊敬されている。",
+    "Target": "so diligent that",
+    "Note": "so ... that 〜: とても…なので〜"
+  },
+  {
+    "Id": "eba3959e-7e9a-4edc-8dd9-f65b4b50d8a3",
+    "Level": 3,
+    "English": "Such a noise did he make that everyone turned around.",
+    "Japanese": "彼があまりに大きな音を立てたので、みんなが振り返った。",
+    "Target": "Such a noise did he make that",
+    "Note": "Such ... that 〜: 大変な〜だったので…(倒置)"
+  },
+  {
+    "Id": "52b3a09b-7dd5-4ca9-96a8-b42ed9ed2a63",
+    "Level": 3,
+    "English": "The problem is too complex for me to solve by myself.",
+    "Japanese": "その問題は複雑すぎて、私一人では解けない。",
+    "Target": "too complex for me to solve",
+    "Note": "too ... to 〜: あまりに…なので〜できない"
+  },
+  {
+    "Id": "891a4ff6-99da-4f3c-ae53-5337456f19c4",
+    "Level": 3,
+    "English": "The box was light enough for a child to carry easily.",
+    "Japanese": "その箱は子供が簡単に運べるほど軽かった。",
+    "Target": "light enough for a child to carry",
+    "Note": "enough for A to do: Aが〜するのに十分なほど…"
+  },
+  {
+    "Id": "367a3ab3-7383-4def-93a9-2694765f0a40",
+    "Level": 3,
+    "English": "I'll go provided that you go with me.",
+    "Japanese": "君が一緒に行ってくれるなら、私も行こう。",
+    "Target": "provided that",
+    "Note": "provided that: 〜という条件で"
+  },
+  {
+    "Id": "ff361862-03c7-4557-aebc-bb219f8d76f3",
+    "Level": 3,
+    "English": "Whether he likes it or not, he has to follow the rules.",
+    "Japanese": "彼がそれを好きかどうかにかかわらず、ルールに従わなければならない。",
+    "Target": "Whether he likes it or not",
+    "Note": "whether ... or not: 〜であろうとなかろうと"
+  },
+  {
+    "Id": "00858951-f904-41cc-815c-6afa4473c242",
+    "Level": 3,
+    "English": "Even if it rains, the baseball game will be held as scheduled.",
+    "Japanese": "たとえ雨が降っても、野球の試合は予定通り行われる。",
+    "Target": "Even if",
+    "Note": "Even if: たとえ〜でも"
+  },
+  {
+    "Id": "36af4b07-2371-44e7-b325-d4b9db4e23a0",
+    "Level": 3,
+    "English": "Supposing you won the lottery, what would you do with the money?",
+    "Japanese": "もし宝くじに当たったら、そのお金をどうしますか？",
+    "Target": "Supposing you won",
+    "Note": "Supposing ...: もし〜なら（仮定）"
+  },
+  {
+    "Id": "06437526-ee22-4cfc-ab91-e151f54325f6",
+    "Level": 3,
+    "English": "He worked hard so that his family could live a comfortable life.",
+    "Japanese": "彼は家族が快適に暮らせるように一生懸命働いた。",
+    "Target": "so that his family could live",
+    "Note": "so that A can/could do: Aが〜できるように"
+  },
+  {
+    "Id": "c54a1963-852e-4355-a909-58d8193f66c7",
+    "Level": 3,
+    "English": "I took an umbrella lest it should rain.",
+    "Japanese": "雨が降るといけないから、傘を持って行った。",
+    "Target": "lest it should rain",
+    "Note": "lest A should do: Aが〜しないように"
+  },
+  {
+    "Id": "df205872-8b19-4034-81dc-67f8c3c01e82",
+    "Level": 3,
+    "English": "Such was his anger that he couldn't speak for a while.",
+    "Japanese": "彼はあまりにも怒っていたので、しばらく話せなかった。",
+    "Target": "Such was his anger that",
+    "Note": "Such was ... that 〜: 大変な〜だったので…"
+  },
+  {
+    "Id": "5ceffef6-0ba8-4c17-ae95-4bd262fb38bc",
+    "Level": 3,
+    "English": "Every time I visit Kyoto, I discover something new.",
+    "Japanese": "京都を訪れるたびに、新しい何かを発見する。",
+    "Target": "Every time",
+    "Note": "Every time ...: 〜するたびに"
+  },
+  {
+    "Id": "96a3ac3a-fe4b-45e2-ab12-ba6d2214732e",
+    "Level": 3,
+    "English": "No sooner had the teacher entered the room than the students became quiet.",
+    "Japanese": "先生が教室に入るやいなや、生徒たちは静かになった。",
+    "Target": "No sooner had the teacher entered the room than",
+    "Note": "No sooner ... than 〜: 〜するやいなや"
+  },
+  {
+    "Id": "b2017ad8-817b-46d4-ae6d-dfa581a8161f",
+    "Level": 3,
+    "English": "Hardly had I finished my lunch when the doorbell rang.",
+    "Japanese": "昼食を終えるか終えないかのうちに玄関のベルが鳴った。",
+    "Target": "Hardly had I finished my lunch when",
+    "Note": "Hardly ... when 〜: 〜するとすぐに"
+  },
+  {
+    "Id": "9cad2746-b6dc-4ba9-b15b-820515591478",
+    "Level": 3,
+    "English": "Scarcely had the sun set when the temperature began to drop rapidly.",
+    "Japanese": "日が沈むか沈まないうちに、気温が急速に下がり始めた。",
+    "Target": "Scarcely had the sun set when",
+    "Note": "Scarcely ... when 〜: 〜するとすぐに"
+  },
+  {
+    "Id": "dcc38136-d174-43f1-9d39-74fa64807705",
+    "Level": 3,
+    "English": "As far as the eye could reach, there was nothing but sand.",
+    "Japanese": "見渡す限り、砂しかなかった。",
+    "Target": "As far as the eye could reach",
+    "Note": "As far as the eye can reach: 見渡す限り"
+  },
+  {
+    "Id": "0b84a593-1bf6-426b-81a9-28811b4c5ddc",
+    "Level": 3,
+    "English": "As long as you tell the truth, I will forgive you.",
+    "Japanese": "真実を話す限り、あなたを許しましょう。",
+    "Target": "As long as",
+    "Note": "As long as: 〜する限り（条件）"
+  },
+  {
+    "Id": "921f7c45-d922-4169-bfa5-d11f78ca74e0",
+    "Level": 3,
+    "English": "The city has changed a lot from what it was ten years ago.",
+    "Japanese": "その都市は10年前の姿から大きく変わった。",
+    "Target": "what it was",
+    "Note": "what it was: 以前の姿"
+  },
+  {
+    "Id": "7e973814-89cb-4e48-98a3-ab9bf5d2037c",
+    "Level": 3,
+    "English": "I owe what I am today to my parents and teachers.",
+    "Japanese": "今日の私があるのは、両親と先生のおかげだ。",
+    "Target": "what I am today",
+    "Note": "what I am today: 今日の私"
+  },
+  {
+    "Id": "a3b1d7ab-27d5-4a00-bf3a-051fc540629c",
+    "Level": 3,
+    "English": "He is what is called a self-made man.",
+    "Japanese": "彼は、いわゆる自力で成功した人（叩き上げの人）だ。",
+    "Target": "what is called",
+    "Note": "what is called: いわゆる"
+  },
+  {
+    "Id": "8320226a-ee70-47fa-aebf-8856d8c0729e",
+    "Level": 3,
+    "English": "Reading is to the mind what exercise is to the body.",
+    "Japanese": "読書が精神に与える影響は、運動が肉体に与える影響と同じだ。",
+    "Target": "is to the mind what exercise is to the body",
+    "Note": "A is to B what C is to D"
+  },
+  {
+    "Id": "71754bba-5aac-4379-a2ac-de70e8fa8fb8",
+    "Level": 3,
+    "English": "He has three daughters, all of whom are talented musicians.",
+    "Japanese": "彼には3人の娘がおり、全員が才能豊かな音楽家だ。",
+    "Target": "all of whom",
+    "Note": "関係代名詞の継続用法（all of whom）"
+  },
+  {
+    "Id": "e59ad3f2-3ff4-46b4-98e8-aadbdc02d911",
+    "Level": 3,
+    "English": "The building, the roof of which was damaged by the storm, needs repair.",
+    "Japanese": "嵐で屋根が壊れたその建物は、修理が必要だ。",
+    "Target": "the roof of which",
+    "Note": "関係代名詞の継続用法（the roof of which）"
+  },
+  {
+    "Id": "6ddf88ef-4b26-470f-ab52-95466dd5f3a1",
+    "Level": 3,
+    "English": "I remember the day when we first met at the park.",
+    "Japanese": "初めて公園で会った日のことを覚えている。",
+    "Target": "when",
+    "Note": "関係副詞(when)"
+  },
+  {
+    "Id": "dcf98673-93ca-45e0-b06b-41534eaea121",
+    "Level": 3,
+    "English": "This is the reason why I decided to study abroad.",
+    "Japanese": "これが、私が留学を決めた理由だ。",
+    "Target": "why",
+    "Note": "関係副詞(why)"
+  },
+  {
+    "Id": "5890963d-8741-4db0-91bd-f37a84282b5e",
+    "Level": 3,
+    "English": "There is something about him that I don't quite trust.",
+    "Japanese": "彼には、どうも完全には信頼できない何かがある。",
+    "Target": "something about him that",
+    "Note": "something about A that ...: Aには〜な何かがある"
+  },
+  {
+    "Id": "73eea4be-e2cc-47a7-9393-7600f832d572",
+    "Level": 3,
+    "English": "As is often the case with him, he left his umbrella in the train.",
+    "Japanese": "彼にはよくあることだが、電車に傘を忘れてきた。",
+    "Target": "As is often the case with",
+    "Note": "As is often the case with: 〜にはよくあることだが"
+  },
+  {
+    "Id": "2e36935d-cf27-4a14-b217-9f637afd52b1",
+    "Level": 3,
+    "English": "I will give you whatever help you need.",
+    "Japanese": "あなたが必要とするどんな助けでもしましょう。",
+    "Target": "whatever",
+    "Note": "whatever: 〜するものは何でも"
+  },
+  {
+    "Id": "f4baf328-eac2-47e4-a675-240d1b32901e",
+    "Level": 3,
+    "English": "You can choose whichever you like.",
+    "Japanese": "どちらでも好きな方を選んでいいですよ。",
+    "Target": "whichever",
+    "Note": "whichever: どちらでも〜な方"
+  },
+  {
+    "Id": "12464f9a-3648-415f-84e0-08cd5d731f61",
+    "Level": 3,
+    "English": "Whoever wants to participate in the contest is welcome.",
+    "Japanese": "コンテストに参加したい人は誰でも歓迎です。",
+    "Target": "Whoever",
+    "Note": "whoever: 〜する人は誰でも"
+  },
+  {
+    "Id": "35606a9a-4b19-4b30-99e2-ee28673dd129",
+    "Level": 3,
+    "English": "No matter how busy he is, he never forgets to call his family.",
+    "Japanese": "どんなに忙しくても、彼は家族への電話を欠かさない。",
+    "Target": "No matter how",
+    "Note": "No matter how: どんなに〜でも"
+  },
+  {
+    "Id": "8fe3d618-4e5d-4b37-bb1e-789e83b586ad",
+    "Level": 3,
+    "English": "I'll follow you wherever you go.",
+    "Japanese": "あなたがどこへ行こうとも、ついていきます。",
+    "Target": "wherever",
+    "Note": "wherever: 〜する所ならどこでも"
+  },
+  {
+    "Id": "cf2c4cf6-cdb6-4817-a521-ed0567f3c468",
+    "Level": 3,
+    "English": "Any book will do as long as it is interesting.",
+    "Japanese": "面白ければどんな本でもいい。",
+    "Target": "will do as long as",
+    "Note": "Any ... will do: どんな〜でもよい"
+  },
+  {
+    "Id": "8ebc9fe8-023e-4904-85ea-d770b4eff2c6",
+    "Level": 3,
+    "English": "The decision is subject to change without prior notice.",
+    "Japanese": "決定は事前の通知なく変更されることがあります。",
+    "Target": "subject to change",
+    "Note": "be subject to: 〜に従う・〜の対象となる"
+  },
+  {
+    "Id": "0942333e-c3ea-415c-bebd-c9284fca979b",
+    "Level": 3,
+    "English": "He is anything but a hero; he is a coward.",
+    "Japanese": "彼は英雄などでは決してない。臆病者だ。",
+    "Target": "anything but",
+    "Note": "anything but: 決して〜ではない"
+  },
+  {
+    "Id": "b1fb350e-885e-439a-92eb-23d23fc8422c",
+    "Level": 3,
+    "English": "The plan was all but impossible from the beginning.",
+    "Japanese": "その計画は最初から、ほとんど不可能に近いものだった。",
+    "Target": "all but",
+    "Note": "all but: ほとんど〜"
+  },
+  {
+    "Id": "1c34b660-62d1-490d-a15f-6bcec022d87d",
+    "Level": 3,
+    "English": "He does nothing but complain about his work.",
+    "Japanese": "彼は仕事の不満ばかり言っている。",
+    "Target": "does nothing but complain",
+    "Note": "do nothing but do: 〜してばかりいる"
+  },
+  {
+    "Id": "3f17a064-8af3-4d7f-ba2a-e81eba4e65b4",
+    "Level": 3,
+    "English": "The results were by no means satisfactory.",
+    "Japanese": "結果は決して満足のいくものではなかった。",
+    "Target": "by no means",
+    "Note": "by no means: 決して〜ない"
+  },
+  {
+    "Id": "b84b9cb0-9a1b-4f08-bdce-169862243f85",
+    "Level": 3,
+    "English": "I have yet to receive a reply from the company.",
+    "Japanese": "その会社からはまだ返事をもらっていない。",
+    "Target": "have yet to receive",
+    "Note": "have yet to do: まだ〜していない"
+  },
+  {
+    "Id": "8fb77f2b-1164-4f95-935d-b954ba02dfe2",
+    "Level": 3,
+    "English": "He carried the heavy box alone, and that with one hand.",
+    "Japanese": "彼はその重い箱を1人で運んだ。しかも片手でだ。",
+    "Target": "and that",
+    "Note": "and that: しかも・それも（追加情報の強調）"
+  },
+  {
+    "Id": "bbca58f9-96cc-4adc-a018-3f43bd589648",
+    "Level": 3,
+    "English": "It follows from what you say that he is innocent.",
+    "Japanese": "君の言うことから判断すると、彼は無実だということになる。",
+    "Target": "It follows from what you say that",
+    "Note": "It follows from A that ...: Aから〜ということになる"
+  },
+  {
+    "Id": "17f56062-448c-494b-9a3d-18fbaf3d4c77",
+    "Level": 2,
+    "English": "Only when we lose our health do we realize its true value.",
+    "Japanese": "健康を失ってはじめて、その真の価値に気づく。",
+    "Target": "Only when we lose our health do we realize",
+    "Note": "Only when ... + 倒置"
+  },
+  {
+    "Id": "0d41bc02-52c7-4280-87c8-1cf7edd83abe",
+    "Level": 2,
+    "English": "So intense was the heat that the rails were warped.",
+    "Japanese": "暑さが非常に激しかったので、線路が歪んでしまった。",
+    "Target": "So intense was the heat that",
+    "Note": "So + 形容詞 ... that 〜（倒置）"
+  },
+  {
+    "Id": "4358986d-3c8f-429a-a4b2-aa17ff5a5f12",
+    "Level": 2,
+    "English": "Under no circumstances should you leave the laboratory unlocked.",
+    "Japanese": "どんな状況下でも、研究室に鍵をかけずに放置してはいけない。",
+    "Target": "Under no circumstances should you leave",
+    "Note": "Under no circumstances: 決して〜ない"
+  },
+  {
+    "Id": "e936e811-eb64-443f-b6c6-433afc1b6303",
+    "Level": 2,
+    "English": "Were it not for your support, I would not be able to finish this task.",
+    "Japanese": "あなたの支えがなければ、この仕事を終えることはできないだろう。",
+    "Target": "Were it not for your support",
+    "Note": "If it were not for の倒置（仮定法過去）"
+  },
+  {
+    "Id": "a4fce2a0-929e-40fc-98a0-33da5e56c93a",
+    "Level": 2,
+    "English": "The importance of this discovery cannot be overestimated.",
+    "Japanese": "この発見の重要性はいくら高く評価してもしすぎることはない。",
+    "Target": "cannot be overestimated",
+    "Note": "cannot be overestimated: いくら〜してもしすぎることはない"
+  },
+  {
+    "Id": "3bfded53-4058-45b6-b025-4b5b46fa68eb",
+    "Level": 2,
+    "English": "He is not so much a scholar as a man of letters.",
+    "Japanese": "彼は学者というよりは、むしろ文学者だ。",
+    "Target": "not so much a scholar as",
+    "Note": "not so much A as B: AというよりはB"
+  },
+  {
+    "Id": "1b1ec40e-b8fd-46a8-b22c-d0236d3dbf5b",
+    "Level": 2,
+    "English": "It is essential that every student be given an equal opportunity.",
+    "Japanese": "すべての学生に平等な機会が与えられることが不可欠だ。",
+    "Target": "essential that every student be given",
+    "Note": "essential that + 原形（仮定法現在）"
+  },
+  {
+    "Id": "cac55ac2-356f-4e48-abda-52c234d1cd32",
+    "Level": 2,
+    "English": "His failure was due not so much to lack of ability as to lack of effort.",
+    "Japanese": "彼の失敗は能力不足というよりは、むしろ努力不足によるものだった。",
+    "Target": "not so much to lack of ability as to",
+    "Note": "not so much A as B"
+  },
+  {
+    "Id": "c5835f14-e1ba-46f9-85f7-b02af652da3f",
+    "Level": 2,
+    "English": "The issue is too complicated to be solved in a single meeting.",
+    "Japanese": "その問題はあまりに複雑すぎて、1回の会議では解決できない。",
+    "Target": "too complicated to be solved",
+    "Note": "too ... to 〜"
+  },
+  {
+    "Id": "c1e3f5cc-a452-44e4-9e67-78fe67febdc2",
+    "Level": 2,
+    "English": "In view of the current situation, we have no choice but to postpone the project.",
+    "Japanese": "現状を考慮すると、プロジェクトを延期せざるを得ない。",
+    "Target": "In view of the current situation",
+    "Note": "in view of: 〜を考慮して"
+  },
+  {
+    "Id": "58134ffa-2ece-40e7-a86b-c6411f9186a0",
+    "Level": 2,
+    "English": "No other scientist has contributed more to this field than Dr. Smith.",
+    "Japanese": "スミス博士ほどこの分野に貢献した科学者は他にいない。",
+    "Target": "No other scientist has contributed more ... than",
+    "Note": "No other ... than 〜"
+  },
+  {
+    "Id": "709cfa4b-6a10-464e-956f-5f8e117a9c09",
+    "Level": 2,
+    "English": "The population of Tokyo is larger than that of any other city in Japan.",
+    "Japanese": "東京の人口は日本の他のどの都市の人口よりも多い。",
+    "Target": "that of any other city",
+    "Note": "that of any other ..."
+  },
+  {
+    "Id": "a47b3e48-c959-42af-9aeb-408b294d7b18",
+    "Level": 2,
+    "English": "Not a single day passes without my thinking of my hometown.",
+    "Japanese": "故郷のことを思わずに過ぎる日は一日たりともない。",
+    "Target": "without my thinking of",
+    "Note": "Not ... without -ing: 〜せずに…することはない"
+  },
+  {
+    "Id": "8d794a65-a704-451e-8627-bbfda851b203",
+    "Level": 2,
+    "English": "He is well-off, to be sure, but he is not very happy.",
+    "Japanese": "確かに彼は裕福だが、あまり幸せではない。",
+    "Target": "to be sure",
+    "Note": "to be sure: 確かに"
+  },
+  {
+    "Id": "a7a5c1a9-89d4-4f60-9103-ffb037132b93",
+    "Level": 2,
+    "English": "To do him justice, he is a very hard worker.",
+    "Japanese": "彼を公平に評せば、彼は大変な努力家だ。",
+    "Target": "To do him justice",
+    "Note": "To do someone justice: 人を公平に評すれば"
+  },
+  {
+    "Id": "41c8e1e6-7375-497f-ba16-db18a7223361",
+    "Level": 2,
+    "English": "The city has undergone a remarkable transformation over the last decade.",
+    "Japanese": "その都市はここ10年で驚くべき変貌を遂げた。",
+    "Target": "undergone a remarkable transformation",
+    "Note": "undergo: 〜を経験する"
+  },
+  {
+    "Id": "27e3f185-13c8-46f4-b2d7-36e89d87e610",
+    "Level": 2,
+    "English": "The expansion of the universe is a phenomenon that fascinates many scientists.",
+    "Japanese": "宇宙の膨張は多くの科学者を魅了する現象だ。",
+    "Target": "is a phenomenon",
+    "Note": "phenomenon: 現象"
+  },
+  {
+    "Id": "61927d2f-aaac-44d3-827c-bfbcc41d266d",
+    "Level": 2,
+    "English": "The government has implemented a series of reforms to stimulate the economy.",
+    "Japanese": "政府は経済を刺激するために一連の改革を実施した。",
+    "Target": "implemented a series of reforms",
+    "Note": "stimulate: 〜を刺激する"
+  },
+  {
+    "Id": "8a9afeaf-a34c-4b5f-b3be-afffca4856f6",
+    "Level": 2,
+    "English": "Artificial intelligence is expected to revolutionize the healthcare industry.",
+    "Japanese": "人工知能はヘルスケア業界に革命をもたらすと期待されている。",
+    "Target": "expected to revolutionize",
+    "Note": "be expected to do: 〜すると期待される / revolutionize: 〜に革命をもたらす"
+  },
+  {
+    "Id": "8222be48-9f7c-4447-aeb2-822bf79a1933",
+    "Level": 2,
+    "English": "We must take effective measures to prevent the spread of the virus.",
+    "Japanese": "ウイルスの拡散を防ぐために効果的な対策を講じなければならない。",
+    "Target": "take effective measures",
+    "Note": "take measures: 対策を講じる"
+  },
+  {
+    "Id": "d3ee2203-0f23-49ca-b203-4a1dce41b9bb",
+    "Level": 2,
+    "English": "Environmental protection is compatible with economic growth.",
+    "Japanese": "環境保護は経済成長と両立可能だ。",
+    "Target": "compatible with",
+    "Note": "compatible with: 〜と両立できる"
+  },
+  {
+    "Id": "6165753b-a32d-4594-ae7a-cbeaadf57e33",
+    "Level": 2,
+    "English": "The company is struggling to maintain its competitive advantage in the global market.",
+    "Japanese": "その会社はグローバル市場での競争優位を維持するのに苦労している。",
+    "Target": "competitive advantage",
+    "Note": "competitive advantage: 競争優位"
+  },
+  {
+    "Id": "7842a831-b303-4c61-ac9e-fcba3caf4512",
+    "Level": 2,
+    "English": "The quality of education has a profound impact on a child's future.",
+    "Japanese": "教育の質は子供の将来に深い影響を与える。",
+    "Target": "profound impact",
+    "Note": "profound impact: 深い影響"
+  },
+  {
+    "Id": "128b104f-e406-4fc4-9eb0-3ef96abec6b6",
+    "Level": 2,
+    "English": "The situation is becoming increasingly complex due to various factors.",
+    "Japanese": "様々な要因により、状況はますます複雑になっている。",
+    "Target": "increasingly complex",
+    "Note": "increasingly: ますます"
+  },
+  {
+    "Id": "0e46cc8b-fe70-4283-989c-9211954390dc",
+    "Level": 2,
+    "English": "Generally speaking, the more we have, the more we want.",
+    "Japanese": "一般的に言って、持てば持つほど、さらに欲しくなる。",
+    "Target": "The more we have, the more we want",
+    "Note": "The more ..., the more 〜"
+  },
+  {
+    "Id": "2b7c75f2-a58c-4d85-a02e-319e99018961",
+    "Level": 2,
+    "English": "He is the last man to betray his friends under any circumstances.",
+    "Japanese": "彼はどんな状況下でも友人を裏切るような男では決してない。",
+    "Target": "the last man to betray",
+    "Note": "the last man to do: 決して〜しない人"
+  },
+  {
+    "Id": "25773960-ac00-4f53-9add-06a70e25268a",
+    "Level": 2,
+    "English": "Although it was pouring, the marathon went ahead.",
+    "Japanese": "土砂降りだったが、マラソンは予定通り行われた。",
+    "Target": "Although it was pouring",
+    "Note": "Although: 〜だけれども"
+  },
+  {
+    "Id": "fd02937c-85f2-40a3-8ca7-6d467d7205de",
+    "Level": 2,
+    "English": "The building was reinforced to withstand the strongest of earthquakes.",
+    "Japanese": "その建物は最強の地震にも耐えられるように補強された。",
+    "Target": "reinforced to withstand",
+    "Note": "reinforce: 〜を補強する"
+  },
+  {
+    "Id": "f5ddea2a-b5a0-4cfc-96b1-610f6f7ab4e7",
+    "Level": 2,
+    "English": "He has lived in the United States so long that he has become a citizen.",
+    "Japanese": "彼は合衆国に非常に長く住んでいるので、市民権を得た。",
+    "Target": "so long that",
+    "Note": "so ... that 〜"
+  },
+  {
+    "Id": "3a10ea9b-e489-4831-ab73-95470a37f2d9",
+    "Level": 2,
+    "English": "The new policy is intended to promote social equality and justice.",
+    "Japanese": "新しい政策は社会的な平等と正義を促進することを意図している。",
+    "Target": "is intended to",
+    "Note": "be intended to: 〜することを意図している"
+  },
+  {
+    "Id": "5b727bd8-e816-4e7f-b1ba-79ee9109b607",
+    "Level": 2,
+    "English": "The decision was subject to the approval of the board of directors.",
+    "Japanese": "その決定は取締役会の承認を条件としていた。",
+    "Target": "subject to",
+    "Note": "subject to: 〜を条件とする"
+  },
+  {
+    "Id": "4f5a8185-7e1c-4022-a859-90af8782679c",
+    "Level": 2,
+    "English": "I am looking forward to seeing the results of your hard work.",
+    "Japanese": "あなたの努力の結果を見るのを楽しみにしています。",
+    "Target": "looking forward to seeing",
+    "Note": "look forward to -ing"
+  },
+  {
+    "Id": "14dbb446-c1f5-42f4-9145-587979a5b8c8",
+    "Level": 2,
+    "English": "She is not only a great singer but also an excellent dancer.",
+    "Japanese": "彼女は素晴らしい歌手であるだけでなく、優れたダンサーでもある。",
+    "Target": "not only a great singer but also",
+    "Note": "not only A but also B"
+  },
+  {
+    "Id": "d06f8c34-47f5-4c67-bffe-0f545409a8e6",
+    "Level": 2,
+    "English": "It took him a long time to recover from the physical and emotional exhaustion.",
+    "Japanese": "彼が肉体的、精神的な疲労から回復するのに長い時間がかかった。",
+    "Target": "recover from ... exhaustion",
+    "Note": "recover from: 〜から回復する / exhaustion: 疲労・枯渇"
+  },
+  {
+    "Id": "a656a430-14fc-48be-a782-deb73f2526aa",
+    "Level": 2,
+    "English": "The results were so remarkable that they surprised the entire scientific community.",
+    "Japanese": "その結果は非常に注目すべきものだったので、科学界全体を驚かせた。",
+    "Target": "so remarkable that",
+    "Note": "remarkable: 注目すべき"
+  },
+  {
+    "Id": "7d5c02e4-a7e8-4f77-8159-0e8e2c80dfaa",
+    "Level": 2,
+    "English": "It is crucial that we address the root cause of the problem.",
+    "Japanese": "問題の根本原因に対処することが極めて重要だ。",
+    "Target": "root cause",
+    "Note": "root cause: 根本原因"
+  },
+  {
+    "Id": "bd845c36-0462-4485-9fb9-c9e655126dca",
+    "Level": 2,
+    "English": "It is taken for granted that technology keeps evolving.",
+    "Japanese": "テクノロジーが進化し続けることは当然のこととされている。",
+    "Target": "It is taken for granted that",
+    "Note": "take for granted: 〜を当然のことと思う"
+  },
+  {
+    "Id": "8f0a8539-0719-4058-9ee4-a729de92a254",
+    "Level": 2,
+    "English": "The city is famous for its unique blend of traditional and modern architecture.",
+    "Japanese": "その都市は伝統的建築と現代建築の独特な融合で有名だ。",
+    "Target": "unique blend of",
+    "Note": "blend: 融合"
+  },
+  {
+    "Id": "40b72189-efcc-4ec6-a397-3d0abae8496d",
+    "Level": 2,
+    "English": "Everything was done in accordance with the established rules.",
+    "Japanese": "すべては確立された規則に従って行われた。",
+    "Target": "in accordance with",
+    "Note": "in accordance with: 〜に従って"
+  },
+  {
+    "Id": "3ed6e518-70a0-4b53-a594-72aa6ac55d55",
+    "Level": 2,
+    "English": "He apologized for his inability to attend the ceremony.",
+    "Japanese": "彼は式典に出席できなかったことを謝罪した。",
+    "Target": "inability to attend",
+    "Note": "inability: できないこと"
+  },
+  {
+    "Id": "2c608ebe-7969-4788-841f-79184ee38818",
+    "Level": 2,
+    "English": "The population density of this area is among the highest in the world.",
+    "Japanese": "この地域の人口密度は世界でも最高水準にある。",
+    "Target": "among the highest",
+    "Note": "among the highest: 最高水準の一つ"
+  },
+  {
+    "Id": "4cd60c62-6fc3-45ae-bdf5-15af1bfc9188",
+    "Level": 2,
+    "English": "I cannot help but wonder what will happen next.",
+    "Japanese": "次に何が起こるのか考えずにはいられない。",
+    "Target": "cannot help but wonder",
+    "Note": "cannot help but do: 〜せずにはいられない"
+  },
+  {
+    "Id": "71e29d1d-26c1-494b-92fd-a7aa7bc42ce1",
+    "Level": 2,
+    "English": "The evidence suggests that the climate is changing faster than previously thought.",
+    "Japanese": "証拠は、気候が以前考えられていたよりも速く変化していることを示唆している。",
+    "Target": "faster than previously thought",
+    "Note": "previously thought: 以前考えられていたよりも"
+  },
+  {
+    "Id": "090015e1-501a-45d5-9bfb-6478e1c1c32c",
+    "Level": 2,
+    "English": "He is considered one of the most influential thinkers of our time.",
+    "Japanese": "彼は現代で最も影響力のある思想家の一人と考えられている。",
+    "Target": "most influential",
+    "Note": "influential: 影響力のある"
+  },
+  {
+    "Id": "8dc7d5ef-d827-4ee2-8db3-61e0690c9f3c",
+    "Level": 2,
+    "English": "Success is not so much a matter of luck as of hard work and persistence.",
+    "Japanese": "成功は運の問題というよりは、努力と粘り強さの問題だ。",
+    "Target": "not so much a matter of luck as of",
+    "Note": "persistence: 粘り強さ"
+  },
+  {
+    "Id": "74b39464-c2a2-4a0c-9e7a-4d05fe5149ed",
+    "Level": 2,
+    "English": "I'm afraid I cannot agree with your proposal on several grounds.",
+    "Japanese": "あいにく、いくつかの理由（根拠）からあなたの提案には同意できません。",
+    "Target": "on several grounds",
+    "Note": "on several grounds: いくらなの根拠で"
+  },
+  {
+    "Id": "66d1007a-8462-466d-a861-7ff68fa825eb",
+    "Level": 2,
+    "English": "It is high time that we took action to solve the environmental crisis.",
+    "Japanese": "環境危機を解決するために行動を起こしてもよい時期だ。",
+    "Target": "took action",
+    "Note": "took action: 行動を起こす"
+  },
+  {
+    "Id": "224b5a45-f2d1-4abd-bc91-32ff858e9d38",
+    "Level": 2,
+    "English": "He has more books than he will ever be able to read in his lifetime.",
+    "Japanese": "彼には一生かかっても読みきれないほどの本がある。",
+    "Target": "more books than he will ever be able to read",
+    "Note": "more ... than one can ever read"
+  },
+  {
+    "Id": "45c496d0-2428-42e4-a362-15473cb24f2d",
+    "Level": 2,
+    "English": "I was surprised to hear that he had resigned from his position.",
+    "Japanese": "彼が職を辞したと聞いて驚いた。",
+    "Target": "had resigned from",
+    "Note": "resign from: 〜を辞職する"
+  },
+  {
+    "Id": "d033ea21-0f35-49c3-9684-da3294a67c4d",
+    "Level": 2,
+    "English": "The results of the survey revealed a significant shift in consumer behavior.",
+    "Japanese": "調査結果は消費者行動の重大な変化を明らかにした。",
+    "Target": "significant shift",
+    "Note": "significant shift: 重大な変化"
+  },
+  {
+    "Id": "81039184-7c95-4e6e-995a-bf1d8e9baa3d",
+    "Level": 2,
+    "English": "It is difficult to predict how the situation will develop in the future.",
+    "Japanese": "将来どのように状況が展開するかを予測するのは難しい。",
+    "Target": "difficult to predict",
+    "Note": "be difficult to do: 〜するのが難しい / predict: 〜を予測する"
+  },
+  {
+    "Id": "1ab214f2-957a-4380-92cd-56ac6d64d1a0",
+    "Level": 1,
+    "English": "Knowledge is power.",
+    "Japanese": "知識は力なり。",
+    "Target": "Knowledge is power",
+    "Note": "格言：知識を持つことは強みになる"
+  },
+  {
+    "Id": "2625b5e0-228b-4d1e-8527-06341e61ae46",
+    "Level": 1,
+    "English": "A friend in need is a friend indeed.",
+    "Japanese": "まさかの時の友こそ真の友。",
+    "Target": "A friend in need is a friend indeed",
+    "Note": "格言：困った時に助けてくれるのが本当の友人だ"
+  },
+  {
+    "Id": "95a84044-5427-4573-bdab-4d3237314b36",
+    "Level": 1,
+    "English": "Better late than never.",
+    "Japanese": "遅れても、やらないよりはましだ。",
+    "Target": "Better late than never",
+    "Note": "格言：たとえ遅れても実行することが大切だ"
+  },
+  {
+    "Id": "48b62103-7b41-4fe6-b391-615b42122bed",
+    "Level": 1,
+    "English": "Don't judge a book by its cover.",
+    "Japanese": "外見で中身を判断してはいけない。",
+    "Target": "Don't judge a book by its cover",
+    "Note": "格言：見かけで人を判断してはいけない"
+  },
+  {
+    "Id": "2f5803fe-e6c2-4c83-a8f2-8bb45ae07687",
+    "Level": 1,
+    "English": "Every cloud has a silver lining.",
+    "Japanese": "どんな不幸にも希望の光はある。",
+    "Target": "Every cloud has a silver lining",
+    "Note": "格言：悪いことの後には良いことがある"
+  },
+  {
+    "Id": "4c1d8f6b-a934-42bc-85ae-ead0c067b829",
+    "Level": 1,
+    "English": "Actions speak louder than words.",
+    "Japanese": "行動は言葉よりも雄弁である。",
+    "Target": "Actions speak louder than words",
+    "Note": "格言：不言実行"
+  },
+  {
+    "Id": "90816b5d-528d-44f7-9002-1aa0eb5ef8c4",
+    "Level": 1,
+    "English": "Failure is the mother of success.",
+    "Japanese": "失敗は成功の母である。",
+    "Target": "Failure is the mother of success",
+    "Note": "格言：失敗を積み重ねることで成功に繋がる"
+  },
+  {
+    "Id": "20511ea6-8575-45d9-b6f1-a8a5974ef1df",
+    "Level": 1,
+    "English": "Rome was not built in a day.",
+    "Japanese": "ローマは一日にして成らず。",
+    "Target": "Rome was not built in a day",
+    "Note": "格言：大事業は長年の努力なしには成し遂げられない"
+  },
+  {
+    "Id": "d384be81-d9cb-477b-b3d4-6e884ee55ded",
+    "Level": 1,
+    "English": "Where there is a will, there is a way.",
+    "Japanese": "意志あるところに道は開ける。",
+    "Target": "Where there is a will, there is a way",
+    "Note": "格言：強い意志があれば解決策は見つかる"
+  },
+  {
+    "Id": "79dfe5c7-3ee5-4d21-a37c-5bcf70a525bd",
+    "Level": 1,
+    "English": "When in Rome, do as the Romans do.",
+    "Japanese": "郷に入っては郷に従え。",
+    "Target": "When in Rome, do as the Romans do",
+    "Note": "格言：その土地の習慣に合わせるべきだ"
+  },
+  {
+    "Id": "89b4c5ef-ac75-4f08-b198-82636623bf3a",
+    "Level": 1,
+    "English": "Prevention is better than cure.",
+    "Japanese": "予防は治療に勝る。",
+    "Target": "Prevention is better than cure",
+    "Note": "格言：予防は治療に勝る"
+  },
+  {
+    "Id": "f6830557-bb35-4566-a3b6-f20b2c854ce5",
+    "Level": 1,
+    "English": "Practice makes perfect.",
+    "Japanese": "継続は力なり（練習が完璧を作る）。",
+    "Target": "Practice makes perfect",
+    "Note": "格言：練習を重ねれば上達する"
+  },
+  {
+    "Id": "efc94b21-aecd-4909-b8ce-ed45313a1dee",
+    "Level": 1,
+    "English": "Look before you leap.",
+    "Japanese": "跳ぶ前に見よ（石橋を叩いて渡れ）。",
+    "Target": "Look before you leap",
+    "Note": "格言：行動を起こす前に注意深く考えるべきだ"
+  },
+  {
+    "Id": "0a851f12-2882-4056-8725-8392d7fdb97a",
+    "Level": 1,
+    "English": "Birds of a feather flock together.",
+    "Japanese": "類は友を呼ぶ。",
+    "Target": "Birds of a feather flock together",
+    "Note": "格言：似た者同士は自然と集まる"
+  },
+  {
+    "Id": "5bc1fc27-a9c7-4529-b965-2de138c9c9dd",
+    "Level": 1,
+    "English": "The early bird catches the worm.",
+    "Japanese": "早起きは三文の徳（早い鳥が虫を捕まえる）。",
+    "Target": "The early bird catches the worm",
+    "Note": "格言：人より早く行動すれば利益がある"
+  },
+  {
+    "Id": "f567e700-cd39-4541-b895-871e9aa3cb11",
+    "Level": 1,
+    "English": "Honesty is the best policy.",
+    "Japanese": "正直は最良の策。",
+    "Target": "Honesty is the best policy",
+    "Note": "格言：正直にしているのが一番よい"
+  },
+  {
+    "Id": "7a8dc6ab-f1cb-48d1-8ef0-7379645dd912",
+    "Level": 1,
+    "English": "Time flies like an arrow.",
+    "Japanese": "光陰矢の如し。",
+    "Target": "Time flies like an arrow",
+    "Note": "格言：時間はあっという間に過ぎ去る"
+  },
+  {
+    "Id": "af899a6c-ffa4-4d6b-9610-020f861287c1",
+    "Level": 1,
+    "English": "Don't put all your eggs in one basket.",
+    "Japanese": "卵を一つのカゴに盛るな。",
+    "Target": "Don't put all your eggs in one basket",
+    "Note": "格言：リスクは分散させるべきだ"
+  },
+  {
+    "Id": "deba40bb-4d75-453b-b5ba-58300c6613cd",
+    "Level": 1,
+    "English": "Out of sight, out of mind.",
+    "Japanese": "去る者は日々に疎し（見えなくなると忘れられる）。",
+    "Target": "Out of sight, out of mind",
+    "Note": "格言：会わなくなると記憶も薄れる"
+  },
+  {
+    "Id": "96160c8e-51cd-4366-a688-7b52ed66a293",
+    "Level": 1,
+    "English": "Killing two birds with one stone.",
+    "Japanese": "一石二鳥。",
+    "Target": "Killing two birds with one stone",
+    "Note": "格言：一つの行動で二つの利益を得ること"
+  },
+  {
+    "Id": "91e35f9f-5fb4-4537-a3b0-bb370f06ef87",
+    "Level": 1,
+    "English": "Still waters run deep.",
+    "Japanese": "静かな水は深く流れる。",
+    "Target": "Still waters run deep",
+    "Note": "格言：思慮深い人はむやみに口を利かない"
+  },
+  {
+    "Id": "6103b64c-59b0-41cd-a3ad-e6e3d7c7955c",
+    "Level": 1,
+    "English": "All that glitters is not gold.",
+    "Japanese": "光るものすべてが金とは限らない。",
+    "Target": "All that glitters is not gold",
+    "Note": "格言：外見が良くても中身が良いとは限らない"
+  },
+  {
+    "Id": "d31776d3-c3ad-45ef-b017-dfbaabbf32ea",
+    "Level": 1,
+    "English": "Speech is silver, silence is golden.",
+    "Japanese": "雄弁は銀、沈黙は金。",
+    "Target": "Speech is silver, silence is golden",
+    "Note": "格言：話すことも大切だが、沈黙すべき時もある"
+  },
+  {
+    "Id": "83e27ebc-5756-4e5e-8c1a-d7c4d2029d15",
+    "Level": 1,
+    "English": "Beauty is in the eye of the beholder.",
+    "Japanese": "あばたもえくぼ（美は見る人の目の中にある）。",
+    "Target": "Beauty is in the eye of the beholder",
+    "Note": "格言：美しさの基準は人それぞれだ"
+  },
+  {
+    "Id": "8fe0dabe-d50b-4d72-919a-835859461eea",
+    "Level": 1,
+    "English": "A rolling stone gathers no moss.",
+    "Japanese": "転石苔を生ぜず。",
+    "Target": "A rolling stone gathers no moss",
+    "Note": "格言：転石苔を生ぜず"
+  },
+  {
+    "Id": "76044147-7979-4cd3-88fc-c649d33761d2",
+    "Level": 1,
+    "English": "Strike while the iron is hot.",
+    "Japanese": "鉄は熱いうちに打て。",
+    "Target": "Strike while the iron is hot",
+    "Note": "格言：チャンスを逃さず行動すべきだ"
+  },
+  {
+    "Id": "c793c46c-5d13-4ce2-b395-13a1d20625d2",
+    "Level": 1,
+    "English": "Necessity is the mother of invention.",
+    "Japanese": "必要は発明の母。",
+    "Target": "Necessity is the mother of invention",
+    "Note": "格言：必要に迫られて新しいものが生まれる"
+  },
+  {
+    "Id": "65a9fb8c-f828-4e81-9fa0-87fe420ce43b",
+    "Level": 1,
+    "English": "Curiosity killed the cat.",
+    "Japanese": "好奇心は身を滅ぼす。",
+    "Target": "Curiosity killed the cat",
+    "Note": "格言：あまりに知りたがると危ない目に遭う"
+  },
+  {
+    "Id": "11f67872-c95d-4bd2-942d-9ff07ef6d3a0",
+    "Level": 1,
+    "English": "Bad news travels fast.",
+    "Japanese": "悪事千里を走る。",
+    "Target": "Bad news travels fast",
+    "Note": "格言：悪いニュースはすぐに広まる"
+  },
+  {
+    "Id": "74665594-fc62-45ff-a4a1-8102b7e09f71",
+    "Level": 1,
+    "English": "No pain, no gain.",
+    "Japanese": "痛みなくして得るものなし。",
+    "Target": "No pain, no gain",
+    "Note": "格言：苦労なくして成功はない"
+  },
+  {
+    "Id": "d30cb4e1-934b-49e1-86cc-70da20605c92",
+    "Level": 1,
+    "English": "Look on the bright side.",
+    "Japanese": "物事の明るい面を見よう。",
+    "Target": "Look on the bright side",
+    "Note": "格言：楽観的に考えよう"
+  },
+  {
+    "Id": "f2e7002a-34c1-4016-a690-74d616fd13d0",
+    "Level": 1,
+    "English": "Read between the lines.",
+    "Japanese": "行間を読め。",
+    "Target": "Read between the lines",
+    "Note": "格言：言葉の裏にある真意を汲み取れ"
+  },
+  {
+    "Id": "364c6484-33aa-4a0d-bb7c-6bf527cb121a",
+    "Level": 1,
+    "English": "Break the ice.",
+    "Japanese": "場を和ませる（氷を砕く）。",
+    "Target": "Break the ice",
+    "Note": "格言：初対面の緊張を解く"
+  },
+  {
+    "Id": "8cdb27ff-5cb6-4e74-b184-1082e95173ec",
+    "Level": 1,
+    "English": "Burn the midnight oil.",
+    "Japanese": "夜なべして働く（深夜の油を燃やす）。",
+    "Target": "Burn the midnight oil",
+    "Note": "格言：夜遅くまで勉強や仕事をする"
+  },
+  {
+    "Id": "2f4cc172-6ba1-450f-b10e-a8300b676b0d",
+    "Level": 1,
+    "English": "Call it a day.",
+    "Japanese": "今日はここまでにしよう。",
+    "Target": "Call it a day",
+    "Note": "格言：仕事を切り上げる"
+  },
+  {
+    "Id": "87ffb3ca-2323-4c8c-819f-8fffcaf58b4a",
+    "Level": 1,
+    "English": "Cut a long story short.",
+    "Japanese": "かいつまんで話すと。",
+    "Target": "Cut a long story short",
+    "Note": "格言：手短に言うと"
+  },
+  {
+    "Id": "edfcf661-9f02-449a-85ad-42daf3b26ab9",
+    "Level": 1,
+    "English": "The bottom line is that we need more funding.",
+    "Japanese": "要するに（結論として）、もっと資金が必要だということだ。",
+    "Target": "The bottom line is",
+    "Note": "bottom line: 結論・最も重要な点"
+  },
+  {
+    "Id": "fa0537bc-0393-483c-a838-99c5e0af34e7",
+    "Level": 1,
+    "English": "Face the music.",
+    "Japanese": "現実を直視する（報いを受ける）。",
+    "Target": "Face the music",
+    "Note": "格言：自分のしたことの結果を潔く受け入れる"
+  },
+  {
+    "Id": "18259ccb-82cd-4e7a-9242-ac5cff74aea0",
+    "Level": 1,
+    "English": "Get the ball rolling.",
+    "Japanese": "物事の軌道に乗せる。",
+    "Target": "Get the ball rolling",
+    "Note": "格言：活動を開始する"
+  },
+  {
+    "Id": "faa0ee0a-3444-413b-94a1-cca0b88c9e49",
+    "Level": 1,
+    "English": "Go the extra mile.",
+    "Japanese": "期待以上の努力をする。",
+    "Target": "Go the extra mile",
+    "Note": "格言：もう一踏ん張りする"
+  },
+  {
+    "Id": "3d7a6990-7373-4eaa-b7ec-18293eb5a8cb",
+    "Level": 1,
+    "English": "Hit the nail on the head.",
+    "Japanese": "図星を指す（釘の頭を叩く）。",
+    "Target": "Hit the nail on the head",
+    "Note": "格言：核心を突く"
+  },
+  {
+    "Id": "56cfdce7-8435-46ff-8b53-e861194e2ebb",
+    "Level": 1,
+    "English": "In the long run, it will be beneficial for you.",
+    "Japanese": "長い目で見れば、それは君のためになる。",
+    "Target": "In the long run",
+    "Note": "in the long run: 長い目で見れば"
+  },
+  {
+    "Id": "efaf1922-1072-4f5e-aa13-0953d01d9eb7",
+    "Level": 1,
+    "English": "Keep your fingers crossed.",
+    "Japanese": "幸運を祈る。",
+    "Target": "Keep your fingers crossed",
+    "Note": "格言：幸運を祈る"
+  },
+  {
+    "Id": "85f99d67-ca81-4261-94bc-79dbc9b47127",
+    "Level": 1,
+    "English": "Let the cat out of the bag.",
+    "Japanese": "うっかり秘密を漏らす。",
+    "Target": "Let the cat out of the bag",
+    "Note": "格言：秘密をばらす"
+  },
+  {
+    "Id": "325c9060-6cc3-45ca-938c-9c725d08bced",
+    "Level": 1,
+    "English": "Once in a blue moon.",
+    "Japanese": "ごく稀に。",
+    "Target": "Once in a blue moon",
+    "Note": "格言：めったにないこと"
+  },
+  {
+    "Id": "96799100-d70e-45d6-9513-032ace4d4631",
+    "Level": 1,
+    "English": "Piece of cake.",
+    "Japanese": "朝飯前。",
+    "Target": "Piece of cake",
+    "Note": "格言：とても簡単なこと"
+  },
+  {
+    "Id": "d55b584a-f382-4851-8eb5-0d7bc55b72b1",
+    "Level": 1,
+    "English": "Pull yourself together.",
+    "Japanese": "しっかりしろ。",
+    "Target": "Pull yourself together",
+    "Note": "格言：落ち着いて自分を取り戻す"
+  },
+  {
+    "Id": "75cd67b3-b12d-4044-8746-f96c8ff62ef0",
+    "Level": 1,
+    "English": "Take it with a grain of salt.",
+    "Japanese": "話を鵜呑みにしない。",
+    "Target": "Take it with a grain of salt",
+    "Note": "格言：割り引いて聞く"
+  },
+  {
+    "Id": "3d80ebf2-e24b-4e17-825c-8995d7cac46c",
+    "Level": 1,
+    "English": "Under the weather.",
+    "Japanese": "体調が悪い。",
+    "Target": "Under the weather",
+    "Note": "格言：気分が優れない"
+  },
+  {
+    "Id": "f7ac0f72-740a-4489-9b40-0f93c370631a",
+    "Level": 1,
+    "English": "Barking up the wrong tree.",
+    "Japanese": "見当違いをしている。",
+    "Target": "Barking up the wrong tree",
+    "Note": "格言：的外れな不満や追求をする"
+  },
+  {
+    "Id": "51b14471-3c9d-4b74-9bad-393047bf9d0d",
+    "Level": 1,
+    "English": "Beat around the bush.",
+    "Japanese": "遠回しに言う。",
+    "Target": "Beat around the bush",
+    "Note": "格言：核心に触れるのを避ける"
+  },
+  {
+    "Id": "18e8124e-cfeb-423f-9b23-fdaa5686df11",
+    "Level": 1,
+    "English": "Bite off more than you can chew.",
+    "Japanese": "欲張りすぎて手に余る。",
+    "Target": "Bite off more than you can chew",
+    "Note": "格言：能力以上のことを引き受ける"
+  },
+  {
+    "Id": "b18d54ca-a2c6-415a-836e-88b401774e1f",
+    "Level": 1,
+    "English": "Blessing in disguise.",
+    "Japanese": "不幸中の幸い（姿を変えた祝福）。",
+    "Target": "Blessing in disguise",
+    "Note": "格言：災い転じて福となす"
+  },
+  {
+    "Id": "6a27092e-7222-4567-aec8-b9146f4e8e10",
+    "Level": 1,
+    "English": "Burn bridges.",
+    "Japanese": "後戻りできないようにする（橋を焼く）。",
+    "Target": "Burn bridges",
+    "Note": "格言：関係を完全に断つ"
+  },
+  {
+    "Id": "e8360360-7818-47b6-aeb8-db34a9d9ae41",
+    "Level": 1,
+    "English": "Comparing apples and oranges.",
+    "Japanese": "全く異なるものを比較している。",
+    "Target": "Comparing apples and oranges",
+    "Note": "格言：比較にならないものを比べること"
+  },
+  {
+    "Id": "8c716b90-f314-435f-8074-6ba4b285de80",
+    "Level": 1,
+    "English": "Don't cry wolf.",
+    "Japanese": "嘘をついて人を騒がせるな（狼少年）。",
+    "Target": "Don't cry wolf",
+    "Note": "格言：虚偽の警告を繰り返すと信じてもらえなくなる"
+  },
+  {
+    "Id": "61b66ac9-40bb-4817-9773-38175dd4f6d2",
+    "Level": 1,
+    "English": "Every dog has his day.",
+    "Japanese": "誰にでも全盛期はある。",
+    "Target": "Every dog has his day",
+    "Note": "格言：誰でも一度は幸運に恵まれる"
+  },
+  {
+    "Id": "b790c261-9475-49f5-ab61-cf769f3460b7",
+    "Level": 1,
+    "English": "Fit as a fiddle.",
+    "Japanese": "とても元気で健康だ。",
+    "Target": "Fit as a fiddle",
+    "Note": "格言：体調が万全であること"
+  },
+  {
+    "Id": "537e1421-dede-417a-98a5-6b338d265422",
+    "Level": 1,
+    "English": "Get out of hand.",
+    "Japanese": "手に負えなくなる。",
+    "Target": "Get out of hand",
+    "Note": "格言：収集がつかなくなる"
+  },
+  {
+    "Id": "ed124287-6f29-4400-9df8-8e1eaf9ce25c",
+    "Level": 1,
+    "English": "Ignorance is bliss.",
+    "Japanese": "知らぬが仏。",
+    "Target": "Ignorance is bliss",
+    "Note": "格言：知らない方が幸せであることもある"
+  },
+  {
+    "Id": "524431b9-0b56-4b06-91a3-43ef4869fd8b",
+    "Level": 1,
+    "English": "Jump on the bandwagon.",
+    "Japanese": "時流に乗る。",
+    "Target": "Jump on the bandwagon",
+    "Note": "格言：流行や勝ち馬に乗る"
+  },
+  {
+    "Id": "bff75182-1546-4e27-9ed1-59db98398708",
+    "Level": 1,
+    "English": "Keep someone at arm's length.",
+    "Japanese": "人と距離を置く。",
+    "Target": "Keep someone at arm's length",
+    "Note": "格言：よそよそしくする"
+  },
+  {
+    "Id": "7e523f5d-a41e-476a-8052-611c23e98f29",
+    "Level": 1,
+    "English": "Last straw.",
+    "Japanese": "我慢の限界（最後の一藁）。",
+    "Target": "Last straw",
+    "Note": "格言：ついに堪忍袋の緒が切れる原因"
+  },
+  {
+    "Id": "7feb0681-2d55-49f7-94f8-c574d51ca715",
+    "Level": 1,
+    "English": "Miss the boat.",
+    "Japanese": "好機を逃す。",
+    "Target": "Miss the boat",
+    "Note": "格言：チャンスに乗り遅れる"
+  },
+  {
+    "Id": "40112ab7-7d8a-48c6-b507-2994115fcdd4",
+    "Level": 1,
+    "English": "On cloud nine.",
+    "Japanese": "意気揚々として（最高に幸せで）。",
+    "Target": "On cloud nine",
+    "Note": "格言：天にも昇る心地"
+  },
+  {
+    "Id": "78cc807e-279a-4893-8304-e3ac203943a1",
+    "Level": 1,
+    "English": "Rock the boat.",
+    "Japanese": "波風を立てる。",
+    "Target": "Rock the boat",
+    "Note": "格言：平穏な状態をかき乱す"
+  },
+  {
+    "Id": "4fe5e3ed-448e-44a6-a457-bd9ad3f80e4f",
+    "Level": 1,
+    "English": "See eye to eye.",
+    "Japanese": "意見が一致する。",
+    "Target": "See eye to eye",
+    "Note": "格言：見解が同じである"
+  },
+  {
+    "Id": "a6506542-b161-487f-959a-f9e46fad676a",
+    "Level": 1,
+    "English": "Spill the beans.",
+    "Japanese": "秘密をぶちまける。",
+    "Target": "Spill the beans",
+    "Note": "格言：うっかり漏らす"
+  },
+  {
+    "Id": "35cf2ed3-de0a-45eb-9772-e49985932016",
+    "Level": 1,
+    "English": "The elephant in the room.",
+    "Japanese": "見て見ぬふりをされている大きな問題。",
+    "Target": "The elephant in the room",
+    "Note": "格言：誰もが気づいているが触れたがらない話題"
+  },
+  {
+    "Id": "2b601400-6328-40e5-9f28-a5fc32f8070d",
+    "Level": 1,
+    "English": "Through thick and thin.",
+    "Japanese": "万難を排して（良い時も悪い時も）。",
+    "Target": "Through thick and thin",
+    "Note": "格言：どんな困難があっても"
+  },
+  {
+    "Id": "27b87c33-97ce-4d5b-9ae7-e563c7602480",
+    "Level": 1,
+    "English": "Up in the air.",
+    "Japanese": "まだ決まっていない。",
+    "Target": "Up in the air",
+    "Note": "格言：空中に浮いている（未定の）状態"
+  },
+  {
+    "Id": "901ebafb-41d8-4666-a683-2d910cac0f0c",
+    "Level": 1,
+    "English": "Wrap your head around something.",
+    "Japanese": "何かを理解する。",
+    "Target": "Wrap your head around",
+    "Note": "格言：複雑なことを飲み込む"
+  },
+  {
+    "Id": "48b8f01f-5fe2-48c0-924e-083786b1b7c3",
+    "Level": 1,
+    "English": "You can't have your cake and eat it too.",
+    "Japanese": "両立できない二つのことを同時に欲張ることはできない。",
+    "Target": "You can't have your cake and eat it too",
+    "Note": "格言：あちらを立てればこちらが立たず"
+  },
+  {
+    "Id": "5cc4239e-7e52-447c-97e2-b6d3072e5021",
+    "Level": 1,
+    "English": "The best of both worlds.",
+    "Japanese": "両方の良いとこ取り。",
+    "Target": "The best of both worlds",
+    "Note": "格言：二つの異なる状況の利点を得ること"
+  },
+  {
+    "Id": "90912acb-706b-4408-aeef-a7d95f907314",
+    "Level": 5,
+    "English": "As a result of the heavy rain, the game was cancelled.",
+    "Japanese": "大雨の結果、試合は中止になった。",
+    "Target": "As a result of",
+    "Note": "as a result of: 〜の結果として"
+  },
+  {
+    "Id": "f03e20ef-42c5-4a62-8cc2-4c3f94c07777",
+    "Level": 5,
+    "English": "She was eager to learn more about the subject.",
+    "Japanese": "彼女はその科目についてもっと学ぶことを熱望していた。",
+    "Target": "eager to learn",
+    "Note": "be eager to do: 〜することを熱望している"
+  },
+  {
+    "Id": "d454473c-ff46-4bfa-9a08-187d989ddbf2",
+    "Level": 5,
+    "English": "He set out to climb the mountain at dawn.",
+    "Japanese": "彼は夜明けに山に登り始めた。",
+    "Target": "set out to",
+    "Note": "set out to do: 〜し始める・着手する"
+  },
+  {
+    "Id": "76f64932-22bf-4ce4-b409-964527105864",
+    "Level": 5,
+    "English": "The plan turned out to be more difficult than we expected.",
+    "Japanese": "その計画は思っていたより難しいことがわかった。",
+    "Target": "turned out to be",
+    "Note": "turn out to be: 〜だとわかる・判明する"
+  },
+  {
+    "Id": "4f1bd04f-5ff3-41dd-8ea8-28c8f8a749d9",
+    "Level": 5,
+    "English": "We ended up taking a taxi because we missed the last train.",
+    "Japanese": "終電を逃したので、結局タクシーに乗ることになった。",
+    "Target": "ended up taking",
+    "Note": "end up -ing: 結局〜することになる"
+  },
+  {
+    "Id": "86309e1a-7103-4887-b363-009d909c3299",
+    "Level": 5,
+    "English": "I am willing to help you with your project.",
+    "Japanese": "あなたのプロジェクトを喜んでお手伝いします。",
+    "Target": "willing to help",
+    "Note": "be willing to do: 〜する気がある・いとわない"
+  },
+  {
+    "Id": "58a77ecc-3938-4627-96b4-08ee2d4a634b",
+    "Level": 5,
+    "English": "If you keep practicing, you are bound to improve.",
+    "Japanese": "練習し続ければ、必ず上達するよ。",
+    "Target": "bound to improve",
+    "Note": "be bound to do: 〜するに違いない・必ず〜する"
+  },
+  {
+    "Id": "e93104b9-c215-4540-a793-177b6efa0c0e",
+    "Level": 5,
+    "English": "I feel like going for a walk this afternoon.",
+    "Japanese": "今日の午後は散歩に行きたい気分だ。",
+    "Target": "feel like going",
+    "Note": "feel like -ing: 〜したい気がする"
+  },
+  {
+    "Id": "43bdf547-a562-454d-b179-5cee5e8e65e9",
+    "Level": 5,
+    "English": "The teacher called off the class because of the storm.",
+    "Japanese": "嵐のために先生は授業を中止した。",
+    "Target": "called off",
+    "Note": "call off: 〜を中止する"
+  },
+  {
+    "Id": "a94f41e6-3800-44d7-a770-469aaaf70ab7",
+    "Level": 5,
+    "English": "This area is known for its beautiful cherry blossoms.",
+    "Japanese": "この地域は美しい桜で知られている。",
+    "Target": "known for",
+    "Note": "be known for: 〜で知られている"
+  },
+  {
+    "Id": "8ad8b16d-74e9-4baa-b758-bafa36707928",
+    "Level": 5,
+    "English": "We need to get rid of all the old equipment.",
+    "Japanese": "古い備品をすべて取り除く必要がある。",
+    "Target": "get rid of",
+    "Note": "get rid of: 〜を取り除く・処分する"
+  },
+  {
+    "Id": "2eb3e239-b020-4b1a-9f97-c5168c76e204",
+    "Level": 5,
+    "English": "She changed her mind and decided not to go abroad.",
+    "Japanese": "彼女は考えを変えて、留学しないことに決めた。",
+    "Target": "changed her mind",
+    "Note": "change one's mind: 考えを変える"
+  },
+  {
+    "Id": "a76669e2-33cf-44b9-91ca-15e088fff804",
+    "Level": 5,
+    "English": "He turned down the job offer because the salary was too low.",
+    "Japanese": "給与が低すぎたので、彼はその仕事の申し出を断った。",
+    "Target": "turned down",
+    "Note": "turn down: 〜を断る"
+  },
+  {
+    "Id": "e0f9711e-cea7-4494-9c82-98c0ba279d8b",
+    "Level": 5,
+    "English": "Don't give up even when things get difficult.",
+    "Japanese": "物事が難しくなっても諦めないで。",
+    "Target": "give up",
+    "Note": "give up: 〜をあきらめる"
+  },
+  {
+    "Id": "1a285198-1888-468e-a2b6-512ee7f72e25",
+    "Level": 5,
+    "English": "The fire resulted in the destruction of several buildings.",
+    "Japanese": "その火事の結果、いくつかの建物が破壊された。",
+    "Target": "resulted in",
+    "Note": "result in: 〜という結果になる"
+  },
+  {
+    "Id": "3dfe84fb-168b-45fa-9550-27d927ec98b3",
+    "Level": 5,
+    "English": "The accident resulted from a lack of attention.",
+    "Japanese": "その事故は不注意から生じた。",
+    "Target": "resulted from",
+    "Note": "result from: 〜が原因で起こる"
+  },
+  {
+    "Id": "b8960413-5416-450a-84df-a94566a180a4",
+    "Level": 5,
+    "English": "He goes on working even when everyone else has gone home.",
+    "Japanese": "他の皆が帰宅した後も、彼は働き続ける。",
+    "Target": "goes on working",
+    "Note": "go on -ing: 〜し続ける"
+  },
+  {
+    "Id": "5305a2ea-cedb-4fd0-89f4-d7a31f66daf3",
+    "Level": 4,
+    "English": "We are confronted with serious environmental problems.",
+    "Japanese": "私たちは深刻な環境問題に直面している。",
+    "Target": "confronted with",
+    "Note": "be confronted with: 〜に直面している"
+  },
+  {
+    "Id": "9c48e64a-4ac7-48dd-85ad-7cafcf534661",
+    "Level": 4,
+    "English": "I am accustomed to waking up early in the morning.",
+    "Japanese": "私は朝早く起きることに慣れている。",
+    "Target": "accustomed to waking",
+    "Note": "be accustomed to -ing: 〜することに慣れている"
+  },
+  {
+    "Id": "270e5e83-4361-4ced-bb5c-d9f44aa5f882",
+    "Level": 4,
+    "English": "The organization is committed to protecting human rights.",
+    "Japanese": "その組織は人権保護に取り組んでいる。",
+    "Target": "committed to protecting",
+    "Note": "be committed to -ing: 〜することに専念・取り組んでいる"
+  },
+  {
+    "Id": "989c1d8f-f028-4f5c-9677-0bbae4ee2c1d",
+    "Level": 4,
+    "English": "The letters UN stand for United Nations.",
+    "Japanese": "UNという文字は国際連合を表す。",
+    "Target": "stand for",
+    "Note": "stand for: 〜を表す・象徴する"
+  },
+  {
+    "Id": "610e8f1a-4adb-47dc-8f3d-0f975d7e3162",
+    "Level": 4,
+    "English": "Students look up to their teacher as a role model.",
+    "Japanese": "生徒たちは先生をロールモデルとして尊敬している。",
+    "Target": "look up to",
+    "Note": "look up to: 〜を尊敬する"
+  },
+  {
+    "Id": "4f93f148-4b30-4483-8e2c-8dc59483ae35",
+    "Level": 4,
+    "English": "It is wrong to look down on people because of their background.",
+    "Japanese": "出身を理由に人を見下すのは間違いだ。",
+    "Target": "look down on",
+    "Note": "look down on: 〜を見下す・軽蔑する"
+  },
+  {
+    "Id": "f0828de7-6ca8-4b37-aa7e-b23bca8c188f",
+    "Level": 4,
+    "English": "It is hard to make sense of his complicated explanation.",
+    "Japanese": "彼の複雑な説明を理解するのは難しい。",
+    "Target": "make sense of",
+    "Note": "make sense of: 〜を理解する・意味を把握する"
+  },
+  {
+    "Id": "b8c27966-e5ef-48b5-901c-5a5c965cdf25",
+    "Level": 4,
+    "English": "She was faced with a difficult choice between career and family.",
+    "Japanese": "彼女はキャリアと家族の間で難しい選択に直面した。",
+    "Target": "faced with",
+    "Note": "be faced with: 〜に直面している"
+  },
+  {
+    "Id": "7fc01788-b654-4832-80db-9614f076c6d5",
+    "Level": 4,
+    "English": "In the meantime, please wait in the lobby.",
+    "Japanese": "その間、ロビーでお待ちください。",
+    "Target": "In the meantime",
+    "Note": "in the meantime: その間に・一方"
+  },
+  {
+    "Id": "a1ca303e-b8ec-4328-aa33-5af23bcd64a9",
+    "Level": 4,
+    "English": "On the contrary, the new policy made things worse.",
+    "Japanese": "それどころか、新しい政策は状況を悪化させた。",
+    "Target": "On the contrary",
+    "Note": "on the contrary: それどころか・反対に"
+  },
+  {
+    "Id": "38194ffc-65fc-49e7-8828-9e56a95112a2",
+    "Level": 4,
+    "English": "On the other hand, living in a rural area has its own benefits.",
+    "Japanese": "一方、田舎に住むことには独自の利点がある。",
+    "Target": "On the other hand",
+    "Note": "on the other hand: 一方では"
+  },
+  {
+    "Id": "e6f5344c-c41d-4e37-9ae6-03571c4846d3",
+    "Level": 4,
+    "English": "For the time being, we will continue with the current plan.",
+    "Japanese": "当面の間、現在の計画を続けていきます。",
+    "Target": "For the time being",
+    "Note": "for the time being: 当面の間・さしあたり"
+  },
+  {
+    "Id": "86dd5717-d35a-4938-9286-46a251977644",
+    "Level": 4,
+    "English": "By and large, the project has been a success.",
+    "Japanese": "概して、そのプロジェクトは成功だった。",
+    "Target": "By and large",
+    "Note": "by and large: 概して・大体において"
+  },
+  {
+    "Id": "52c26c98-7cba-4731-870d-223186ade78f",
+    "Level": 4,
+    "English": "He achieved success at the expense of his health.",
+    "Japanese": "彼は健康を犠牲にして成功を収めた。",
+    "Target": "at the expense of",
+    "Note": "at the expense of: 〜を犠牲にして"
+  },
+  {
+    "Id": "d9133bf2-f131-43ea-9a07-a3e1bc845ee3",
+    "Level": 4,
+    "English": "In the wake of the earthquake, many people lost their homes.",
+    "Japanese": "地震の後、多くの人が家を失った。",
+    "Target": "In the wake of",
+    "Note": "in the wake of: 〜の後に・〜の結果として"
+  },
+  {
+    "Id": "703c4f3e-7691-45a8-8db1-c489c4d159ed",
+    "Level": 4,
+    "English": "She is prone to making careless mistakes when she is tired.",
+    "Japanese": "疲れているとき、彼女はケアレスミスをしがちだ。",
+    "Target": "prone to making",
+    "Note": "be prone to -ing: 〜しがちだ"
+  },
+  {
+    "Id": "712ccf4c-78a4-4e54-b820-2254568ea9b3",
+    "Level": 4,
+    "English": "He is apt to forget important dates.",
+    "Japanese": "彼は大切な日を忘れがちだ。",
+    "Target": "apt to forget",
+    "Note": "be apt to do: 〜しがちだ・〜する傾向がある"
+  },
+  {
+    "Id": "3b90d1a4-bae1-44e6-880a-2c2083f2ae3f",
+    "Level": 4,
+    "English": "The new policy gave rise to a lot of controversy.",
+    "Japanese": "新しい政策は多くの議論を引き起こした。",
+    "Target": "gave rise to",
+    "Note": "give rise to: 〜を引き起こす"
+  },
+  {
+    "Id": "7d02aef1-57b9-485b-8309-4f726c0c6460",
+    "Level": 4,
+    "English": "Can you account for the sudden drop in sales?",
+    "Japanese": "売上の急落を説明できますか？",
+    "Target": "account for",
+    "Note": "account for: 〜を説明する・〜を占める"
+  },
+  {
+    "Id": "bc3e8e9e-6d58-4913-b65e-3dde8be7d25b",
+    "Level": 4,
+    "English": "Nothing can make up for the time we have lost.",
+    "Japanese": "私たちが失った時間を補えるものは何もない。",
+    "Target": "make up for",
+    "Note": "make up for: 〜を補う・埋め合わせる"
+  },
+  {
+    "Id": "eaf7965b-ebee-4b33-94df-28c8857503e0",
+    "Level": 4,
+    "English": "The new employee has lived up to our expectations.",
+    "Japanese": "その新入社員は私たちの期待に応えた。",
+    "Target": "lived up to",
+    "Note": "live up to: 〜に応える・〜に見合う"
+  },
+  {
+    "Id": "623fab08-0715-45d4-acf1-6e694326afc2",
+    "Level": 4,
+    "English": "With respect to the budget, we need to be more careful.",
+    "Japanese": "予算に関して、私たちはもっと注意する必要がある。",
+    "Target": "With respect to",
+    "Note": "with respect to: 〜に関して"
+  },
+  {
+    "Id": "695a2b63-c677-4846-8442-1f9a267d23d9",
+    "Level": 4,
+    "English": "Needless to say, health is the most important thing in life.",
+    "Japanese": "言うまでもなく、健康は人生で最も重要なことだ。",
+    "Target": "Needless to say",
+    "Note": "needless to say: 言うまでもなく"
+  },
+  {
+    "Id": "c4ba2d64-cc86-40d2-9e0a-c8798830bf9a",
+    "Level": 4,
+    "English": "She long for a chance to travel around the world.",
+    "Japanese": "彼女は世界中を旅する機会を切望していた。",
+    "Target": "longs for",
+    "Note": "long for: 〜を切望する・熱望する"
+  },
+  {
+    "Id": "0f67bb82-0efb-411b-ad6f-bf6bdbbfcde2",
+    "Level": 3,
+    "English": "The success of the mission was contingent on good weather.",
+    "Japanese": "その任務の成功は良い天候次第だった。",
+    "Target": "contingent on",
+    "Note": "be contingent on: 〜次第である・〜を条件とする"
+  },
+  {
+    "Id": "c57ce918-073c-4b62-846e-4410e189666b",
+    "Level": 3,
+    "English": "He argued on the grounds that the law was unfair.",
+    "Japanese": "彼はその法律は不公平だという理由で主張した。",
+    "Target": "on the grounds that",
+    "Note": "on the grounds that: 〜という理由で"
+  },
+  {
+    "Id": "755c6f29-1295-4afa-99cd-d45ffe69ef9f",
+    "Level": 3,
+    "English": "The boat was at the mercy of the storm.",
+    "Japanese": "ボートは嵐のなすがままだった。",
+    "Target": "at the mercy of",
+    "Note": "at the mercy of: 〜のなすがまま・〜に翻弄されて"
+  },
+  {
+    "Id": "69fb2178-1937-4002-bf61-e65225d1160d",
+    "Level": 3,
+    "English": "The salary increase is in proportion to the amount of work done.",
+    "Japanese": "昇給は仕事量に比例している。",
+    "Target": "in proportion to",
+    "Note": "in proportion to: 〜に比例して"
+  },
+  {
+    "Id": "98992ce6-ac28-463c-8ef4-900a01b72ddf",
+    "Level": 3,
+    "English": "She spoke quietly for fear of waking the baby.",
+    "Japanese": "赤ちゃんを起こすのを恐れて、彼女は静かに話した。",
+    "Target": "for fear of waking",
+    "Note": "for fear of -ing: 〜することを恐れて"
+  },
+  {
+    "Id": "69e1d4d1-f08f-467c-9253-afbe69896c39",
+    "Level": 3,
+    "English": "The report was criticized to the extent that it lacked evidence.",
+    "Japanese": "その報告書は証拠が不足しているという点で批判された。",
+    "Target": "to the extent that",
+    "Note": "to the extent that: 〜の程度まで・〜という点で"
+  },
+  {
+    "Id": "c63f3066-910f-47f8-bcf9-a186fecc8c99",
+    "Level": 3,
+    "English": "He runs the risk of losing everything if he invests carelessly.",
+    "Japanese": "不注意に投資すれば、彼はすべてを失うリスクを冒す。",
+    "Target": "runs the risk of",
+    "Note": "run the risk of: 〜のリスクを冒す"
+  },
+  {
+    "Id": "bbeab2c1-dfbf-4c39-a0c8-a51efd502dcc",
+    "Level": 3,
+    "English": "I was at a loss for words when I heard the news.",
+    "Japanese": "そのニュースを聞いたとき、言葉を失った（途方に暮れた）。",
+    "Target": "at a loss",
+    "Note": "be at a loss: 途方に暮れる・どうしてよいかわからない"
+  },
+  {
+    "Id": "b71493ba-67b2-48d0-91ad-476c5d6fd69a",
+    "Level": 3,
+    "English": "You should make allowances for the fact that he is still a beginner.",
+    "Japanese": "彼がまだ初心者であるという事実を考慮に入れるべきだ。",
+    "Target": "make allowances for",
+    "Note": "make allowances for: 〜を考慮に入れる・大目に見る"
+  },
+  {
+    "Id": "8b5ef1e0-ccc2-4889-a4eb-e45d00c6b032",
+    "Level": 3,
+    "English": "Far from giving up, she worked even harder after the failure.",
+    "Japanese": "あきらめるどころか、彼女は失敗の後でさらに懸命に働いた。",
+    "Target": "Far from giving up",
+    "Note": "far from -ing: 〜するどころか"
+  },
+  {
+    "Id": "b77b7da9-ebd1-4475-94a6-e16007f851db",
+    "Level": 2,
+    "English": "He can't even cook, let alone bake a cake.",
+    "Japanese": "ケーキを焼くのはもちろん、彼は料理さえできない。",
+    "Target": "let alone",
+    "Note": "let alone: 〜はもちろん・〜どころか"
+  },
+  {
+    "Id": "bb799699-c4e0-48e8-9f45-00bbebc5aa11",
+    "Level": 2,
+    "English": "I can't afford a new car, much less a sports car.",
+    "Japanese": "スポーツカーはもちろん、新車を買う余裕もない。",
+    "Target": "much less",
+    "Note": "much less: まして〜ない（否定文で）"
+  },
+  {
+    "Id": "4f730cbf-fdfa-43c5-a35e-43163010b15e",
+    "Level": 2,
+    "English": "He can't speak French, still less write it.",
+    "Japanese": "彼はフランス語を話せない。まして書くことなどできない。",
+    "Target": "still less",
+    "Note": "still less: まして〜ない（否定文で）"
+  },
+  {
+    "Id": "72a4cf7b-9952-4329-97f5-bacf2eb9e1c7",
+    "Level": 2,
+    "English": "Not to mention his intelligence, he is also very kind.",
+    "Japanese": "彼の知性は言うまでもなく、とても親切でもある。",
+    "Target": "Not to mention",
+    "Note": "not to mention: 〜は言うまでもなく"
+  },
+  {
+    "Id": "39c5b711-a127-4674-8fe5-46faa4c2cafc",
+    "Level": 2,
+    "English": "The food was delicious, not to speak of the wonderful service.",
+    "Japanese": "素晴らしいサービスは言うまでもなく、料理も美味しかった。",
+    "Target": "not to speak of",
+    "Note": "not to speak of: 〜は言うまでもなく"
+  },
+  {
+    "Id": "6da5cd05-5512-4b95-902b-7f3b3ce8146b",
+    "Level": 2,
+    "English": "The new model is faster, and what is more, it uses less energy.",
+    "Japanese": "新モデルはより速く、さらに消費エネルギーも少ない。",
+    "Target": "what is more",
+    "Note": "what is more: さらに・おまけに"
+  },
+  {
+    "Id": "3159ae9f-d902-4b63-bedb-55317b40f71d",
+    "Level": 2,
+    "English": "What is worse, we ran out of food on the last day of the trip.",
+    "Japanese": "さらに悪いことに、旅行の最終日に食料が尽きてしまった。",
+    "Target": "What is worse",
+    "Note": "what is worse: さらに悪いことに"
+  },
+  {
+    "Id": "f88359da-1617-42c1-9cc4-4d494813599c",
+    "Level": 2,
+    "English": "The evidence was weak; nonetheless, the jury found him guilty.",
+    "Japanese": "証拠は弱かった。それにもかかわらず、陪審員は彼を有罪とした。",
+    "Target": "nonetheless",
+    "Note": "nonetheless: それにもかかわらず"
+  },
+  {
+    "Id": "0b8020d0-b57c-48f6-bf80-07c849ed3358",
+    "Level": 2,
+    "English": "In so far as I understand, the plan is still being discussed.",
+    "Japanese": "私が理解している限りでは、その計画はまだ議論中だ。",
+    "Target": "In so far as",
+    "Note": "in so far as: 〜する限りにおいて"
+  },
+  {
+    "Id": "b16d7779-d2fb-4164-8573-e26335d395b0",
+    "Level": 2,
+    "English": "The region was devoid of any natural resources.",
+    "Japanese": "その地域には天然資源が全くなかった。",
+    "Target": "devoid of",
+    "Note": "be devoid of: 〜を全く欠いている"
+  }
+]

@@ -1,0 +1,422 @@
+/* =========================================================
+   全体共通（フォント・基本色）
+   ========================================================= */
+
+html, body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+}
+/* ページ全体でスクロールバーのガタつきを防止 */
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+/* h1 にフォーカスが当たった時のアウトラインを消す
+   （主にBlazorの自動フォーカス対策） */
+h1:focus {
+    outline: none;
+}
+
+/* リンクとリンク風ボタンの色 */
+a,
+.btn-link {
+    color: #0071c1;
+}
+
+/* =========================================================
+   Bootstrap ボタン調整
+   ========================================================= */
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* フォーカス時の視認性を確保（アクセシビリティ） */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+/* 判定ボタンをホバーした時のスタイル */
+.btn-success.shadow:hover {
+    background-color: #769e3c !important; /* 少し濃い緑に変える */
+    border-color: #769e3c !important;
+    transform: translateY(-2px); /* 少し上に浮かせる（遊び心だぜ） */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2) !important; /* 影を強くする */
+    transition: all 0.2s ease-in-out; /* 変化を滑らかにする */
+}
+
+/* クリックした瞬間（Active）の挙動 */
+.btn-success.shadow:active {
+    transform: translateY(0); /* 押した時に沈む演出 */
+}
+
+/* =========================================================
+   レイアウト微調整
+   ========================================================= */
+
+.content {
+    padding-top: 1.1rem;
+}
+
+/* =========================================================
+   フォームバリデーション（Blazor）
+   ========================================================= */
+
+/* 正常入力（checkbox以外） */
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+/* 無効入力 */
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+/* =========================================================
+   Blazor エラーUI
+   ========================================================= */
+
+#blazor-error-ui {
+    color-scheme: light only;
+    background: lightyellow;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: none;
+    padding: 0.6rem 1.25rem 0.7rem;
+    box-sizing: border-box;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+    /* 閉じるボタン */
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+/* エラーバウンダリ（致命的エラー表示） */
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,...) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred.";
+    }
+
+/* =========================================================
+   ローディング表示（Blazor）
+   ========================================================= */
+
+.loading-progress {
+    position: absolute;
+    inset: 20vh 0 auto 0;
+    margin: 0 auto;
+    width: 8rem;
+    height: 8rem;
+}
+
+    /* 円形プログレス（背景） */
+    .loading-progress circle {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 0.6rem;
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+    }
+
+        /* 円形プログレス（進捗） */
+        .loading-progress circle:last-child {
+            stroke: #1b6ec2;
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+
+/* ローディング文字 */
+.loading-progress-text {
+    position: absolute;
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+    .loading-progress-text::after {
+        content: var(--blazor-load-percentage-text, "Loading");
+    }
+
+.update-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+/* =========================================================
+   コード表示
+   ========================================================= */
+
+code {
+    color: #c02d76;
+}
+
+/* =========================================================
+   Bootstrap form-floating 調整
+   ========================================================= */
+
+/* プレースホルダーを右寄せ */
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+/* フォーカス時は左寄せに戻す */
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* =========================================================
+   トレーニング画面：入力エラー演出
+   ========================================================= */
+
+/* 間違えた時に震える */
+.is-invalid {
+    animation: shake 0.2s ease-in-out 0s 2;
+    border-color: #d9534f !important;
+    background-color: #f8d7da !important;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* オーバーレイを画面中央に固定 */
+.overlay-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* 記号をめちゃくちゃデカくする */
+.huge-symbol {
+    font-size: 15rem; /* さっきの3倍以上のサイズだ！ */
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 5px 5px 0px rgba(0,0,0,0.1);
+    -webkit-text-stroke: 3px white; /* 縁取りを入れて視認性を上げる */
+}
+
+/* ×の時に「プヨンプヨン」と震えるアニメーション（自作） */
+@keyframes pudding {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.2, 0.8);
+    }
+
+    50% {
+        transform: scale(0.8, 1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate__pudding {
+    animation: pudding 0.4s ease-in-out;
+}
+
+/* =========================================================
+   Home：カレンダー表示
+   ========================================================= */
+
+.calendar-table th,
+.calendar-table td {
+    width: 14.28%; /* 7等分 */
+    padding: 8px 2px !important;
+    vertical-align: middle;
+}
+
+.flower-mark {
+    font-size: 1.5rem;
+    color: #ff4757;
+}
+
+.training-mark {
+    font-size: 1.2rem;
+    color: #1e90ff;
+}
+
+.study-mark {
+    font-size: 1.2rem;
+    color: #2ed573;
+}
+
+/* =========================================================
+   カスタムキーボード（画面下固定）
+   ========================================================= */
+
+.simple-keyboard-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #f8f5f0;
+    border-top: 1px solid #dfd7ca;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* キーボード分の余白確保 */
+.training-page {
+    padding-bottom: 260px !important;
+}
+
+/* ナビバー内の container-fluid の余白対策 */
+.navbar .container-fluid {
+    padding-bottom: 0 !important;
+}
+
+/* 非表示用 */
+.simple-keyboard-container.d-none {
+    display: none !important;
+}
+
+/* モバイル時の仮想キーボード全体の調整 */
+.simple-keyboard {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+    /* 各ボタン（キー）の高さを出して押しやすくする */
+    .simple-keyboard .hg-button {
+        height: 65px !important; /* 以前より高さをアップ（標準は約40-50px） */
+        font-size: 1.4rem !important; /* 文字も少し大きくして視認性アップ */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff !important;
+        border-bottom: 3px solid #b5b5b5 !important; /* 立体感を出してボタンらしく */
+    }
+
+    /* 決定ボタン（Enter）やBackspaceをもっと目立たせる場合 */
+    .simple-keyboard .hg-button-enter,
+    .simple-keyboard .hg-button-backspace {
+        background: #e0e0e0 !important;
+        font-weight: bold;
+    }
+
+    /* タップした時の反応を分かりやすく（フィードバック強化） */
+    .simple-keyboard .hg-button:active {
+        background: #efefef !important;
+        transform: translateY(2px);
+        border-bottom: none !important;
+    }
+
+/* =========================================================
+   ナビバー：ハンバーガーアイコン自作
+   ========================================================= */
+
+.navbar-toggler-icon {
+    background-image: none;
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+    .navbar-toggler-icon::before,
+    .navbar-toggler-icon::after,
+    .navbar-toggler-icon span {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: currentColor;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .navbar-toggler-icon::before {
+        top: 0.25em;
+    }
+
+    .navbar-toggler-icon span {
+        top: 0.7em;
+    }
+
+    .navbar-toggler-icon::after {
+        top: 1.15em;
+    }
+
+/* 開いた時に×になる */
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+    transform: translateY(0.45em) rotate(45deg);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon span {
+    opacity: 0;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+    transform: translateY(-0.45em) rotate(-45deg);
+}
+
+/* =========================================================
+   入力欄：placeholder だけ小さくする
+   ========================================================= */
+
+input.fs-1::placeholder {
+    font-size: 1.2rem !important;
+    opacity: 0.6;
+}
+
+/* スマホ向け微調整 */
+@media (max-width: 576px) {
+    input.fs-1::placeholder {
+        font-size: 1rem !important;
+    }
+}
