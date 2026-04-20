@@ -185,6 +185,9 @@
         {
             // 4. JS側の更新処理を実行
             await JS.InvokeVoidAsync("activateUpdate");
+            // ★ 5秒待ってもリロードされなければ、C#側から強制リロード
+            await Task.Delay(5000);
+            Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
         }
         catch (Exception ex)
         {

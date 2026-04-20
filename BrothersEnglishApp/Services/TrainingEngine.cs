@@ -246,15 +246,13 @@ public class TrainingEngine
         EnglishWord? target = null;
 
         // ① 今日学習した単語（セッション内未出題）
-        var todayLearned = allWords.Where(w =>
-            userProgress?.WordStatuses.Any(s =>
-                s.WordId == w.Id &&
-                s.LastReviewed.Date == todayUtc &&
-                s.Status >= 1) ?? false
-        ).ToList();
+        var todayLearnedIds = userProgress?.WordStatuses
+            .Where(s => s.LastReviewed.Date == todayUtc && s.Status >= 1)
+            .Select(s => s.WordId)
+            .ToHashSet() ?? new HashSet<string>();
 
-        var freshWords = todayLearned
-            .Where(w => !_sessionWordCounts.ContainsKey(w.Id))
+        var freshWords = allWords
+            .Where(w => todayLearnedIds.Contains(w.Id) && !_sessionWordCounts.ContainsKey(w.Id))
             .ToList();
 
         if (freshWords.Any())
@@ -263,29 +261,41 @@ public class TrainingEngine
         }
         else
         {
-            // ② 誤答履歴のある苦手単語（セッション内未出題・誤答数降順）
+            // ② 真の苦手単語 または 直近1週間以内にミスした単語
+            var todayUtcData = DateTime.UtcNow.Date;
+            var oneWeekAgo = todayUtcData.AddDays(-7);
+
             var weakWords = allWords
-                .Where(w => userProgress?.WordStatuses
-                    .Any(s => s.WordId == w.Id && s.IncorrectCount > 0) ?? false)
-                .OrderByDescending(w =>
-                    userProgress?.WordStatuses
-                        .FirstOrDefault(s => s.WordId == w.Id)?.IncorrectCount ?? 0)
+                .Where(w => {
+                    var s = userProgress?.WordStatuses.FirstOrDefault(x => x.WordId == w.Id);
+                    if (s == null) return false;
+
+                    // 条件A: 長期的な苦手（正解数がミス数以下）
+                    bool isLongTermWeak = s.IncorrectCount > 0 && s.CorrectCount <= s.IncorrectCount;
+
+                    // 条件B: 短期的なミス（最終レビューが1週間以内で、かつミスがある）
+                    // ※LastReviewedがUTCであることを考慮
+                    bool isRecentlyMissed = s.LastReviewed.Date >= oneWeekAgo && s.IncorrectCount > 0;
+
+                    // A または B を満たす単語を抽出
+                    return isLongTermWeak || isRecentlyMissed;
+                })
+                .Where(w => !_sessionWordCounts.ContainsKey(w.Id)) // 今セッション未出題
+                .OrderByDescending(w => {
+                    var s = userProgress?.WordStatuses.FirstOrDefault(x => x.WordId == w.Id);
+                    return s?.IncorrectCount ?? 0;
+                })
                 .ToList();
 
-            var freshWeakWords = weakWords
-                .Where(w => !_sessionWordCounts.ContainsKey(w.Id))
-                .ToList();
-
-            if (freshWeakWords.Any())
+            if (weakWords.Any())
             {
-                target = freshWeakWords.First();
+                target = weakWords.First();
             }
             else
             {
-                // ③ 学習済みプールからランダム（直前の単語を除外して連続出題を防ぐ）
+                // ③ 学習済みプールからランダム（該当がなければ即ここに来る）
                 var masteredPool = allWords.Where(w =>
-                    userProgress?.WordStatuses
-                        .Any(s => s.WordId == w.Id && s.Status >= 1) ?? false
+                    userProgress?.WordStatuses.Any(s => s.WordId == w.Id && s.Status >= 1) ?? false
                 ).ToList();
 
                 if (masteredPool.Any())
